@@ -1,0 +1,20 @@
+:root {
+	/*configure colorboiz */
+	--puplebg: #221122;
+	--tantext: #ebdbb2;
+	--h1boi: #458587;
+	--h2boi: #d79821;
+	--h3boi: #cc241d;
+	--hrcomplaint: #83a598;
+}
+
+body {
+	background: var(--puplebg);
+	color: var(--tantext);
+}
+
+hr {
+	color: var(--hrcomplaint);
+	border: 1px solid;
+	width: 95%;
+}
