@@ -1,0 +1,10 @@
+<html>
+	<body style="background: #696969">
+		<h1>{{ .Title }}</h1>
+		<br>
+		<ul>
+		{{ range .Pages }}
+			<li><a href="{{ .Permalink }}">{{ .Title }}</a></li>
+		{{ end }}
+		</ul>
+</html>

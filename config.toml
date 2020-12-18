@@ -1,0 +1,15 @@
+baseURL = "https://blog.distro.watch"
+languageCode = "en-us"
+title = "concrete box ramblings"
+theme = "ghostwriter"
+
+[Params]
+	mainSections = ["post"]
+	intro = true
+	headline = "line my head"
+	description = "describe what?"
+	github = "https://github.com/insanitywholesale"
+	gitlab = "https://gitlab.com/insanitywholesale"
+
+[Permalinks]
+	post = "/:filename/"
