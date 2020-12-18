@@ -1,12 +1,13 @@
-<html>
-<body style="background: #221122">
-	<h1>{{ .Title }}</h1>
+{{ define "header" }}
+	{{ .Title }}
+{{ end }}
+
+{{ define "main" }}
 	this is from content index.html...{{ .Content }}
 
 	<ul>
 	{{ range .Site.RegularPages }}
-		<li><a href="{{ .Permalink }}">{{ .Title }}</a></li>
+		<li><a href="{{.Permalink}}">{{ .Title }}</a></li>
 	{{ end }}
 	</ul>
-</body>
-</html>
+{{ end }}
