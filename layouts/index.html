@@ -5,9 +5,10 @@
 {{ define "main" }}
 	this is from content index.html...{{ .Content }}
 
-	<ul>
+	{{ partial "home" . }}
+	<!--ul>
 	{{ range .Site.RegularPages }}
 		<li><a href="{{.Permalink}}">{{ .Title }}</a></li>
 	{{ end }}
-	</ul>
+	</ul-->
 {{ end }}

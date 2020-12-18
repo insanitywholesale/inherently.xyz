@@ -12,6 +12,7 @@
 body {
 	background: var(--puplebg);
 	color: var(--tantext);
+	font-family: "Fira Sans", Helvetica, sans-serif;
 }
 
 hr {
@@ -47,4 +48,14 @@ p {
 
 li {
 	text-align: left;
+}
+
+
+
+
+/*load some dank fira sans undertale woot woot*/
+@font-face {
+	font-family: "Fira Sans";
+	src: url("/fonts/FiraSans-Regular.woff2") format("woff2");
+	font-display: swap;
 }
