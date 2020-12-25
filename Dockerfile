@@ -12,8 +12,9 @@ WORKDIR /go/src
 RUN git clone https://gitlab.com/insanitywholesale/inheresite-hugo
 WORKDIR /go/src/inheresite-hugo
 RUN git checkout feature-advancing
-RUN hugo
+RUN hugo -D
 
-#FROM jojomi/hugo
-#WORKDIR /src
-#COPY . .
+FROM nginx:alpine
+RUN rm -rf /usr/share/nginx/html/*
+COPY --from=build /go/src/inheresite-hugo/public /usr/share/nginx/html
+RUN ls /usr/share/nginx/html

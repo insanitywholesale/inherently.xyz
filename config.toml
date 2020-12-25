@@ -1,17 +1,5 @@
-baseURL = "https://blog.distro.watch"
+#baseURL = "https://blog.distro.watch"
 languageCode = "en-us"
 title = "concrete box ramblings"
-#theme = "ghostwriter"
-#theme = "mainroad"
-
-#ghostwriter-related stuff
-#[Params]
-#	mainSections = ["post"]
-#	intro = true
-#	headline = "line my head"
-#	description = "describe what?"
-#	github = "https://github.com/insanitywholesale"
-#
-
 [Permalinks]
 	post = "/:filename/"
