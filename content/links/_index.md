@@ -6,8 +6,14 @@ draft: false
 
 # Here are some other things on this site
 
+---
+
 ## Other things here
 
-{{ range . }}
-	[{{ .Title }}]({{ .Permalink }})
-{{ end }}
+### Microservices
+[todo microservice](https://gitlab.com/insanitywholesale/usrvtodo)  
+[url shortener microservice](https://gitlab.com/insanitywholesale/urlshort)  
+[paste microservice](https://gitlab.com/insanitywholesale/ctrlshiftv)  
+
+### Yucky stuff
+[attempt at using mern](https://gitlab.com/insanitywholesale/mern_first)  
