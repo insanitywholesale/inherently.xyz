@@ -6,9 +6,9 @@
 	this is from content index.html...{{ .Content }}
 
 	{{ partial "home" . }}
-	<!--ul-->
-	{{ range .Site.RegularPages }}
+	<!--ul>
+	{{ range .Site.Pages }}
 		<li><a href="{{.Permalink}}">{{ .Title }}</a></li>
 	{{ end }}
-	<!--/ul-->
+	</ul-->
 {{ end }}

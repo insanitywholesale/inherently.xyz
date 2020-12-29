@@ -1,5 +1,3 @@
-#baseURL = "https://blog.distro.watch"
+#baseURL = "https://distro.watch"
 languageCode = "en-us"
 title = "concrete box ramblings"
-[Permalinks]
-	post = "/:filename/"
