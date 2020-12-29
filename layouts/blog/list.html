@@ -1,0 +1,15 @@
+<html>
+<head>
+	<title>{{ .Title }}</title>
+	<link rel="stylesheet" href="/css/basic.css"> <!--inside static dir-->
+</head>
+<body>
+<h1>articles I've written</h1>
+<hr>
+<ul>
+{{ range .RegularPages }}
+	<li><a href="{{ .Permalink }}"><h2>{{ .Title }}</h2></a></li>
+{{ end }}
+</ul>
+</body>
+</html>
