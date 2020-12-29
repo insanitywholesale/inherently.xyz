@@ -1,0 +1,14 @@
+<html>
+<body>
+<h1> my git stuff </h1>
+
+{{ define "main" }}
+<h2>{{ .Title }}</h2>
+<ul>
+	{{ range . }}
+	<li>
+		<a href="{{ .Permalink }}">{{ .Title }} </a>
+	</li>
+	{{ end }}
+</ul>
+{{ end }}

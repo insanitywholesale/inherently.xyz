@@ -1,0 +1,17 @@
+<html>
+<head>
+	<title>Tutorials</title>
+	<link rel="stylesheet" href="/css/basic.css"> <!--inside static dir-->
+</head>
+<body>
+<h1> my git stuff </h1>
+<hr>
+	<ul>
+	{{ range .Pages }}
+		<li>
+			<a href="{{ .Permalink }}"><h2>{{ .Title }}</h2></a>
+		</li>
+	{{ end }}
+	</ul>
+</body>
+</html>
