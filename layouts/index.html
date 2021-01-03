@@ -1,9 +1,10 @@
-{{ define "header" }}
-	{{ .Title }}
-{{ end }}
-
-{{ define "main" }}
-	this is from content index.html...{{ .Content }}
-
-	{{ partial "home" . }}
-{{ end }}
+<html>
+<head>
+	<title>{{ .Title }}</title>
+	<link rel="stylesheet" href="/css/basic.css"> <!--inside static dir-->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+{{ .Content }}
+</body>
+</html>
