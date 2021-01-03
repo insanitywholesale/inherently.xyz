@@ -7,7 +7,9 @@ a port of a website to hugo
 site https://gitlab.com/insanitywholesale/distrowatch became a bit annoying to handle manually so it's being ported to hugo
 
 ## run in dev mode on remote host (raspberry pi for example) with working links
-`hugo server -D --disableFastRender --baseURL=http://fruitdoot.hell --bind=0.0.0.0`
+```
+hugo server -D --disableFastRender --baseURL=http://fruitdoot.hell --bind=0.0.0.0
+```
 
 ## lang
 
