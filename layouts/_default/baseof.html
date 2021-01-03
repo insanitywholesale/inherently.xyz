@@ -1,0 +1,15 @@
+<html>
+	<head>
+		<title>{{.Title}}</title>
+		<link rel="stylesheet" href="/css/basic.css"> <!--inside static dir-->
+	</head>
+	<body>
+		<h1>
+			{{ block "header" . }}
+			{{ end 	}}
+		</h1>
+		<hr>
+		{{ block "main" . }}
+		{{ end }}
+</body>
+</html>

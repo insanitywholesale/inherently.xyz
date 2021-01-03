@@ -1,0 +1,16 @@
+<html>
+<head>
+	<title>{{ .Title }}</title>
+	<link rel="stylesheet" href="/css/basic.css"> <!--inside static dir-->
+</head>
+<body>
+{{ .Content }}
+<hr>
+<ul>
+{{ range .RegularPages }}
+	<li><a href="{{ .Permalink }}"><h2>{{ .Title }}</h2></a></li>
+	<p>{{ .Date.Format "May. 02, 2006" }}</p>
+{{ end }}
+</ul>
+</body>
+</html>
