@@ -63,3 +63,11 @@ li {
 	src: url("/fonts/FiraSans-Regular.woff2") format("woff2");
 	font-display: swap;
 }
+
+/*media query for bigger touch area
+@media (pointer: coarse) {
+	a {
+		padding: 0.8em 0em 0.8em 0em;
+	}
+}
+*/
