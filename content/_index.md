@@ -13,9 +13,9 @@ draft: false
 Most of the time I'm tinkering with something technology-related that is interesting to me.
 I started playing around with setting up servers when I was 13-14 and only got more into it from there.
 My passion for productive and effective use of technology led to me discovering the world of
-[libre software](https://www.fsf.org/resources/resources/what-is-fs)  
+[libre software](https://www.fsf.org/resources/resources/what-is-fs)
 and
-[self-hosting](https://www.reddit.com/r/selfhosted/wiki/index#wiki_self-hosting)  
+[self-hosting](https://www.reddit.com/r/selfhosted/wiki/index#wiki_self-hosting).
 Eventually I realized that it was something I could do all day and never be bored and thus began my studies in the field.
 Up to this point, I've tried many technologies, most notably (in non-chronological order):
 

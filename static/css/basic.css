@@ -1,3 +1,7 @@
+* {
+	box-sizing: border-box;
+}
+
 :root {
 	/*configure colorboiz */
 	--puplebg: #221122;
