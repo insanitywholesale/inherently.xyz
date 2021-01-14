@@ -1,6 +1,7 @@
 ---
 title: "About"
 date: 2020-12-29T03:26:36+02:00
+tags: ["about"]
 draft: false
 ---
 

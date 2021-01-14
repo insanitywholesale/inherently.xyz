@@ -1,11 +1,8 @@
 ---
 title: "Home"
 date: 2020-12-13T20:37:02+02:00
+tags: ["index"]
 draft: false
----
-
-# concrete box ramblings
-
 ---
 
 ## What I do
