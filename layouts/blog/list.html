@@ -1,17 +1,11 @@
-<html>
-<head>
-	<title>{{ .Title }}</title>
-	<link rel="stylesheet" href="/css/basic.css"> <!--inside static dir-->
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body>
-{{ .Content }}
-<hr>
-<ul>
-{{ range .RegularPages }}
-	<li><a href="{{ .Permalink }}"><h2>{{ .Title }}</h2></a></li>
-	<p>{{ .Date.Format "May. 02, 2006" }}</p>
+{{ define "header" }}
+	{{ .Title }}
 {{ end }}
-</ul>
-</body>
-</html>
+{{ define "main" }}
+	<ul>
+	{{ range .RegularPages }}
+		<li><a href="{{ .Permalink }}"><h2>{{ .Title }}</h2></a></li>
+		<p>{{ .Date.Format "May. 02, 2006" }}</p>
+	{{ end }}
+	</ul>
+{{ end }}
