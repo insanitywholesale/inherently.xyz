@@ -62,6 +62,7 @@ li {
 	font-family: "Fira Sans";
 	src: url("/fonts/FiraSans-Regular.woff2") format("woff2");
 	font-display: swap;
+	unicode-range: U+0020-007F; /* The bare minimum for the English Language */
 }
 
 /*media query for bigger touch area
