@@ -2,7 +2,7 @@
 title: "Computers Were Faster"
 date: 2020-12-29T17:10:41+02:00
 draft: false
-tags: ["old", "computers", "technology"]
+tags: ["old", "hardware", "computers", "technology"]
 type: blog
 ---
 

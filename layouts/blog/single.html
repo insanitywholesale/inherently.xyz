@@ -1,9 +1,6 @@
-<html>
-	<title>{{ .Title }}</title>
-	<link rel="stylesheet" href="/css/basic.css"> <!--inside static dir-->	
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-<body>
-	<h1>{{ .Title }}</h1>
+{{ define "header" }}
+	{{ .Title }}
+{{ end }}
+{{ define "main" }}
 	<p>{{ .Content }}</p>
-</body>
-</html>
+{{ end }}

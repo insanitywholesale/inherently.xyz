@@ -1,7 +1,8 @@
 ---
 title: "Hardware Updates 2020"
 date: 2021-01-15T21:10:38+02:00
-draft: true
+tags: ["homelab", "hardware", "computers", "technology"]
+draft: false
 ---
 
 During 2020 I got a few upgrades to my setup but I don’t remember the exact order of them.
