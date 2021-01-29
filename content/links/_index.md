@@ -4,16 +4,23 @@ date: 2020-12-29T01:22:04+02:00
 draft: false
 ---
 
-# Here are some other things on this site
+## Here are some other things on this site
 
----
+### Websites
+[currently takes you back to non-hugo distro.watch](https://distro.watch/links.html)  
 
-## Other things here
+#### Lists of links
+[interesting software]()  
+[software I'd like to package]()  
 
-### Microservices
-[todo microservice](https://gitlab.com/insanitywholesale/usrvtodo)  
-[url shortener microservice](https://gitlab.com/insanitywholesale/urlshort)  
-[paste microservice](https://gitlab.com/insanitywholesale/ctrlshiftv)  
+### Programming stuff
 
-### Yucky stuff
+#### Microservices
+[gif creation](https://gitlab.com/insanitywholesale/gifinator)  
+[todo](https://gitlab.com/insanitywholesale/usrvtodo)  
+[url shortener](https://gitlab.com/insanitywholesale/urlshort)  
+[paste](https://gitlab.com/insanitywholesale/ctrlshiftv)  
+
+#### Yucky stuff
 [attempt at using mern](https://gitlab.com/insanitywholesale/mern_first)  
+[simple react thing](https://gitlab.com/insanitywholesale/reactionary)  

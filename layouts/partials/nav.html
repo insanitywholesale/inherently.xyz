@@ -1,13 +1,16 @@
-<center>
-<!--
-{{ range ($.Site.GetPage "taxonomyTerm" "tags").Pages }}
-	<a href="{{.Permalink}}">{{.Title}}</a></li>
-{{ end }}
--->
-{{ range $name, $taxonomy := .Site.Taxonomies.tags }} {{ $cnt := .Count }}
+<!--center>
+{{ range $name, $taxonomy := .Site.Taxonomies.tags }} {{ $count := .Count }}
 	{{ with $.Site.GetPage (printf "/tags/%s" $name) }}
-		<a href="{{ .RelPermalink }}" title="All pages with tag <i>{{ $name }}</i>">{{$name}}</a>
-		<sup>{{$cnt}}</sup>
+		<a href="{{ .RelPermalink }}" title="All pages with tag {{ $name }}">{{$name}}</a>
+		<sup>{{ $count }}</sup>
 	{{ end }}
 {{ end }}
+</center>
+<br-->
+<center>
+	<a href="/about">about</a>
+	<a href="/blog">blog</a>
+	<a href="/links">links</a>
+	<a href="/tutorials">tutorials</a>
+	<a href="/git">git</a>
 </center>
