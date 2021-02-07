@@ -11,4 +11,4 @@ RUN hugo
 
 FROM nginx:alpine
 COPY default.conf /etc/nginx/conf.d/
-COPY --from=build /go/src/inheresite-hugo/public/* /usr/share/nginx/html/
+COPY --from=build /go/src/inheresite-hugo/public /usr/share/nginx/html

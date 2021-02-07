@@ -2,7 +2,7 @@
 title: "Beyond Docker"
 date: FILL--THIS--IN
 tags: ["tutorial", "docker"]
-draft: true
+draft: false
 ---
 
 # Docker and beyond
