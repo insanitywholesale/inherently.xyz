@@ -10,6 +10,5 @@ WORKDIR /go/src/inheresite-hugo
 RUN hugo
 
 FROM nginx:alpine
-RUN rm -rf /usr/share/nginx/html/*
-COPY --from=build /go/src/inheresite-hugo/public /usr/share/nginx/html
-COPY cache.conf /etc/nginx/conf.d/cache.conf
+COPY default.conf /etc/nginx/conf.d/
+COPY --from=build /go/src/inheresite-hugo/public/* /usr/share/nginx/html/
