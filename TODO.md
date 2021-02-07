@@ -1,1 +1,2 @@
 - make the git page like the link page as far as content and layout if possible
+- fix layout of tutorials
