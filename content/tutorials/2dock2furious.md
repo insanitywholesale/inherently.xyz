@@ -5,8 +5,6 @@ tags: ["tutorial", "docker"]
 draft: false
 ---
 
-# Docker and beyond
-
 ## Preamble
 
 On the first part I only talked about docker and functionality included with it by default. This time we are going to look at a few extras. The list includes but is not limited to

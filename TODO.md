@@ -1,1 +1,1 @@
-- fix single page layout of tutorials
+- add contact page

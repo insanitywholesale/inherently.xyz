@@ -5,8 +5,6 @@ tags: ["tutorial", "docker"]
 draft: false
 ---
 
-# Docker
-
 ## Preamble
 
 Docker is quite popular and has a lot of benefits if used appropriately.
