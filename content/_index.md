@@ -14,26 +14,8 @@ My passion for productive and effective use of technology led to me discovering 
 and
 [self-hosting](https://www.reddit.com/r/selfhosted/wiki/index#wiki_self-hosting).
 Eventually I realized that it was something I could do all day and never be bored and thus began my studies in the field.
-Up to this point, I've tried many technologies, most notably (in non-chronological order):
-
-- linux
-- zfs
-- qemu+kvm+libvirt
-- proxmox
-- openstack
-- pfsense
-- vim
-- git
-- ansible
-- terraform
-- lxc
-- lxd
-- docker
-- docker-compose
-- kubernetes
-- freenas/truenas
-- glusterfs
-- ceph
+Up to this point I've tried many technologies including but not limited to
+linux, zfs, qemu+kvm+libvirt, proxmox, openstack, pfsense, git, ansible, terraform, lxc, lxd, docker, docker-compose, kubernetes, freenas/truenas, glusterfs, ceph
 
 check out what else is on the site by
 [clicking here](/links)
