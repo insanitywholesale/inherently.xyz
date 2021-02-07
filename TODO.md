@@ -1,1 +1,1 @@
-- fix layout of tutorials
+- fix single page layout of tutorials
