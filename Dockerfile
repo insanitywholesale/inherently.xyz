@@ -7,7 +7,7 @@ RUN go install -v
 WORKDIR /go/src
 RUN git clone https://gitlab.com/insanitywholesale/inheresite-hugo
 WORKDIR /go/src/inheresite-hugo
-RUN hugo -D
+RUN hugo
 
 FROM nginx:alpine
 RUN rm -rf /usr/share/nginx/html/*
