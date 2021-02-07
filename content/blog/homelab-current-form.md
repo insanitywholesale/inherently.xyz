@@ -40,4 +40,4 @@ This was a long journey and it isn’t coming to a close any time soon.
 The next step is to continuous deployment but that’s an issue for another time.
 To conclude as briefly as possible, I’ve no put most of the critical pieces of my homelab in a single git repo that I can use to recreate almost all of it from scratch with minimal manual intervention (there are still a few quirks like not having dynamic inventory for ansible and having to manually copy IPs but I can put that aside for now).
 Despite the imperfections like not having dynamic inventory for ansible or having secrets stored unencrypted in git, I'm very happy with the setup is working.
-If you missed them, make sure to check out the [hardware updates]({{< ref "blog/hardware-updates-2020">}}) and [the first part about software changes]({{< ref "blog/homelab-evolved>}}) for a better of what I've been up to.
+If you missed them, make sure to check out the [hardware updates]({{< ref "blog/hardware-updates-2020">}}) and [the first part about software changes]({{< ref "blog/homelab-evolved">}}) for a better of what I've been up to.
