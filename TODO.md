@@ -1,1 +1,1 @@
-- add contact page
+- add built-in comment/contact system
