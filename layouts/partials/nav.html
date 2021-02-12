@@ -1,12 +1,3 @@
-<!--center>
-{{ range $name, $taxonomy := .Site.Taxonomies.tags }} {{ $count := .Count }}
-	{{ with $.Site.GetPage (printf "/tags/%s" $name) }}
-		<a href="{{ .RelPermalink }}" title="All pages with tag {{ $name }}">{{$name}}</a>
-		<sup>{{ $count }}</sup>
-	{{ end }}
-{{ end }}
-</center>
-<br-->
 <center>
 	<big>
 		<a href="/">home</a>
