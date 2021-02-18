@@ -1,1 +1,1 @@
-- add built-in comment/contact system
+- fix typo in contact page
