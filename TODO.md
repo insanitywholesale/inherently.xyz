@@ -1,1 +1,3 @@
 - fix typo in contact page
+- add meta tags
+- add footer
