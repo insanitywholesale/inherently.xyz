@@ -6,6 +6,7 @@
 	--h1boi: #458587;
 	--h2boi: #d79821;
 	--h3boi: #cc241d;
+	--h4boi: #ff69b4;
 	--linkfam: #689d6a;
 }
 
@@ -44,6 +45,10 @@ h2 {
 
 h3 {
 	color: var(--h3boi);
+}
+
+h4 {
+	color: var(--h4boi);
 }
 
 a {
