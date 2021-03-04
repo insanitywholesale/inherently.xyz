@@ -11,17 +11,9 @@ site https://gitlab.com/insanitywholesale/distrowatch became a bit annoying to h
 hugo server -D --disableFastRender --baseURL=http://fruitdoot.hell --bind=0.0.0.0
 ```
 
-## lang
+## comments
 
-go
-
-## squad
-
-pog
-
-## hotel
-
-trivago
+there is a [contact system](https://github.com/insanitywholesale/gommenter) used to sumbit a comment through the form on the contact page
 
 # legal stuff
 

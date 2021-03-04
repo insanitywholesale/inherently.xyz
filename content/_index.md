@@ -41,6 +41,9 @@ However, my experience is far from limited to one thing when it comes to program
 Initially, I started out with shell scripting when I was 15-16 and that was most of my experience with programming until university.
 There I found out that despite the negative opinion of the wider programming community, I liked Java.
 After making a couple silly programs with java, I decided to try tackling a more "modern" stack.
+This took form as me diving into spring boot without any real end goal in mind.
+Unsurprisingly I ended up enjoying it but leaving it to the side as there was no project to work on.
+After that little bit of dipping a bit into backend stuff, I decided to give a "modern" frontend stack a chance.
 To that extent, I tried reactjs and nodejs and ended up making an incomplete (as of now) messaging site.
 Not satisfied with the previous experience and with a bit of research I set my sights on golang.
 Barely a week had passed yet I had made a couple web-based services that despite their simple function, were fairly advanced as far as architecture was concerned.
