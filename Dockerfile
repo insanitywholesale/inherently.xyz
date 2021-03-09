@@ -5,9 +5,8 @@ WORKDIR /go/src
 RUN git clone https://github.com/gohugoio/hugo.git
 WORKDIR /go/src/hugo
 RUN go install -v
-WORKDIR /go/src
-RUN git clone https://gitlab.com/insanitywholesale/inheresite-hugo
 WORKDIR /go/src/inheresite-hugo
+COPY . .
 RUN hugo
 
 # good old alpine to serve the files
