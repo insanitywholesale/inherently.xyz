@@ -64,6 +64,9 @@ li {
 	text-align: left;
 }
 
+a > h2 {
+	display: inline;
+}
 
 /*load some dank fira sans undertale woot woot*/
 @font-face {
