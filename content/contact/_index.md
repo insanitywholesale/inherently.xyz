@@ -5,7 +5,8 @@ draft: false
 ---
 
 ## Contact Me
-Do you have an opinion about something a blog post or a question? feel free to reach me in any of the following ways:
-- email: daddyinherently@cock.li
+Do you have an opinion about a blog post or a question about anything?
+feel free to reach me in any of the following ways:
+- email: [pepitsizous@zoho.com](mailto:pepitsizous@zoho.com)
 - discord: [lhz#5973](https://discord.com/users/334452995703963649)
-- that's it, I don't remember my twitter so there you go
+- twitter: [@\_longhairzombie](https://twitter.com/_longhairzombie)
