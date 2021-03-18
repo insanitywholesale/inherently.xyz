@@ -68,6 +68,13 @@ a > h2 {
 	display: inline;
 }
 
+#footer {
+	position:fixed;
+	left:0px;
+	bottom:0px;
+	width:100%;
+}
+
 /*load some dank fira sans undertale woot woot*/
 @font-face {
 	font-family: "Fira Sans";
