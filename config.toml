@@ -1,3 +1,17 @@
 baseURL = "https://next.distro.watch"
 languageCode = "en-us"
 title = "concrete box ramblings"
+
+[markup]
+	[markup.highlight]
+		anchorLineNos = true
+		codeFences = true
+		guessSyntax = true
+		hl_Lines = ""
+		lineAnchors = ""
+		lineNoStart = 1
+		lineNos = false
+		lineNumbersInTable = true
+		noClasses = true
+		style = "native"
+		tabWidth = 4
