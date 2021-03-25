@@ -1,8 +1,8 @@
 ---
 title: "Hardware Updates 2020"
 date: 2021-01-15T21:10:38+02:00
-tags: ["homelab", "hardware", "computers", "technology"]
 draft: false
+tags: ["homelab", "sysadmin", "hardware"]
 ---
 
 ## Getting a real storage server

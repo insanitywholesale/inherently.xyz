@@ -1,8 +1,8 @@
 ---
 title: "Reinstalling Gentoo"
 date: 2021-03-10T00:54:04+02:00
-tags: ["desktop", "computers", "technology", "linux", "gentoo", "zfs", "ansible", "debloat"]
 draft: false
+tags: ["desktop", "linux", "gentoo", "zfs", "ansible"]
 ---
 
 ## Why

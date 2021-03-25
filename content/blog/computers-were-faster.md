@@ -3,7 +3,6 @@ title: "Computers Were Faster"
 date: 2020-12-29T17:10:41+02:00
 draft: false
 tags: ["opinion", "old", "hardware"]
-type: blog
 ---
 
 ## Intro

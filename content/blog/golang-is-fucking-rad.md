@@ -1,8 +1,8 @@
 ---
 title: "Golang Is Fucking Rad"
 date: 2021-03-18T21:21:15+02:00
-tags: ["golang", "computers", "technology", "programming"]
 draft: false
+tags: ["opinion", "golang", "programming"]
 ---
 
 ## Radical Gopherism

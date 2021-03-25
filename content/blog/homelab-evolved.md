@@ -1,8 +1,8 @@
 ---
 title: "Homelab Evolved"
 date: 2021-02-07T13:53:10+02:00
-tags: ["homelab", "computers", "technology", "linux", "zfs", "kubernetes", "ansible"]
 draft: false
+tags: ["homelab", "sysadmin", "linux", "zfs", "kubernetes", "ansible"]
 ---
 
 ## Previous revelevant post

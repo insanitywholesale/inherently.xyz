@@ -1,8 +1,8 @@
 ---
 title: "Homelab Current Form"
 date: 2021-02-07T14:35:32+02:00
-tags: ["homelab", "computers", "technology", "linux", "zfs", "kubernetes", "ansible", "proxmox", "terraform"]
 draft: false
+tags: ["homelab", "sysadmin", "linux", "zfs", "kubernetes", "ansible", "proxmox", "terraform"]
 ---
 
 ## Previous relevant post
