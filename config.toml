@@ -2,6 +2,9 @@ baseURL = "https://next.distro.watch"
 languageCode = "en-us"
 title = "concrete box ramblings"
 
+[author]
+	name = "inherently"
+
 [markup]
 	[markup.highlight]
 		anchorLineNos = true
