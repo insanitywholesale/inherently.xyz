@@ -5,7 +5,7 @@ draft: false
 tags: ["homelab", "sysadmin", "linux", "zfs", "kubernetes", "ansible"]
 ---
 
-## Previous revelevant post
+## Previous relevant post
 The hardware side of the changes made to my homelab were covered [in a previous post]({{< ref "blog/hardware-updates-2020" >}}) where I also alluded to some software changes.
 
 ## What came before
