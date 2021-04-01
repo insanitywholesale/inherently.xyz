@@ -11,6 +11,12 @@ There will eventually be a part 2 where we will make an application that perform
 Also I'll assume you're using some kind of Linux or UNIX-like system because that's what I use.
 Let's start then.
 
+## Getting set up
+I'm not going to cover how to set up the development environment but you can look at these links:
+- https://golangdocs.com/install-go-linux
+- https://golangdocs.com/install-go-windows
+- https://golangdocs.com/install-go-mac-os
+
 ## Greeting the world
 First off, in a file called `main.go` we declare the package, add a couple basic imports, write the main function and make it print something:
 
