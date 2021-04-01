@@ -1,5 +1,5 @@
 ---
-title: "Go Api Part 1"
+title: "Go API Part 1"
 date: 2021-04-01T06:39:47+03:00
 tags: ["tutorial", "programming", "golang", "api"]
 ---
