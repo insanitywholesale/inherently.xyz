@@ -3,11 +3,14 @@
 	--puplebg: #221122;
 	--tantext: #ebdbb2;
 	--hrcomplaint: #83a598;
+	--hrcomplaint: #dfff00;
 	--h1boi: #458587;
 	--h2boi: #d79821;
 	--h3boi: #cc241d;
 	--h4boi: #ff69b4;
 	--linkfam: #689d6a;
+	--rawcode: #ff2feb;
+	--rawcodebg: #003366;
 }
 
 * {
@@ -17,7 +20,7 @@
 body {
 	background: var(--puplebg);
 	color: var(--tantext);
-	font-family: "Fira Sans", Helvetica, sans-serif;
+	font-family: "Fira Sans", sans-serif;
 	max-width: 1100px;
 	margin-left: auto;
 	margin-right: auto;
@@ -68,12 +71,25 @@ a > h2 {
 	display: inline;
 }
 
+
+p > code {
+	font-family: Consolas;
+	color: var(--rawcode);
+	background-color: var(--rawcodebg);
+}
+
+pre > code {
+	background-color;
+	font-family: "Lucida Console", monospace;
+}
+
+
 /*load some dank fira sans undertale woot woot*/
 @font-face {
 	font-family: "Fira Sans";
 	src: url("/fonts/FiraSans-Regular.woff2") format("woff2");
 	font-display: swap;
-	unicode-range: U+0020-007F; /* The bare minimum for the English Language */
+	/*unicode-range: U+0020-007F; The bare minimum for the English Language */
 }
 
 /*media query for bigger touch area*/
