@@ -149,6 +149,7 @@ In the code above, `myCurrentYear` is created when the request is sent according
 There is a little if statement that sets a default value for `Good` and `Comment` if the year is 2020 or 2021.
 The variables `goodYear` and `comment` are declared without a default value and if we hadn't used them the compiler would error out but we did so that's not an issue just something to keep in mind.
 All of the translation of the struct to json is done automatically, we just created a new json encoder that encodes into the responsewriter aka to the client and then encoded our struct.
+If you run `go run main.go` now and then visit `localhost:8080/year` you will see that now the response is in json, exactly what we wanted.
 
 ## Adding a dependency
 Eventually we will want to be able to do a GET request on something like `example.com/api/v1/orders/521` and get back the details of the 521st order in JSON format.
@@ -200,14 +201,72 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
-	http.HandleFunc("/year", getCurrentYear)
 	router := mux.NewRouter()
+	router.HandleFunc("/year", getCurrentYear)
 	log.Fatal(http.ListenAndServe(":"+port, router))
 }
 {{< / highlight >}}
 
 We've added it, notice how `http.ListenAndServe` has a second argument now instead of `nil`.
-This doesn't do a lot, we have added no extra functionality to our program but added a dependency.
+Also instead of `http.HandleFunc` we have `router.HandleFunc` since the handler is no longer the default one from `net/http`.
+Now if you visit `localhost:8080/year` you'll notice that json is returned just like before.
+I didn't comment on it previously but did you notice the lack of `good` in the json response?
+Why is that? We explicitly set a value so what's the deal there?
+In the case of a `bool` variable, `false` is considered to be the "empty" state of the variable so it's not shown.
+All we need to do to fix it is remove the `omitempty` from its annotation (as well as the comma) and we'll get the result we want.
+Here is the finished code then:
+
+{{< highlight go >}}
+package main
+
+import (
+	"encoding/json"
+	"github.com/gorilla/mux"
+	"log"
+	"net/http"
+	"os"
+	"time"
+)
+
+type MyYear struct {
+	CurrentYear int    `json:"currentyear"`
+	Good        bool   `json:"good"`
+	Comment     string `json:"comment,omitempty"`
+}
+
+func getCurrentYear(w http.ResponseWriter, r *http.Request) {
+	currentTime := time.Now()
+	year := currentTime.Year()
+	var goodYear bool
+	var comment string
+	if (year == 2020 || year == 2021) {
+		goodYear = false
+		comment = "big oof"
+	}
+	myCurrentYear := MyYear{
+		CurrentYear: year,
+		Good: goodYear,
+		Comment: comment,
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(myCurrentYear)
+	return
+}
+
+func main() {
+	log.Println("ordering facilities online")
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	router := mux.NewRouter()
+	router.HandleFunc("/year", getCurrentYear)
+	log.Fatal(http.ListenAndServe(":"+port, router))
+}
+{{< / highlight >}}
+
+Adding `gorilla/mux` didn't do a lot, we have added no extra functionality to our program but added a dependency which is generally not good.
 The next part will focus more on the awesome things we can do with `gorilla/mux` related to paths, subrouters, regular expressions and matching HTTP verbs.
 
 ## Conclusion
