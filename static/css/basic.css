@@ -2,12 +2,12 @@
 	/*configure colorboiz */
 	--puplebg: #221122;
 	--tantext: #ebdbb2;
-	--hrcomplaint: #83a598;
 	--hrcomplaint: #dfff00;
 	--h1boi: #458587;
 	--h2boi: #d79821;
 	--h3boi: #cc241d;
 	--h4boi: #ff69b4;
+	--h5boi: #83a598;
 	--linkfam: #689d6a;
 	--rawcode: #ff2feb;
 	--rawcodebg: #003366;
@@ -52,6 +52,10 @@ h3 {
 
 h4 {
 	color: var(--h4boi);
+}
+
+h5 {
+	color: var(--h5boi);
 }
 
 a {
