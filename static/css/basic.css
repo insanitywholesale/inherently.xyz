@@ -76,17 +76,22 @@ a > h2 {
 }
 
 
+/*for inline code*/
 p > code {
 	font-family: Consolas;
 	color: var(--rawcode);
 	background-color: var(--rawcodebg);
 }
 
+/*for code blocks*/
 pre > code {
-	background-color;
 	font-family: "Lucida Console", monospace;
 }
 
+/*for line numbers -- doesn't work cause highlight color is inline*/
+tr td:first-child code:first-child span {
+	color: var(--h5boi);
+}
 
 /*load some dank fira sans undertale woot woot*/
 @font-face {
