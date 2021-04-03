@@ -1,6 +1,6 @@
 ---
 title: "Docker"
-date: theyearthatneverhappened-atsomemonthTmomentofimpact
+date: 2020-12-29T09:15:23+03:00
 tags: ["tutorial", "docker"]
 draft: false
 ---

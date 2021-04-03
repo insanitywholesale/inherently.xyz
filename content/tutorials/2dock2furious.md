@@ -1,13 +1,15 @@
 ---
 title: "Beyond Docker"
-date: FILL--THIS--IN
+date: 2020-09-22T12:29:52+03:00
 tags: ["tutorial", "docker"]
 draft: false
 ---
 
 ## Preamble
 
-On the first part I only talked about docker and functionality included with it by default. This time we are going to look at a few extras. The list includes but is not limited to
+(Warning: the examples haven't been fully validated so they're not guaranteed to work)
+
+On the first part I only talked about docker and functionality included with it by default. This time we are going to look at a few extras. The list includes but is not limited to:
 
 - docker-compose since it's often the next step after standalone docker
 - a couple tips for Dockerfiles like being extra paranoid about the base image used and how to make sure the thing inside the container is running and listening to requests
