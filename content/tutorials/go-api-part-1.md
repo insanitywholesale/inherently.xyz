@@ -18,7 +18,7 @@ I'm not going to cover how to set up the development environment but you can loo
 - https://golangdocs.com/install-go-mac-os
 
 ## Greeting the world
-First off, in a file called `main.go` we declare the package, add a couple basic imports, write the main function and make it print something:
+First off, in a file called `main.go` we declare the package (important note here, if the package is not `main` then there is no ability to use `go run` on it), add a couple basic imports, write the main function and make it print something:
 
 {{< highlight go >}}
 package main
