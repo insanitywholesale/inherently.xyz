@@ -18,11 +18,11 @@ I'll assume you read the front page or if you didn't, you can click [here]({{< r
 - Packaging for Gentoo Linux using ebuilds
 
 ## Highlighted Projects
-- [gifinator:](https://gitlab.com/insanitywholesale/gifinator) port of a google codebase to use minio instead of gcs
-- [go-usrv-tmpl:](https://github.com/insanitywholesale/go-usrv-tmpl) template for microservices (still WIP)
-- [usrvtodo:](https://gitlab.com/insanitywholesale/usrvtodo) todo microservice with a JS-free frontend
-- [infra:](https://gitlab.com/insanitywholesale/infra) not super duper proud of it but it's improving
-- [interocitor:](https://github.com/insanitywholesale/interocitor) ansible playbook to set up vfio
+- [gifinator](https://gitlab.com/insanitywholesale/gifinator): port of a google codebase to use minio instead of gcs
+- [go-usrv-tmpl](https://github.com/insanitywholesale/go-usrv-tmpl): template for microservices (still WIP)
+- [usrvtodo](https://gitlab.com/insanitywholesale/usrvtodo): todo microservice with a JS-free frontend
+- [infra](https://gitlab.com/insanitywholesale/infra): not super duper proud of it but it's improving
+- [interocitor](https://github.com/insanitywholesale/interocitor): ansible playbook to set up vfio
 - I'm sure I'll think of something more
 
 ## Reach Me
