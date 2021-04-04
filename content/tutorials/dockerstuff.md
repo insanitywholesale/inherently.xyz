@@ -1,8 +1,9 @@
 ---
 title: "Docker"
-date: 2020-12-29T09:15:23+03:00
-tags: ["tutorial", "docker"]
+date: 2020-06-04T09:15:23+03:00
+summary: "expansive guide to docker"
 draft: false
+tags: ["tutorial", "docker"]
 ---
 
 ## Preamble

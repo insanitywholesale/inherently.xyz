@@ -1,8 +1,9 @@
 ---
 title: "Beyond Docker"
 date: 2020-09-22T12:29:52+03:00
-tags: ["tutorial", "docker"]
+summary: "docker-compose and more docker topics"
 draft: false
+tags: ["tutorial", "docker"]
 ---
 
 ## Preamble
@@ -21,7 +22,7 @@ Sounds exciting, right? Let's get started then
 ## Prerequisites
 
 - MUST :
-	+ Have Linux installed
+	- Have Linux installed
 	- Have Docker installed
 	- Read the first part
 - OPTIONAL:
@@ -43,13 +44,13 @@ First of all, how do we get that. Following the first-glance upstream documentat
 For our first multi-container deployment, let's try [gitea](https://docs.gitea.io/en-us/install-with-docker/ "Gitea Install with Docker") since it already has pretty good examples. The first ingredient we need is a file named `docker-compose.yaml` or `docker-compose.yml` if we wish it to be automatically recognized by the `docker-compose` command the same way a file named `Dockerfile` is recognized by `docker build`. However, an argument can be give to the `-f` flag in order to specify a different file if that's what we wanted to do. For now, we open our favorite editor and start writing.  
 First up, we need to specify what version we're using at the very top of the file. This will determine what features we have access to. The latest major version is 3 so let's go with that:
 
-```
+```yaml
 version: "3"
 ```
 
 It needs to be provided as a string which is why it's surrounded by double quotes. Next up we specify our services, meaning the declaration block for the individual containers and their settings:
 
-```
+```yaml
 version: "3"
 
   services:
@@ -57,7 +58,7 @@ version: "3"
 
 Please note the whitespace indentation, this is how YAML is written. After telling docker-compose that we're about to define our services, let's actually define one:
 
-```
+```yaml
 version: "3"
 
   services:
@@ -69,7 +70,7 @@ version: "3"
 
 Which means the service is named `server` which uses the `gitea/gitea` image and should always be restarted. Below it we can fill some environment variables:
 
-```
+```yaml
 version: "3"
 
   services:
@@ -91,7 +92,7 @@ The lines below `environment` that start with a dash are items of a list in YAML
 
 Let's move on to specifying the networks and volumes this container will use (declarations for networks and volumes will be covered later, don't worry). First a mount point for data and two for sourcing the time from the host system (the `:ro` means read only so don't worry about your host files being overwritten or corrupted). This is what the file looks like after those additions:
 
-```
+```yaml
 version: "3"
 
   services:
@@ -117,7 +118,7 @@ version: "3"
 
 Quite a bit nicer and easier to read than the multiple command-line declarations I think. Now that it's hooked up to a network, it needs at least one port to expose its web interface on (port 3000) and there is also the ability to ssh into it (using port 22 which is the standard port for it). Here is how ports are mapped in a docker-compose file:
 
-```
+```yaml
 version: "3"
 
   services:
@@ -146,7 +147,7 @@ version: "3"
 
 The above covers the gitea server part but we defined a database to be used so next up we have to add that. The format is the same as above and no new concepts are introduced so here is the file in full as it exists now:
 
-```
+```yaml
 version: "3"
 
   services:
@@ -188,7 +189,7 @@ version: "3"
 
 However there is are a few things still missing from the above. First, the `gitea` network definition. Second, we're still storing credentials in the docker-compose file in plaintext form. Last, and less apparent, nothing guarantees that the gitea server instance will start only after the database is operational. To achieve this, we will use `depends_on`. In this case, the server should not start until the database is ready so `depends_on` will be added to the server declaration:
 
-```
+```yaml
 version: "3"
 
   services:
@@ -231,7 +232,7 @@ version: "3"
 
 Simple as that, we have now defined a startup dependency and ensured that our containers are started in the correct order. Let's move on to the network declaration now.
 
-```
+```yaml
 version: "3"
 
   services:
@@ -285,7 +286,7 @@ After having written our `docker-compose.yml` or `docker-compose.yaml` (as menti
 
 I'll have to be a buzzkill and remind you that we're still storing access credentials inside a file that could and should be in a source code version control repository. Public git repositories are free of charge on the vast majority of code hosting websites and allow other people to reuse our docker-compose YAML files to run services more easily. It becomes clear then that our credentials should be stored elsewhere. Where could we store them though? Inside `.env` of course! Docker-compose can read environment variables if there is a file called `.env` inside the same directory that the `docker-compose.yml` file is. This means that only that single file can be excluded from version control and while we publicize everything else. Let's take a look at the `.env` file then:
 
-```
+```bash
 UUID=1000
 UGID=1000
 
@@ -300,7 +301,7 @@ PSTGRSDB=gitea
 
 Simple as that, `variable=value` pairs is all that's needed. I avoided underscores and refactored the names a bit to make it clear when the above variables are used. Let's see how the docker-compose file will look if we want to source the values of the variables we defined
 
-```
+```yaml
 version: "3"
 
   services:
@@ -350,7 +351,7 @@ Pretty easy, right? Just like grabbing the value from variables in the shell. No
 
 Personal preference of mine is to set the name (equivalent to `--name` in `docker run`) for the containers as well as their hostnames (equivalent to `--hostname` in `docker run`), usually to the same value. The final `docker-compose.yml` would look like this if you wanted to adopt my pet peeve:
 
-```
+```yaml
 version: "3"
 
   services:
@@ -406,7 +407,7 @@ As on the previous part, we'll start with a simple example. Our old pal nginx wi
 
 First, start an nginx container in detached mode `docker run --rm -d --name ngx nginx` and then with the help of `docker exec -it ngx /bin/bash` get a shell. Ta-da! Don't forget, if you don't give it a nice name you can always use the hash-like name shown in `docker container ls`, no hindsight required. I walked you through all of this because it's going to be useful for debugging should you find yourself in a sticky situation and because we'll demonstrate a common healthcheck command. The one in question is `curl --fail http://localhost || exit 1`. This will exit with 1 (which is the error/problem code) if there is an error or `0` if there isn't. Of course we can also replace `http://localhost` with the URL of our choice. This is a common way to check if a service is still responding normally for obvious reasons, all that is required is `curl`, a very common utility and we get improved awareness of our program's status. Let's see how we can take a Dockerfile from the previous part and add a healthcheck to it. Here is the original (to be used with [this project](https://gitlab.com/insanitywholesale/reactionary "reactjs counters website")):
 
-```
+```dockerfile
 FROM node:14.1.0-alpine3.11 as build
 WORKDIR /app
 COPY . .
@@ -422,7 +423,7 @@ CMD ["nginx", "-g", "daemon off;"]
 
 And here it is with the healthcheck added:
 
-```
+```dockerfile
 FROM node:14.1.0-alpine3.11 as build
 WORKDIR /app
 COPY . .
@@ -498,7 +499,7 @@ What are they and what do they do? A proxy is essentially a middleman, in the co
 First up, make a directory (I recommend `$HOME/docker`) to put all the relevant files in (this will be known as `DOCKDIR` for our purposes). Since the basics have been explained, here is where we are going to start from:  
 create a `docker-compose.yml` inside the `DOCKDIR` with the following content
 
-```
+```yaml
 version: "3"
 
 services:
@@ -529,7 +530,7 @@ networks:
 
 You didn't read this wrong, I'm using the latest release of the v1.x of traefik since the configuration is much simpler. This isn't fully ready but we're taking it one step at a time. So, remember what external means? We have to run `docker network create traefik_proxy` before ever running `docker-compose up` since it will fail due to the network missing. As for a brief explanation, traefik's api is running on port 8080 so we expose that and port 80 is where all HTTP traffic will go to. We also bind mount the configuration directory so we can edit traefik's config easily. Save and exit the file and create a subdirectory named `traefik` under the `DOCKDIR` to put the `traefik.toml` in. Said file will include the following:
 
-```
+```toml
 #options for loglevel are: DEBUG, INFO, WARN, ERROR, FATAL, PANIC
 logLevel = "DEBUG"
 
@@ -558,7 +559,7 @@ exposedbydefault = true
 
 First, enabling debug mode to be able to get logs in case something is wrong and turning off certificate checking since it will all be http-only. We set `http` as the only default entrypoint and then define it addresses on port 80. After that, we enable the api with the dashboard and make it accessible on port 8080. Finally, we add docker-related settings and set all services to be exposed by default without requiring the use of a label for the container. Labels? Let's go back to the `docker-compose.yml` and add a couple things. Traefik uses labels for configuring apects of how the reverse proxy will treat an application. For example:
 
-```
+```yaml
 version: "3"
 
 services:
@@ -593,7 +594,7 @@ networks:
 
 This sets the name for the backend that handles its traffic to `traefik`, makes it accessible by using `traefik.$DOMAINNAME` (we'll define this in our `.env`), sets the port that the application runs on as `8080` and defines the protocol as http. This little bit will be added to almost every container with some modifications if it's a container that should accept traffic from clients and not a database or something else meant for internal use only. I'll use a container running caddy and one using nginx to demonstrate:
 
-```
+```yaml
 version: "3"
 
 services:
@@ -648,7 +649,7 @@ networks:
 
 Fairly simple, right? Only one thing is missing at the moment and that is our `.env` to define a few commonly used variables. Here it is then:
 
-```
+```bash
 PUID=1000
 PGID=998
 TZ="Europe/Athens"
@@ -661,7 +662,7 @@ I defined some commonly used things like a password for databases, timezone, the
 
 if it is remote:
 
-```
+```bash
 192.168.35.18	web1.docks.localhome
 192.168.35.18	web2.docks.localhome
 192.168.35.18	traefik.docks.localhome
@@ -669,7 +670,7 @@ if it is remote:
 
 or if you're running it on the same host you're accessing it from:
 
-```
+```bash
 127.0.1.1	web1.docks.localhome
 127.0.1.1	web2.docks.localhome
 127.0.1.1	traefik.docks.localhome
@@ -681,13 +682,13 @@ We need this because traefik responds based on the name that is requested. Time 
 
 The above is all fine and dandy but what if things go wrong? A common first action is to look at the logs. Since everything is running inside docker, we could start an interactive terminal and check there but anything that has already been printed will not be shown. Here is where the `logs` subcommand comes in. While in the same directory as the `docker-compose.yml` (or by using the `-f` flag) we can see the logs from all the containers that were launched, including the previous 50 lines, like so:
 
-```
+```bash
 docker-compose -f docker-compose.yml logs --tail=50 -f
 ```
 
 I included the file flag for docker-compose and the follow flag for `logs` to showcase how they should be positioned since order is important here. This command will print the last 50 lines of logs from all containers that were started from the specified `docker-compose.yml` and keep following the logs as they're printed. That's not what we want to always do because the problematic container might be a single one and the clutter from the rest is distracting. No problem, simply append the specific one that needs to be examined, let's use traefik as the example:
 
-```
+```bash
 docker-compose -f docker-compose.yml logs --tail=50 -f traefik
 ```
 
@@ -704,11 +705,11 @@ If there are not at least 2 copies of a file, it might as well not exist. Backup
 What would a simple backup such as the one I suggest above look like then?
 
 The following commands are examples that you should tweak depending on your setup and not meant to be copy-pasted and used
-```
+```bash
 rsync -Pauvr --progress /home/user/docker /mnt/externaldrive/docker-bak-$(date +'%F')
 ```
 and
-```
+```bash
 tar czvf /mnt/externaldrive/docker-bak-$(date +'%F') /home/user/docker
 ```
 
@@ -722,12 +723,12 @@ Connecting to dockerhub as well as having an account there can bothersome to imp
 
 First let's see how we can run a local docker registry using a raw docker command:
 
-```
+```bash
 docker run -d -p 5000:5000 -v ./registry:/var/lib/registry registry:2
 ```
 
 With the above setup, we'll have a persistent registry running on port 5000 of the host that is running it. For the client setup I'm going to assume everything is on the same system so I will use `localhost` for the registry address but in reality you'll be running it on a remote host so feel free to replace `localhost` with the IP or hostname of the host that the registry is running on in the following examples. On the client's side create the file `/etc/docker/daemon.json` (it doesn't exist by default) and insert the following into it:
-```
+```json
 {
 	"insecure-registries" : [
 		"localhost:5000"
@@ -737,7 +738,7 @@ With the above setup, we'll have a persistent registry running on port 5000 of t
 
 Don't worry about the "insecure" part, that's because it's not using https. In order to test this out, try pushing an image to it and then pulling it:
 
-```
+```bash
 docker pull nginx:1.19.2-alpine
 docker tag nginx:1.19.2-alpine localhost:5000/ngxalp
 docker push localhost:5000/ngxalp
@@ -752,14 +753,14 @@ And there we have it, our very own local dockerhub. That's not where the story e
 
 This one requires a tiny bit more configuration but still nothing extravagant. Start by editing `/etc/docker/registry/config.yml` (the registry subdirectory as well as the config.yml file don't exist by default so you'll have to create them first) and inserting the following in it:
 
-```
+```yaml
 proxy:
   remoteurl: https://registry-1.docker.io
 ```
 
 and afterwards add an extra option in `/etc/docker/daemon.json` so the file looks like the one below:
 
-```
+```json
 {
 	"insecure-registries" : [
 		"localhost:5000"
