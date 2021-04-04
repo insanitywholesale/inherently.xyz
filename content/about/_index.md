@@ -14,7 +14,7 @@ I'll assume you read the front page or if you didn't, you can click [here]({{< r
 - Docker (deployment, development, debugging and more)
 - Kubernetes (self-deployed and managed clusters, upstream k8s as well as k3s)
 - Ansible and Terraform for automation
-- Proxmox
+- Proxmox and libvirt for virtualization
 - Packaging for Gentoo Linux using ebuilds
 
 ## Highlighted Projects
@@ -27,3 +27,15 @@ I'll assume you read the front page or if you didn't, you can click [here]({{< r
 
 ## Reach Me
 - through the [contact page]({{< ref "contact" >}})
+
+## Find my code
+I use multiple git forges to host my code, here are the links to them:
+
+### Gitea
+- [Hosted on this server and mirroring the rest](https://git.distro.watch/inherently)
+
+### Gitlab
+- [Primary place used for publishing source code](https://gitlab.com/insanitywholesale)
+
+### Github
+- [Occasionally used for some stuff](https://github.com/insanitywholesale)

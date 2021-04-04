@@ -2,5 +2,4 @@
 - fix font unicode range (not a huge deal)
 - test 2dock2furious docker-compose.yml examples (actually need to do this)
 - write tutorial "Go API Part 2" (not gonna happen)
-- merge `git` page to `about` or `links`
 - possibly make list page titles lowercase
