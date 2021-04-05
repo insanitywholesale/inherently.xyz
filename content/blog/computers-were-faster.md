@@ -13,7 +13,7 @@ The socket 478 based ones are much closer to usable for most of my use cases and
 How can that ""obsolete trash"" be useful, one might rightfully wonder.
 
 ## My Use Cases
-## Development use case
+### Development use case
 Computers with less than 4GB of RAM and 2 cores are completely unusable and nobody should ever touch them, a "muh modern" advocate might cry.
 However I use those computers at least once a week for various tasks.
 First off, as a 32-bit docker registry. They don't need to mix with the rest of the environment since there is no actual dependency between the 32bit and 64bit infrastructure.
@@ -25,7 +25,7 @@ On a newer multi-core cpu with loads of RAM and fast storage the bottleneck only
 However on a more limited system it becomes apparent very quickly where the bottleneck could be.
 For example, if the hard drive access is more than it should be, you hear the damn thing click every time so you know where to look.
 
-## Networking Use Case
+### Networking Use Case
 In addition, old computers make great routers. Routers? They're old and weak computers you might think.
 Well, that anemic MIPS or ARM based all-in-one network box that many ISPs provide you with has a CPU that is orders of magnitude slower than either of my 32bit boxes. For the router use case the same thing applies to the amount as well as speed of RAM.
 In fact, that's how I originally got into DIY and selfhosting.
