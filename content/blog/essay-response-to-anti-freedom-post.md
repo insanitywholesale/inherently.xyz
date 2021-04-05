@@ -1,16 +1,16 @@
 ---
 title: "Essay Response to Anti-Freedom Post"
 date: 2021-04-05T12:34:24+03:00
-draft: true
+draft: false
+tags: ["opinion", "rant", "free software", "software freedom", "essay"]
 ---
 
 ## Intro
 There are a lot of airhead takes on the internet but I've never seen so many in one post and it's a good opportunity to respond to a lot of the anti-freedom arguments one might encounter online.
 I might seem a bit too combatative in the beginning but that's mostly because I know what's coming later.
-Link to the [original](#TODO).
+Link to the [original](https://r0ml.medium.com/free-software-an-idea-whose-time-has-passed-6570c1d8218a).
 
 ## Let's go
-
 > Almost forty years ago, in 1985, the idea of “Free Software” was born.
 > That is not to say that the idea of sharing software with colleagues and making source code available was born.
 > Ten years before the GNU Manifesto and the Free Software Foundation, I worked at a cloud services company (only we called it “timesharing” back then), and in order to encourage people to use our offerings and pay us for renting computer time and disk space and network bandwidth, we curated a collection of software libraries that customers could freely use.
@@ -411,6 +411,9 @@ I didn't buy the anti-freedom arguments before and this doesn't change anything.
 > The free-softwarians make the argument that without access to the source code, one would not be able to detect the nefarious intent of the bad actors.
 > Let me digress briefly to reminisce about an incident during my career.
 > I was employed by a large investment bank who had asked for (and received) a copy of the source code for Microsoft Windows.
+
+Let's make this clear, this is an incredibly powerful and wealthy organization doing something that an average user of the same software cannot.
+
 > This bank then proceeded to make modifications and compile their own custom version of Microsoft Windows which they distributed to tens of thousands of employees.
 > Furthermore, we also wrote custom applications which relied on features of this custom version of MS Windows.
 > You’ll never guess what happened next.
@@ -423,12 +426,29 @@ I didn't buy the anti-freedom arguments before and this doesn't change anything.
 > So we bought tens of thousands of licenses for VMWare so that every employee could run two virtual machines: one running our custom version of Microsoft Windows, and one running the publicly available version.
 > For all I know, they are doing this still.
 
+So instead of being able to give back the modifications and benefitting others with the same use case, those changes were kept secret and resulted in terrible software engineering decisions and even worse monetary ones.
+Was this supposed to be a defense of proprietary software cause if so, it failed spectacularly.
+
 > The point being: large corporations and government agencies have always had the ability to get access to the source code of commercial software, and modify it if they wish.
 > And if they have a good reason, they will do so. But usually, they don’t wish to.
+
+Another flagrant display of the author's true thoughts.
+Multi-millionaire institutions can do something if they want to even though a common person can't so everything is fine and you shouldn't think too hard about it.
+
 > The GPL (or other such licenses) will only assist in foiling bad actors if the expectation is that individual hobbyists are responsible for regulating cyberspace and preventing cybercrime.
+
+False. Instead of one megacorp being accountable to another megacorp, everyone is given the freedom to perform their own audits and modifications.
+
 > The government and regulated utility companies and large corporations do not need special copyright licenses in order to audit proprietary software.
 > They have plenty of existing mechanisms for doing that.
+
+I will not concede the false notion that since large corporations can sometimes receive source code then average computer users should not be guaranteed the freedom to do so too.
+My goal is to further democratize computer systems and make them work for the benefit of people, if you happen to be employed by a multi-millionaire megacorp you should have the same access and influence as anyone else using the software.
+
 > After all, it’s not as hard as tracking every telephone call on the planet — an activity which you or I might not be able to engage in — but rest assured that it is not as challenging for a certain government agency as it would be for you.
+
+Certain private corporations track every search query and the overwhelming majority of site visits all over the planet.
+Not sure what the argument is here other than "massively powerful institutions can do X while citizens cannot and that is perfectly fine" which I've already responded to.
 
 > And while we’re on the subject of preventing bad actors from harming us with software, I read recently that the losses from cybercrime in the US exceeded the losses from all natural disasters combined.
 > That’s a worrisome bad actor situation.
@@ -436,13 +456,205 @@ I didn't buy the anti-freedom arguments before and this doesn't change anything.
 > And does the Free Software Foundation come down on the side of those in this fight who would deter the bad actors? No they do not!
 > The unimpeded access to source code and running software (like the unimpeded access to unregulated assault rifles) is more important than the peace of mind which comes from reducing the threat of criminals breaking into your computer (or shooting up your school).
 
+False dichotomy again, a lot if not a majority of free software activists are in favor of reproducible builds and securing software supply lines.
+
 > Next point (I’ve lost track of the numbers): why does copyrighting software provide more freedom than patenting software?
-The stated intent of Article I, Section 8, Clause 8 of the United State Constitution, is to “promote the progress of science and useful arts” by striking a bargain: inventors would document their inventions in exchange for an exclusive right for a limited time.
+> The stated intent of Article I, Section 8, Clause 8 of the United State Constitution, is to “promote the progress of science and useful arts” by striking a bargain: inventors would document their inventions in exchange for an exclusive right for a limited time.
 > That “limited time” for copyright is the remaining life of the author plus 70 years.
 > That “limited time” for patents is 20 years.
-> It seems to me that there is more freedom sooner with a patent than a copyright. If we eliminated the ability to copyright software, we could have more software in the public domain sooner. That sounds like increasing freedom. There is a fruitful area for proposing legislation to advance things on this front. Software patents could be of shorter duration. Software patents might require the source code to be part of the filing (which, not incidentally, provides the same “bad actor” protection as the GPL). Then the government would be enforcing universal access to the source code, as opposed to now, where that function falls to a subsidiary of Microsoft (Github). If there is a political dimension to software, then the mechanisms to enforce that freedom properly belong to government, not multi-national corporations. Yet the Free Software Foundation does not have a great record of proposing and lobbying for legislation to increase the rights of “the software”, relying instead on a single counter-intuitive quirk of copyright law. Sometime in the early 2000’s, I was invited by a telecommunications lobbying group to attend an event in Washington D.C. to lobby on behalf of free software to a collection of congressmen and senators. I remember the event because it was there that I met Bruce Momjian (who was the most interesting free software advocate) and Joe Biden (who was the most interesting politician). Unfortunately, the politicians did all of the talking, because the free software contingent did not have a legislative agenda. I doubt I’ll get another opportunity, but I sometimes ponder the hypothetical: if I did get another meeting with Joe Biden to lobby him for legislative changes to improve “software freedom”, what would I ask him to implement? If the Free Software Foundation has a legislative platform, I don’t know what it is. It seems to be an organization that focuses on litigation rather than legislation. It is against laws that others have proposed, rather than for laws that it has proposed. It focuses on products (boycotting them or building them) rather than governance (proposing legislation and regulation). The Free Software Foundation seems to be a collection of programmers who want to write software and talk about software and boycott software. It seems to be uninterested in proposing political solutions to issues it cares about — but willing to attack proposals that others have made that it disagrees with. As a political organization, it is profoundly ineffective, apparently by design.
-> Before so-called “free software”, there was public software. We could return to public software. As there are public libraries for books, there could be public libraries for software. Interestingly, a public library does not give people the right to make their own copies. They can check books out of the library and read them for a time, then return them so that others can read them. The activity is funded by the government. There is no reason that this activity could not be mimicked with software. It need not be “free software”. It could be licensed commercial software (using floating network licenses), funded by the government, providing software licenses to its citizenry to check out, use for a time, then return for others to use. This would increase access to software to our citizenry — increased freedom for all.
-> Freedom of the press is the freedom to publish without government interference. However, the existence of a “free press” does not mean that I can copy an article written by a journalist, print my own copies, and distribute them myself (whether I charge for them or not). Specifically, we are all agreed that a free press can healthily exist in a regime where copying or modifying the published work of that free press is not allowed. Is, in a word, illegal. (Illegal, incidentally, according the same regulatory regime that the Free Software regime employs to “keep software free”.) That prohibition against copying apparently, does not infringe on the freedom of the press. Similarly, I think it is manifestly obvious that freedoms of “the software” do not require the ability to make copies or even to make modifications. If we are going to use the “free press” metaphor to understand “free software”, then programs which are “free software” can be restricted from being copied or modified without impinging on any freedoms. Which is a long winded way of saying that I can easily imagine a world in which the GPL has been abandoned, but other policies and regulations and legislative actions have created a world with considerably more freedoms for “the software” than we enjoy today.
-> These are people who are so invested in their cultish conspiracy theories that they literally have no idea how software works today. The funniest part of the recent Stallman announcement about his return to the FSF board was the admission that they couldn’t figure out how to make a video of the announcement and distribute it. We are way beyond new board members, or a new organization to keep the flame of “Free Software” alive. It is time to admit that all the tropes and rhetoric and conspiracy theories of the so-called free software movement are an impediment to making any actual progress on making positive political change with regards to software. I believe firmly that we need to have better engagement from government to improve the positive impact that software can make on society. Regulations and legislation and governmental programs and non-governmental organizations need to keep pace with the evolving nature of software. I also firmly believe that so-called “free software” is the greatest impediment to making real progress on any of these fronts. The Free Software clique is rooted in the deep past, and committed to endlessly rehashing the software controversies of the 1980’s — when mainframes were battling with minicomputers for supremacy. The leadership is morally and intellectually bankrupt. The organization is morally and intellectually bankrupt. The “movement” is morally and intellectually bankrupt. It was an idea that had resonance and a potential future in the 1990’s. Back then, I was a believer.
-> That time is passed. Let the past die. Kill it, if you have to. That’s the only way to become what we aspire to be. A society with a rational governance framework for software and its effects. I’m willing to support a Public Software Foundation that advocates for that.
-> In the future, should I use the phrase “free software”, I will be talking about software that I don’t have to pay for. Otherwise, I’ll be talking about “digital autonomy”, or open source software, or liberal software, or, as most publications have been doing for the last few decades, “liberally licensed software”. It’s from the Latin “libre” (referring to freedom), or perhaps from the Latin “liber” (meaning “book” — a metonym for education).
+> It seems to me that there is more freedom sooner with a patent than a copyright.
+> If we eliminated the ability to copyright software, we could have more software in the public domain sooner.
+
+When you abolish copyright, feel free to email me.
+
+> That sounds like increasing freedom.
+> There is a fruitful area for proposing legislation to advance things on this front.
+> Software patents could be of shorter duration.
+
+Yeah in a parallel universe where copyright doesn't exist.
+
+> Software patents might require the source code to be part of the filing (which, not incidentally, provides the same “bad actor” protection as the GPL).
+
+Provides the ability to study the code without guaranteeing the rest of the 4 freedoms.
+
+> Then the government would be enforcing universal access to the source code, as opposed to now, where that function falls to a subsidiary of Microsoft (Github).
+
+First off, that's not an accurate comparison.
+Github is one place of many where you could host code even though it's cartoonishly overpopulated while there is no alternative to the government.
+Second, the wonder of copyleft is that it exploits a system that the big software vendors want to stay in place, namely copyright, and uses it to benefit the majority of people.
+
+> If there is a political dimension to software, then the mechanisms to enforce that freedom properly belong to government, not multi-national corporations.
+
+Sure but copyleft free software takes advantage of a set of laws, copyright, to grant users of software the 4 freedoms and not contracts between megacorps.
+
+> Yet the Free Software Foundation does not have a great record of proposing and lobbying for legislation to increase the rights of “the software”, relying instead on a single counter-intuitive quirk of copyright law.
+
+And they've done more to achieve that end than you ever will.
+Also the EFF which argues for all kinds of ethical technology-related matters has done a lot of work regarding legislation.
+
+> Sometime in the early 2000’s, I was invited by a telecommunications lobbying group to attend an event in Washington D.C. to lobby on behalf of free software to a collection of congressmen and senators.
+> I remember the event because it was there that I met Bruce Momjian (who was the most interesting free software advocate) and Joe Biden (who was the most interesting politician).
+> Unfortunately, the politicians did all of the talking, because the free software contingent did not have a legislative agenda.
+> I doubt I’ll get another opportunity, but I sometimes ponder the hypothetical: if I did get another meeting with Joe Biden to lobby him for legislative changes to improve “software freedom”, what would I ask him to implement?
+> If the Free Software Foundation has a legislative platform, I don’t know what it is.
+
+I'm not sure if you're looking for state-mandated AGPLv3 licensing of all software or something like that but the majority of the advocacy has been towards developers with the goal of them liberating their software.
+
+> It seems to be an organization that focuses on litigation rather than legislation.
+
+It's part of exploiting copyright and there is a grace period according to the license during which the party that violated the license can use to become in compliance again.
+
+> It is against laws that others have proposed, rather than for laws that it has proposed.
+
+Yes, multi-billionaire megacorps sure do lobby a lot which leaves little room for offensive action.
+Also worth noting that similar to right to repair, it's usually more about preventing megacorps from prohibiting you to do something.
+
+> It focuses on products (boycotting them or building them) rather than governance (proposing legislation and regulation).
+
+Indeed, with the goal of having fully free computer systems it's important to avoid non-free systems and build alternatives.
+
+> The Free Software Foundation seems to be a collection of programmers who want to write software and talk about software and boycott software.
+
+Programmers coming together will still be programmers. That's supposed to be surprising?
+
+> It seems to be uninterested in proposing political solutions to issues it cares about — but willing to attack proposals that others have made that it disagrees with.
+> As a political organization, it is profoundly ineffective, apparently by design.
+
+Just a few excerpts above you said they have successfully exploited laws for their gain.
+Again though, what's this hangup with the FSF? They're not the only free software advocates on the planet.
+
+> Before so-called “free software”, there was public software.
+> We could return to public software.
+
+Did you delete copyright? Cause I'm afraid what you're proposing is impossible.
+
+> As there are public libraries for books, there could be public libraries for software.
+> Interestingly, a public library does not give people the right to make their own copies.
+
+So you're admitting that your proposal offers less freedoms than we currently enjoy.
+
+> They can check books out of the library and read them for a time, then return them so that others can read them.
+> The activity is funded by the government.
+
+This government thing over and over again.
+You dismiss independent organizations that are building libre software alternatives and then say the government should own everything and regulate access to everything even though self-admittedly we'd be less free.
+
+> There is no reason that this activity could not be mimicked with software.
+> It need not be “free software”.
+
+Yeah it won't be free software cause the majority of the 4 freedoms would be removed.
+
+> It could be licensed commercial software (using floating network licenses), funded by the government, providing software licenses to its citizenry to check out, use for a time, then return for others to use.
+
+But why though? Why not just have GPL-licensed software that guarantees a greater amount of freedom?
+
+> This would increase access to software to our citizenry — increased freedom for all.
+> Freedom of the press is the freedom to publish without government interference.
+
+Another false equivalency? Come on...
+And you're bringing in positive vs negative freedom arguments when you've been advocating for goernment interference this entire post.
+
+> However, the existence of a “free press” does not mean that I can copy an article written by a journalist, print my own copies, and distribute them myself (whether I charge for them or not).
+
+You discovered copyright, congratulations.
+
+> Specifically, we are all agreed that a free press can healthily exist in a regime where copying or modifying the published work of that free press is not allowed.
+
+Not really, you're just describing copyrighted material which can absolutely be copied in a healthy society just like I copied your article for the purpose of responding to it.
+
+> Is, in a word, illegal.
+
+Nope, it's legal under several conditions.
+
+> (Illegal, incidentally, according the same regulatory regime that the Free Software regime employs to “keep software free”.)
+
+Yes, we talked about this.
+They exploited a system that the powerful institutions wanted to keep in place which is pretty smart.
+
+> That prohibition against copying apparently, does not infringe on the freedom of the press.
+
+Indeed because the freedom of the press as you said is to do something without interference.
+However interfering to protect copyright does not fall under that.
+
+> Similarly, I think it is manifestly obvious that freedoms of “the software” do not require the ability to make copies or even to make modifications.
+
+The 4 freedoms that are currently guaranteed to users through copyleft licensing include the ability to make copies, to redistribute and to make modifications.
+
+> If we are going to use the “free press” metaphor to understand “free software”, then programs which are “free software” can be restricted from being copied or modified without impinging on any freedoms.
+
+Let's not use it, it's a bad analogy.
+
+> Which is a long winded way of saying that I can easily imagine a world in which the GPL has been abandoned, but other policies and regulations and legislative actions have created a world with considerably more freedoms for “the software” than we enjoy today.
+
+That's fine but copyright is the reason that we can't be in a world where the GPL family of licenses are not necessary.
+
+> These are people who are so invested in their cultish conspiracy theories that they literally have no idea how software works today.
+
+Funny you should say that considering that earlier on you argued that massive corporations having access to source code means we shouldn't advocate that average users have increased freedoms over the software they use.
+
+> The funniest part of the recent Stallman announcement about his return to the FSF board was the admission that they couldn’t figure out how to make a video of the announcement and distribute it.
+
+Again the obsession with the FSF and a bit of a mask slip as to why this article came out when it did.
+
+> We are way beyond new board members, or a new organization to keep the flame of “Free Software” alive.
+> It is time to admit that all the tropes and rhetoric and conspiracy theories of the so-called free software movement are an impediment to making any actual progress on making positive political change with regards to software.
+
+I don't think I'll stop advocating for software freedom or for users to have more power over the computers systems they use.
+If progress is going to be made it's going to be in spite of people like you, not because of you.
+
+> I believe firmly that we need to have better engagement from government to improve the positive impact that software can make on society.
+> Regulations and legislation and governmental programs and non-governmental organizations need to keep pace with the evolving nature of software.
+
+They do but that's not an argument against the free software movement since both can exist at the same time.
+
+> I also firmly believe that so-called “free software” is the greatest impediment to making real progress on any of these fronts.
+
+Bet you also believe "free press" is the greatest impediment to making real progress on availability of information.
+These are proposterous arguments that have not been substantiated in the post even though thousands of words were wasted.
+
+> The Free Software clique is rooted in the deep past, and committed to endlessly rehashing the software controversies of the 1980’s — when mainframes were battling with minicomputers for supremacy.
+
+A very similar type of software exists today with a different name.
+
+> The leadership is morally and intellectually bankrupt.
+> The organization is morally and intellectually bankrupt.
+
+There are good arguments to support these points none of them present in the author's post though.
+
+> The “movement” is morally and intellectually bankrupt.
+
+This is the logical leap that's been the downfall of many arguments in this post, speaking about the FSF and then extrapolating to the FSM with no way to back it up.
+It was baseless the first time and it's baseless this time too.
+
+> It was an idea that had resonance and a potential future in the 1990’s.
+> Back then, I was a believer.
+
+Seems doubtful based on your writings but okay.
+
+> That time is passed. Let the past die. Kill it, if you have to.
+> That’s the only way to become what we aspire to be.
+
+The time to empower people and redistribute power over the commons never passes.
+
+> A society with a rational governance framework for software and its effects.
+
+Yes but without taking away the freedoms currently afforded to users of free software.
+
+> I’m willing to support a Public Software Foundation that advocates for that.
+> In the future, should I use the phrase “free software”, I will be talking about software that I don’t have to pay for.
+> Otherwise, I’ll be talking about “digital autonomy”, or open source software, or liberal software, or, as most publications have been doing for the last few decades, “liberally licensed software”.
+
+So many steps and effort to avoid saying free or libre and indirectly supporting the movement for software freedom.
+
+> It’s from the Latin “libre” (referring to freedom), or perhaps from the Latin “liber” (meaning “book” — a metonym for education).
+
+Libre is already what the **L** in **FLOSS** means.
+The free software movement has always been fighting for liberty, a value you disregarded repeatedly.
+You're not being part of the change, you're being part of the problem.
+
+## Conclusion
+I'm finally done with this trashfire.
+I've never been a fan of anti-freedom rhetoric and this was a good opportunity for catharsis.
+As a tiny summary, keep advocating for the power balance to shift.
+People like the author of the original post would prefer we all sit back and call everything ineffective while proposing terrible alternatives to the achievements already made.
+Thank you for reading, I hope you enjoyed.
