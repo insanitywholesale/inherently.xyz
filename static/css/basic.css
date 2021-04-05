@@ -75,7 +75,6 @@ a > h2 {
 	display: inline;
 }
 
-
 /*for inline code*/
 p > code {
 	font-family: Consolas;
@@ -91,6 +90,21 @@ pre > code {
 /*for line numbers -- doesn't work cause highlight color is inline*/
 tr td:first-child code:first-child span {
 	color: var(--h5boi);
+}
+
+blockquote {
+	color: var(--h5boi);
+	margin-top: 10px;
+	margin-bottom: 10px;
+	margin-left: 30px;
+	padding-left: 10px;
+	border-left: 5px solid var(--h4boi);
+}
+
+blockquote > blockquote {
+	color: var(--h5boi);
+	margin-left: 10px;
+	border-left: 5px solid var(--hrcomplaint);
 }
 
 /*load some dank fira sans undertale woot woot*/
