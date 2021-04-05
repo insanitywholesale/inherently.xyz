@@ -24,7 +24,7 @@ Also the creation of software that people other than you might use or access is 
 
 > And that when the creation of software was motivated by politics, it should be called free software to differentiate it from software created for other reasons.
 
-Not just the creation but the use too as can be seen [in the second sentence of the FSF's description of free software](https://www.fsf.org/resources/resources/what-is-fs).
+Not just the creation but the use too, as can be seen [in the second sentence of the FSF's description of free software](https://www.fsf.org/resources/resources/what-is-fs).
 Worth noting that this is the second time that "it's political" has been used in an attempt to play on people's intuitive notion of "politics bad".
 
 > This became clear to be when I attended my first O’Reilly Open Source Conference, where I watched Miguel de Icaza debate Richard Stallman — and the question on the table was whether or not there was a difference between “free software” and “open source software”.
@@ -39,7 +39,6 @@ I doubt RMS forgot to mention the difference between copyleft and permissive lic
 
 There is a nugget of truth here, free software is user-centric while open source software is developer-centric.
 A common argument against permissive licenses and in favor of copyleft is that free software is free as in freedom while open source software is free as in free labor.
-
 
 > My interest in free or open source software has never been either political or industrial.
 > My interest has always been educational.
@@ -62,8 +61,6 @@ It's a fairly effective roundabout way to make argument without making it cause 
 
 > The availability of source code is certainly invaluable in Liberal Software, and there are several scenarios regarding industrial software that require access to the source code.
 > But that is a discussion for a different time.
-
-
 > Today’s topic is political software.
 
 Everything concerning the commons, in this case software used or accessible by multiple people, is political, get over it.
@@ -100,7 +97,6 @@ Find people just as determined to improve the computing experience and push them
 Again, there is a conflation of the foundation with the movement.
 
 > Secondly, I am reminded of Harry Truman’s quote:
-
 > > It is amazing what you can accomplish if you do not care who gets the credit.
 
 > The Free Software Foundation is famously fixated on insisting that it be given credit for Linux.
@@ -136,13 +132,11 @@ GNU didn't really fail, if anything they've succeeded in putting free software i
 > We have two thousand years of scholarship that inform us that the phrase “software freedom” is meaningless gibberish.
 > It can only sow confusion — and the confusion is only exacerbated by explaining that you used the words to mean something else entirely.
 > That was Lewis Carroll’s point in Through the Looking Glass:
-
 > > “I don’t know what you mean by ‘glory’”, Alice said.
 > > Humpty Dumpty smiled contemptuously. “Of course you don’t — till I tell you. I meant ‘there’s a nice knock-down argument for you!’”
 > > “But ‘glory’ doesn’t mean ‘a nice knock-down argument’,” Alice objected.
 > > “When I use a word,” Humpty Dumpty said, in rather a scornful tone, “it means just what I choose it to mean — neither more nor less.”
 > > “The question is,” said Alice, “whether you can make words mean so many different things.”
-
 > The Free Software coterie is fond of insisting that words mean what they say they mean, and that is a profound misunderstanding of the nature of language.
 > Such linguistic naïveté is not an asset in pursuing political goals.
 
