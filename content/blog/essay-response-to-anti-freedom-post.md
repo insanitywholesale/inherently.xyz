@@ -4,55 +4,115 @@ date: 2021-04-05T12:34:24+03:00
 draft: true
 ---
 
+## Intro
+There are a lot of airhead takes on the internet but I've never seen so many in one post and it's a good opportunity to respond to a lot of the anti-freedom arguments one might encounter online.
+
+## Let's go
+
 > Almost forty years ago, in 1985, the idea of “Free Software” was born.
 > That is not to say that the idea of sharing software with colleagues and making source code available was born.
 > Ten years before the GNU Manifesto and the Free Software Foundation, I worked at a cloud services company (only we called it “timesharing” back then), and in order to encourage people to use our offerings and pay us for renting computer time and disk space and network bandwidth, we curated a collection of software libraries that customers could freely use.
 > We called it the Public Library, of course.
-> The software therein was public software. The idea of public software was software that anybody could freely use.
+> The software therein was public software.
+> The idea of public software was software that anybody could freely use.
 > What happened in 1985 was the birth of the idea that creation of software was a political act.
+
+A group of people united by an idea of how the world should operate were seeking changes to transform the current situation to be more like what they wanted.
+Also the creation of software that people other than you might use or access is political since it is part of the commons.
+
 > And that when the creation of software was motivated by politics, it should be called free software to differentiate it from software created for other reasons.
+
+Not just the creation but the use too as can be seen [in the second sentence of the FSF's description of free software](https://www.fsf.org/resources/resources/what-is-fs).
+Worth noting that this is the second time that "it's political" has been used in an attempt to play on people's intuitive notion of "politics bad".
+
 > This became clear to be when I attended my first O’Reilly Open Source Conference, where I watched Miguel de Icaza debate Richard Stallman — and the question on the table was whether or not there was a difference between “free software” and “open source software”.
 > The conclusion was that there was no detectable difference from examining the software or the license or any artifact.
+
+I doubt RMS forgot to mention the difference between copyleft and permissive licenses regarding user freedom so not sure how one could reach that conclusion.
+
 > The difference was the intent of the programmer.
 > If the intent was political (i.e. a concern for freedom), then the result was free software.
 > If the intent was industrial, the result was open source software.
 > I use the term industrial because the motivation of the open source crowd is to use what they believe to be a superior method of producing software.
 
+There is a nugget of truth here, free software is user-centric while open source software is developer-centric.
+A common argument against permissive licenses and in favor of copyleft is that free software is free as in freedom while open source software is free as in free labor.
+
 
 > My interest in free or open source software has never been either political or industrial.
 > My interest has always been educational.
 > That is, access to the source code provided the opportunity to learn from it.
+
+Your freedom to study how a program works and change it so it does what you want want is one of the 4 freedoms.
+
 > So, in the same spirit as the Open Source / Free Software distinction, I coined the term Liberal Software to refer to software where the intent of the programmer is educational (liberal as in education).
 > Any one of these three intents can produce software for which the source code is available — and that is often called FLOSS, meaning Free, Liberal, or Open Source Software.
+
+No, **FLOSS** means **F**ree **L**ibre and **O**pen **S**ource **S**oftware.
+You can have a different idea in your head by changing what the **L** stands for and essentially removing at least a couple of the 4 freedoms but that's not what the acronym means to most people.
+
 > I prefer to think about these categories in terms of intent, because that opens the door to reflecting about effective strategies to implement that intent.
 > So, for example, if it were to turn out that, all other things being equal, providing source code for libraries could be shown to produce software of inferior quality (and there is much evidence to support such a conclusion), then someone with an intent to produce industrial software might choose to pursue a course of action that did not involve making the source code available.
+
+Mask starts slipping, the arguments against freedom are showing.
+Also you can't just say "there is much evidence to show" then provide not a single link nor a plausible explanation other than the one you think is right.
+It's a fairly effective roundabout way to make argument without making it cause if the argument was to be made, it's unlikely that a causal link could be found provided the sampling wasn't done incorrectly.
+
 > The availability of source code is certainly invaluable in Liberal Software, and there are several scenarios regarding industrial software that require access to the source code.
 > But that is a discussion for a different time.
 
 
 > Today’s topic is political software.
+
+Everything concerning the commons, in this case software used or accessible by multiple people, is political, get over it.
+
 > I think it is clear that the Free Software Foundation has failed to move the needle on the political issues relating to software.
+
+The Foundation, maybe. The movement, certainly not.
+
 > Those of us who are interested in issues of freedom and ethics and social justice related to software must explore alternative stratagems to achieve those objectives.
+
+There is no "us", you've only made an attempt to dismiss the freedoms that free software and copyleft licenses provide.
+
 > The tactics of the Free Software Foundation (the insistence on copylefting software and fighting software patents) have become more and more ineffective.
 > The world of software has evolved and changed in the years since 1985: we need to let the past die and build a better future.
 
+Not really. If anything it's just circled back which you admitted in the opening paragraph by the following remark:
+
+> I worked at a cloud services company (only we called it “timesharing” back then)
+
+The predictions that free software activists have all basically materialized.
+The licenses written to combat abuses and improve the experience of computing for all people have proven necessary time and time again.
 
 > The first sign that free software is intellectually bankrupt is that the Free Software Foundation seems unable to develop new generations of leadership.
+
+Conflation of the FSF with the FSM. The movement does not hinge upon a single entity.
+
 > Free societies are usually lukewarm to the practice of “dictators for life”.
 > After around a decade, it is a healthy sign if new leadership emerges.
 > It is a sign of growth and innovation.
 > It is healthy.
 > Seeing the same people in the same places pursuing the same failed tactics decade after decade is evidence of a lack of broader acceptance.
 
+Find people just as determined to improve the computing experience and push them to join if you fancy the FSF so much.
+Again, there is a conflation of the foundation with the movement.
 
 > Secondly, I am reminded of Harry Truman’s quote:
 
 > > It is amazing what you can accomplish if you do not care who gets the credit.
 
 > The Free Software Foundation is famously fixated on insisting that it be given credit for Linux.
+
+Correction: for the resulting complete system that results from combining Linux with GNU software, not the kernel itself.
+
 > Caring about who gets the credit more than successfully creating change is not a good look.
+
+Not giving credit when it's been earned is not a good look either.
+
 > It is, of course, consistent with the ego required to cling to power and smother the growth of the next generation.
 > Linux is perhaps the child that succeeded where GNU failed.
+
+GNU didn't really fail, if anything they've succeeded in putting free software in the hands of millions of people.
 
 > Thirdly, the rhetoric of Free Software devotees is awkward and unconvincing.
 > The inflexibility (or inarticulateness) that has failed to evolve the talking points to make them more effective is a failure of politics.
@@ -84,16 +144,36 @@ draft: true
 > The Free Software coterie is fond of insisting that words mean what they say they mean, and that is a profound misunderstanding of the nature of language.
 > Such linguistic naïveté is not an asset in pursuing political goals.
 
+This entire thing boils down to linguisting prescriptivism with an appeal to authority thrown in.
+Words can have different meanings and application in different contexts, get over it.
+
 > With all that said, the intent of the adherents to the term Free Software is to seek to promote certain freedoms for the users of software, by depriving the creators of software (at least in the United States) of the rights afforded them by Congress under Article I, Section VIII, Clause VIII.
 > Many programmers are under the impression that “software freedom” is meant to increase the freedoms of software producers.
 > Nothing could be further from the truth.
+
+Yes, free software has always been user-centric. This is unsurprising, one of the intended side-effects is giving more people more power over the technology they use.
+
 > The GNU manifesto and Free Software Foundation take great pains to explain that their intent is to increase the freedom of computer users — at the expense, of course, of software producers.
 > “The Software” is a metonym for software users.
 > The difficulty is that the freedoms that the Free Software Foundation insists on giving software users are freedoms that most software users do not want, and the freedoms that they wish to restrict for software producers are freedoms that most software producers would rather retain.
 > The so-called Free Software coterie might make more headway if it took the trouble to find out what freedoms “the software” (a/k/a software users — see how awkward this metonymy is) actually wanted.
+
+And here we get the real argument.
+The central anti-freedom sentiment expressed in full.
+Let's break this down.
+In a traditional model of proprietary software the entity that develops it and distributes it holds all the power while the user has basically none.
+With Free/Libre software this imbalance shifts a lot.
+The users get to influence the systems they use while the developer stops being the singular authority that can have total control of the software to the detriment of the users.
+As for the "freedoms most users don't want", I wonder if the author thinks people shouldn't have to become politicians because most people don't want to.
+Just a thought.
+
 > Instead they invest most of their energy trying to convince “the software” of which freedoms they ought to want.
 > In that vein, the intent of the programmer who selects the license makes it “free software” or not — the intent of the user is not considered.
 > If a user uses software with political intent, but it is not licensed in a way that the Free Software Foundation approves of, can “the software (meaning the user)” be exercising freedom?
+
+If the FSF doesn't approve of a license or recommends a different one over it, there is a good chance that the license in question doesn't guarantee or respect the user's freedoms.
+In the case where it does and they don't recommend it but the license does respect and guarantee user freedom, the answer is yes, the user is using free software.
+This hangup with the FSF is coming off as really weird at this point.
 
 > Prior to 1983, (two years before the Free Software Foundation was founded), all computers sold by IBM (which in those days meant pretty much “all computers”) came with the source code to the operating system.
 > Like Linux (although you usually have to download the source code separately nowadays).
