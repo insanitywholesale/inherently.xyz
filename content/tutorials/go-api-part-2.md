@@ -2,6 +2,7 @@
 title: "Go Api Part 2"
 date: 2021-04-06T02:23:55+03:00
 draft: true
+summary: "REST API with golang part 2"
 tags: ["tutorial", "programming", "golang", "api"]
 ---
 
