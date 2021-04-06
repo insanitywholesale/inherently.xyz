@@ -48,7 +48,7 @@ type Delivery struct {
 	Driver           DeliveryDriver `json:"deliverydriver"`
 }
 
-// type deliveries is slice of Delivy pointers
+// type deliveries is slice of Delivery pointers
 type deliveryList []*Delivery
 
 // variable deliveryList is of type deliveries
@@ -108,7 +108,7 @@ type Delivery struct {
 	Driver           DeliveryDriver `json:"deliverydriver"`
 }
 
-// type deliveries is slice of Delivy pointers
+// type deliveries is slice of Delivery pointers
 type deliveryList []*Delivery
 
 // variable deliveryList is of type deliveries
@@ -215,7 +215,7 @@ type Delivery struct {
 	Driver           DeliveryDriver `json:"deliverydriver"`
 }
 
-// type deliveries is slice of Delivy pointers
+// type deliveries is slice of Delivery pointers
 type deliveryList []*Delivery
 
 // variable deliveryList is of type deliveries
