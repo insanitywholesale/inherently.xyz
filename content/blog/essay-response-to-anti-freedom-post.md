@@ -140,7 +140,7 @@ GNU didn't really fail, if anything they've succeeded in putting free software i
 > The Free Software coterie is fond of insisting that words mean what they say they mean, and that is a profound misunderstanding of the nature of language.
 > Such linguistic naïveté is not an asset in pursuing political goals.
 
-This entire thing boils down to linguisting prescriptivism with an appeal to authority thrown in.
+This entire thing boils down to linguistic prescriptivism with an appeal to authority thrown in.
 Words can have different meanings and application in different contexts, get over it.
 
 > With all that said, the intent of the adherents to the term Free Software is to seek to promote certain freedoms for the users of software, by depriving the creators of software (at least in the United States) of the rights afforded them by Congress under Article I, Section VIII, Clause VIII.

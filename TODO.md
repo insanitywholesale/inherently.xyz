@@ -1,4 +1,4 @@
-# Things before 1.0.0
-- fix font unicode range (not a huge deal)
+# We hit 1.0.0 -- there are possible improvements
+- fix font unicode range and other ways to minimize font size (not a huge deal)
 - test 2dock2furious docker-compose.yml examples (actually need to do this)
-- possibly make list page titles lowercase
+- d
