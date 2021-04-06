@@ -21,20 +21,15 @@ check out what else is on the site by
 [clicking here](/links)
 or in the links section on the top bar.
 
----
 
 ## Personal Projects
-
 I'll make an attempt to document my journey as far as programming and sysadmin experiences.
 This will have missing and slightly inaccurate information as I'm doing this all in one go.
 My contact information is available on the contact page so feel free to ask me about anything and I'll do my best to answer.
 The source code for most if not all of the following things (where applicable) is on my github or gitlab so take a look there.
 With all disclaimers out of the way, let's get into it. 
 
----
-
 ### Programming
-
 Over the years, I've used quite a few programming and scripting languages.
 I have a soft spot for Go, YAML (pretty much a programming language nowadays) as well as shell scripts since that's what I write most of the time.
 Initially, I started out with shell scripting when I was 15-16 and that was most of my experience with programming until university.
@@ -57,10 +52,7 @@ Apparently I liked tinkering with microservices in general.
 Later on, gRPC came into the picture and it was very nice to work with so I made the decision to keep using it in my microservices.
 The 12-factor model as well as a hexagonal design pattern is something I found useful during both development and running in production.
 
----
-
 ### Sysadmin
-
 Enough about programming, time to get into system administration.
 There are few things I find as enjoyable as figuring out how a system works and setting it up.
 Everything from a small Raspberry Pi running an NFS share to an older desktop with a couple virtual machines to multi-master kubernetes clusters is interesting to me.
@@ -73,7 +65,7 @@ A year or so later, I was already setting up an old 32-bit computer as a router 
 Somewhere in there I tried vmware esxi for a couple months before moving to proxmox (was using OpenVZ instead of LXC back then).
 It wasn't long before I was using Linux on every computer I had and inside virtual machines.
 Playing around with setting up LAMP stacks, FTP servers, configuring secure SSH access with keys, nextcloud, dokuwiki and more.
-You can always find me reading about something, always finding out new information about something. 
+I'm always reading about something, always learning more.
 
 My homelab hasn't stopped expanding and evolving, in a constant state of flux yet always present.
 There is no reason to stop setting up and configuring more applications and services, writing ansible playbooks or improving existing infrastructure.
