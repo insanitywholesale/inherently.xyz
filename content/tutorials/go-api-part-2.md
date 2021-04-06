@@ -331,7 +331,7 @@ Pretty good, right?
 ## Add one
 After we're done with the Read part of CRUD, let's move on to Create.
 Here we will add a delivery after it is sent to us as JSON.
-I will use [cURL](https://curl.se/) for this purpose but you can use [hoppscotch](https://hoppscotch.io/) if you want.
+I will use [cURL](https://curl.se/) for this purpose but you can use something else if you want.
 Let's look at the code first though.
 In our `addDelivery` function we will create an empty delivery item, `d`, that will later on receive the JSON data.
 Then we'll see what the next order number should be according to the length of our list and use that instead of whatever the user has provided, it is up to us to decide where to fit the delivery.
