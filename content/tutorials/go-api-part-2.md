@@ -77,7 +77,7 @@ As you can see it's fairly familiar.
 The subrouter is based on the path so anything starting with `/api/v1` is sent to that subrouter and all the `HandleFunc` only needs to specify the path under the path of the subrouter, in this case `/deliveries`.
 We can run this using `go run main.go` and visit `localhost:8000/api/v1/deliveries` to see a measly `[]` which is an empty json array.
 
-# Get all
+## Get all
 Let's add some data then, 3 example entries should suffice:
 
 ```go

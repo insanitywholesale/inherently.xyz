@@ -92,6 +92,11 @@ tr td:first-child code:first-child span {
 	color: var(--h5boi);
 }
 
+div.highlight {
+	border: 2px solid;
+	border-color: var(--h5boi);
+}
+
 blockquote {
 	color: var(--h5boi);
 	margin-top: 10px;
