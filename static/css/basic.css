@@ -84,7 +84,7 @@ p > code {
 
 /*for code blocks*/
 pre > code {
-	font-family: "Lucida Console", monospace;
+	font-family: "Fira Mono", Consolas, monospace;
 }
 
 /*for line numbers -- doesn't work cause highlight color is inline*/
@@ -118,6 +118,12 @@ blockquote > blockquote {
 	src: url("/fonts/FiraSans-Regular.woff2") format("woff2");
 	font-display: optional;
 	/*unicode-range: U+0020-007F; The bare minimum for the English Language */
+}
+
+@font-face {
+	font-family: "Fira Mono";
+	src: url("/fonts/FiraMono-Regular.woff2") format("woff2");
+	font-display: optional;
 }
 
 /*media query for bigger touch area*/
