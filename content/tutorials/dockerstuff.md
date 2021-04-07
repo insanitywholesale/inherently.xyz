@@ -144,7 +144,7 @@ and to delete it we use
 `docker network rm bridge-net`  
 but how do we use it?  
 For this, we'll need two containers. Let's pick alpine since it includes the `ping` command. The flag to specify what network to attach the container to is `--network` so the full commands are as follows
-```
+```bash
 docker run -dit --name alpine1 --network bridge-net alpine:latest
 docker run -dit --name alpine2 --network bridge-net alpine:latest
 ```
@@ -169,7 +169,7 @@ When integration with the network that the host is connected to is desired, we c
 In this mode, the network is bridged to a physical interface on the host and it integrates with the underlying network.
 
 To see it in action, (I'll assume a fairly standard home network scheme) we can look at
-```
+```bash
 $ ip r
 default via 192.168.1.1 dev eth0 metric 2
 172.16.0.0/16 dev virbr0 proto kernel scope link src 172.16.0.1 linkdown
@@ -236,7 +236,7 @@ Similar to a Makefile but used for docker containers instead, the Dockerfile des
 #### Single-stage example build
 
 For our starting example, we'll use nginx and the following simple index.html:  
-```
+```html
 <!DOCTYPE html>
 <html>
 	<head>
@@ -248,22 +248,22 @@ For our starting example, we'll use nginx and the following simple index.html:
 </html>
 ```
 So we create a new file named Dockerfile and put the following in it  
-```  
+```dockerfile
 FROM nginx:1.17.10-alpine
 ```
 We could bind-mount our files but shipping them inside the image is we'd need if this was a website we were packing so let's do it. I'm making the assumption that index.html is in the current working directory
-```  
+```dockerfile
 FROM nginx:1.17.10-alpine
 COPY ./index.html /usr/share/nginx/html/
 ```
 Without a port exposed, it won't be accessible even if we bind ports to it so let's do that next
-```  
+```dockerfile
 FROM nginx:1.17.10-alpine
 COPY ./index.html /usr/share/nginx/html/
 EXPOSE 80
 ```
 The final thing we should put in there is what command will be ran when the container starts. Running as a daemon is not desired since it will be in the foreground so we turn that off.
-```
+```dockerfile
 FROM nginx:1.17.10-alpine
 COPY ./index.html /usr/share/nginx/html/
 EXPOSE 80
@@ -285,32 +285,32 @@ Congratulations, you just built your first docker image. But things are never th
 #### Multi-stage golang example build
 
 I am going to be using [this](https://github.com/insanitywholesale/microsrv) for demonstration. Ignore the included dockerfile, our main focus now is to understand the steps required to make images. After cloning the project and entering its directory, delete the included Dockerfile (it's not as correct as the one we're going to make anyway) and make an empty one. Just the same as before, we're going to start with a `FROM ` statement.
-```
+```dockerfile
 FROM golang:1.14.2
 ```
 Picking version 1.14.2 since that is the latest at the time of writing and the code has been tested to work with it.
 Next, we're going to go into the `$GOPATH` directory, in a subdirectory named `src` and then in a subdirectory with our project's name. Note that we use `/go/src/microsrv` since `$GOPATH` is resolved to `/go` in this image.
-```
+```dockerfile
 FROM golang:1.14.2
 WORKDIR /go/src/microsrv
 ```
 We could have used the `RUN` statement and done `RUN cd $GOPATH/src/microsrv` but the `WORKDIR` command works at the Dockerfile level meaning that all subsequent commands will use it and it also creates the directory in case it doesn't exist already.
 After that, it's time to copy over the project files using `COPY`
-```
+```dockerfile
 FROM golang:1.14.2
 WORKDIR /go/src/microsrv
 COPY . .
 ```
 this copies the contents of our current working directory outside of the container (project's root) into the current working directory inside the container ($GOPATH/src/microsrv)
 Following that, we run the command to download all the required dependencies and source code but not build or install the project (that's due to using `-d`). Here the `RUN`statement is used which executes the command after it inside the container.
-```
+```dockerfile
 FROM golang:1.14.2
 WORKDIR /go/src/microsrv
 COPY . .
 RUN go get -d -v ./...
 ```
 Of course in the end we want to build and install the project so let's do that
-```
+```dockerfile
 FROM golang:1.14.2
 WORKDIR /go/src/microsrv
 COPY . .
@@ -318,7 +318,7 @@ RUN go get -d -v ./...
 RUN go install -v ./...
 ```
 Right after that is exposing the port, 9090 in this case
-```
+```dockerfile
 FROM golang:1.14.2
 WORKDIR /go/src/microsrv
 COPY . .
@@ -327,7 +327,7 @@ RUN go install -v ./...
 EXPOSE 9090
 ```
 The last piece missing is the command to be executed
-```
+```dockerfile
 FROM golang:1.14.2
 WORKDIR /go/src/microsrv
 COPY . .
@@ -347,7 +347,7 @@ This is all fine and dandy but if we check `docker image ls` we see that the res
 To achive this separation we can use multi-stage builds.
 The first step is taking out runtime-specific things out of the build stage.
 What port gets exposed and what command is ran when the container starts is not in the build stage's scope so let's remove those.
-```
+```dockerfile
 FROM golang:1.14.2
 WORKDIR /go/src/microsrv
 COPY . .
@@ -355,7 +355,7 @@ RUN go get -d -v ./...
 RUN go install -v ./...
 ```
 Time to build the second stage. First we'll use an alias for the first stage in order to be able to copy stuff from it.  
-```
+```dockerfile
 FROM golang:1.14.2 as build
 WORKDIR /go/src/microsrv
 COPY . .
@@ -363,7 +363,7 @@ RUN go get -d -v ./...
 RUN go install -v ./...
 ```
 With that done, let's define the second stage inside the same file. We'll use busybox, a very small image that has just enough to be usable for our case. Since the default image uses glibc as its C library, we'll specify that tag since busybox doesn't use it by default.
-```
+```dockerfile
 FROM golang:1.14.2 as build
 WORKDIR /go/src/microsrv
 COPY . .
@@ -373,7 +373,7 @@ RUN go install -v ./...
 FROM busybox:glibc
 ```
 Here is where the alias comes in handy when copying the resulting binary (located at $GOPATH/bin/microsrv) from the first stage
-```
+```dockerfile
 FROM golang:1.14.2 as build
 WORKDIR /go/src/microsrv
 COPY . .
@@ -384,7 +384,7 @@ FROM busybox:glibc
 COPY --from=build /go/bin/microsrv /
 ```
 And finally we add the two lines that were removed  
-```
+```dockerfile
 FROM golang:1.14.2 as build
 WORKDIR /go/src/microsrv
 COPY . .
@@ -410,24 +410,24 @@ Now that our backend is all packed up, time to see how we'd go about doing the s
 
 The project I'll be using for this demonstration is [this](https://gitlab.com/insanitywholesale/reactionary), just a simple one-page counter application. Same as the previous example, we'll clone it, change into its directory and delete the included Dockerfile since we'll be remaking it from scratch.
 As I mentioned, it's good to know the project's tooling, in this case we need node and npm for building the application but not for running it. We'll start with a `FROM` statement to grab the node image but pre-emptively optimize by going with the alpine flavour. The size comparison between the regular version is as follows and should explain why this is a better choice.  
-```
+```bash
 $ docker images | grep node
 node                             alpine              0854fcfc1637        2 days ago          117MB
 node                             latest              a511eb5c14ec        2 days ago          941MB
 ```
 Coming in at over 8 times the size of the alpine one, the main image is massive and doesn't include anything we need and won't get otherwise.
 Starting with our Dockerfile then, we pick the latest (at the time of writing) node image based on the latest alpine version and alias it to `build` since it will be our build stage
-```
+```dockerfile
 FROM node:14.1.0-alpine3.11 as build
 ```
 We then change our current working directory to `/app` and move all of our project's freshly cloned files in there
-```
+```dockerfile
 FROM node:14.1.0-alpine3.11 as build
 WORKDIR /app
 COPY . .
 ```
 Now on to getting everything installed and ready for the build. Since it's a reactjs website and the scripts that will be run (as defined in package.json) are from the `react-scripts` package (which needs to be installed globally) we will opt for installing that first before the usual `npm install`. Here is the Dockerfile up until now  
-```
+```dockerfile
 FROM node:14.1.0-alpine3.11 as build
 WORKDIR /app
 COPY . .
@@ -435,7 +435,7 @@ RUN npm install --global react-scripts
 RUN npm install
 ```
 To finish up the build stage one last command is required in order to generate the files that nginx will serve  
-```
+```dockerfile
 FROM node:14.1.0-alpine3.11 as build
 WORKDIR /app
 COPY . .
@@ -444,7 +444,7 @@ RUN npm install
 RUN npm run build
 ```
 There we go then. The resulting files will be inside the container in the `/app/build` directory. No instructions for exposing any ports or the starting command we specified since that's for the runtime stage. Speaking of which, you might have already guessed what the rest of the Dockerfile will look like. Start with an nginx alpine image, copy over only the necessary files to it from the build stage, open up port 80 and start nginx in foreground mode. Here is the final result
-```
+```dockerfile
 FROM node:14.1.0-alpine3.11 as build
 WORKDIR /app
 COPY . .
@@ -481,7 +481,7 @@ First, let's look at the "I wish I'd known sooner" method. As we know, images ha
 And there we have it. Simple enough, ain't it? But how about tagging an already existing image? Someone might not fancy rebuilding theirs.
 
 That's what the `docker tag` command is for. All we have to do is find the image ID from the output of `docker image ls` and then tag it twice. Here we go then (assuming this is the image ID `7755c1923b8a`):
-```
+```bash
 docker tag 7755c1923b8a username/reactjs-counters:0.0.1
 docker tag 7755c1923b8a username/reactjs-counters:latest
 ```
@@ -491,7 +491,7 @@ docker tag 7755c1923b8a username/reactjs-counters:latest
 
 All that's left is to `docker push` the image of our choice and make it available so other people can `docker pull` it.  
 
-```
+```bash
 docker push username/reactjs-counters:0.0.1
 docker push username/reactjs-counters:latest
 ```
