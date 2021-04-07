@@ -75,9 +75,15 @@ a > h2 {
 	display: inline;
 }
 
+code {
+	font-family: Consolas, monospace;
+	color: var(--rawcode);
+	background-color: var(--rawcodebg);
+}
+
 /*for inline code*/
 p > code {
-	font-family: Consolas;
+	font-family: Consolas, monospace;
 	color: var(--rawcode);
 	background-color: var(--rawcodebg);
 }
