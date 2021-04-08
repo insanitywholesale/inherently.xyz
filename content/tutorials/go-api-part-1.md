@@ -1,7 +1,7 @@
 ---
 title: "Go API Part 1"
 date: 2021-04-01T06:39:47+03:00
-summary: "introduction to REST APIs with Go"
+summary: "intro to REST APIs with Go"
 draft: false
 tags: ["tutorial", "programming", "golang", "api"]
 ---
