@@ -75,12 +75,6 @@ a > h2 {
 	display: inline;
 }
 
-code {
-	font-family: Consolas, monospace;
-	color: var(--rawcode);
-	background-color: var(--rawcodebg);
-}
-
 /*for inline code*/
 p > code {
 	font-family: Consolas, monospace;
@@ -91,6 +85,13 @@ p > code {
 /*for code blocks*/
 pre > code {
 	font-family: "Fira Mono", Consolas, monospace;
+}
+
+/*mainly to cover golang is rad inline code*/
+li > code {
+	font-family: Consolas, monospace;
+	color: var(--rawcode);
+	background-color: var(--rawcodebg);
 }
 
 /*for line numbers -- doesn't work cause highlight color is inline*/
@@ -111,6 +112,7 @@ blockquote {
 	padding-left: 10px;
 	border-left: 5px solid var(--h4boi);
 }
+
 
 blockquote > blockquote {
 	color: var(--h5boi);
