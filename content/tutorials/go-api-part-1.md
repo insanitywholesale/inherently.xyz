@@ -10,7 +10,6 @@ tags: ["tutorial", "programming", "golang", "api"]
 This is going to be a simple tutorial about creating a backend web service that can be accessed over a REST API.
 The application is going to be able to do something very basic just to make everyone familiar with the basics.
 There will eventually be a part 2 where we will make an application that performs the basic CRUD(Create Read Update Delete) actions, it will include real-life applicable data and actions as well as a database for storing information.
-Also I'll assume you're using some kind of Linux or UNIX-like system because that's what I use.
 Let's start then.
 
 ## Getting set up
