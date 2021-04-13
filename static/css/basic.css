@@ -34,6 +34,11 @@ hr {
 	width: 95%;
 }
 
+hr:last-of-type {
+	margin: 2rem;
+	margin-bottom: 1rem;
+}
+
 h1 {
 	color: var(--h1boi);
 	font-size: 2rem;
@@ -120,6 +125,20 @@ blockquote > blockquote {
 	border-left: 5px solid var(--hrcomplaint);
 }
 
+input {
+	color: var(--rawcode);
+	background-color: var(--rawcodebg);
+	border-size: 2px;
+	border-color: var(--linkfam);
+}
+
+input[type=submit] {
+	font-weight: bold;
+	font-size: 16px;
+	border-size: 5px;
+	border-color: var(--h2boi);
+}
+
 /*load some dank fira sans undertale woot woot*/
 @font-face {
 	font-family: "Fira Sans";
@@ -137,6 +156,6 @@ blockquote > blockquote {
 /*media query for bigger touch area*/
 @media (pointer: coarse) {
 	a {
-		padding: 0.5em 0em 0.5em 0em;
+		padding: 0.8em 0em 0.8em 0em;
 	}
 }
