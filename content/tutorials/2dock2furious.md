@@ -82,11 +82,11 @@ After telling docker-compose that we're about to define our services, let's actu
 ```yaml
 version: "3"
 
-  services:
+services:
 
-    server:
-      image: gitea/gitea
-      restart: always
+  server:
+    image: gitea/gitea
+    restart: always
 ```
 
 Which means the service is named `server` which uses the `gitea/gitea` image and should always be restarted.
@@ -95,19 +95,19 @@ Below that we can specify some environment variables:
 ```yaml
 version: "3"
 
-  services:
+services:
 
-    server:
-      image: gitea/gitea
-      restart: always
-      environment:
-        - USER_UID=1000
-        - USER_GID=1000
-        - DB_TYPE=postgres
-        - DB_HOST=db:5432
-        - DB_NAME=gitea
-        - DB_USER=gitea
-        - DB_PASSWD=gitea
+  server:
+    image: gitea/gitea
+    restart: always
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - DB_TYPE=postgres
+      - DB_HOST=db:5432
+      - DB_NAME=gitea
+      - DB_USER=gitea
+      - DB_PASSWD=gitea
 ```
 
 The lines below `environment` that start with a dash are items of a list in YAML, in this case environment variable and their values.
@@ -121,25 +121,25 @@ This is what the file looks like after those additions:
 ```yaml
 version: "3"
 
-  services:
+services:
 
-    server:
-      image: gitea/gitea
-      restart: always
-      environment:
-        - USER_UID=1000
-        - USER_GID=1000
-        - DB_TYPE=postgres
-        - DB_HOST=db:5432
-        - DB_NAME=gitea
-        - DB_USER=gitea
-        - DB_PASSWD=gitea
-      networks:
-        - gitea
-      volumes:
-        - ./gitea:/data
-        - /etc/timezone:/etc/timezone:ro
-        - /etc/localtime:/etc/localtime:ro
+  server:
+    image: gitea/gitea
+    restart: always
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - DB_TYPE=postgres
+      - DB_HOST=db:5432
+      - DB_NAME=gitea
+      - DB_USER=gitea
+      - DB_PASSWD=gitea
+    networks:
+      - gitea
+    volumes:
+      - ./gitea:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
 ```
 
 Quite a bit nicer and easier to read than the multiple command-line declarations I think.
@@ -149,28 +149,28 @@ Here is how ports are mapped in a docker-compose file:
 ```yaml
 version: "3"
 
-  services:
+services:
 
-    server:
-      image: gitea/gitea
-      restart: always
-      environment:
-        - USER_UID=1000
-        - USER_GID=1000
-        - DB_TYPE=postgres
-        - DB_HOST=db:5432
-        - DB_NAME=gitea
-        - DB_USER=gitea
-        - DB_PASSWD=gitea
-      networks:
-        - gitea
-      volumes:
-        - ./gitea:/data
-        - /etc/timezone:/etc/timezone:ro
-        - /etc/localtime:/etc/localtime:ro
-      ports:
-        - "3000:3000"
-        - "222:22"
+  server:
+    image: gitea/gitea
+    restart: always
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - DB_TYPE=postgres
+      - DB_HOST=db:5432
+      - DB_NAME=gitea
+      - DB_USER=gitea
+      - DB_PASSWD=gitea
+    networks:
+      - gitea
+    volumes:
+      - ./gitea:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "3000:3000"
+      - "222:22"
 ```
 
 The above covers the gitea server part but we defined a database to be used so next up we have to add that.
@@ -179,41 +179,41 @@ The format is the same as above and no new concepts are introduced so here is th
 ```yaml
 version: "3"
 
-  services:
+services:
 
-    server:
-      image: gitea/gitea
-      restart: always
-      environment:
-        - USER_UID=1000
-        - USER_GID=1000
-        - DB_TYPE=postgres
-        - DB_HOST=db:5432
-        - DB_NAME=gitea
-        - DB_USER=gitea
-        - DB_PASSWD=gitea
-      networks:
-        - gitea
-      volumes:
-        - ./gitea:/data
-        - /etc/timezone:/etc/timezone:ro
-        - /etc/localtime:/etc/localtime:ro
-      ports:
-        - "3000:3000"
-        - "222:22"
+  server:
+    image: gitea/gitea
+    restart: always
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - DB_TYPE=postgres
+      - DB_HOST=db:5432
+      - DB_NAME=gitea
+      - DB_USER=gitea
+      - DB_PASSWD=gitea
+    networks:
+      - gitea
+    volumes:
+      - ./gitea:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "3000:3000"
+      - "222:22"
 
-    db:
-      image: postgres:9.6
+  db:
+    image: postgres:9.6
 
-      restart: always
-      environment:
-        - POSTGRES_USER=gitea
-        - POSTGRES_PASSWORD=gitea
-        - POSTGRES_DB=gitea
-      networks:
-        - gitea
-      volumes:
-        - ./postgres:/var/lib/postgresql/data
+    restart: always
+    environment:
+      - POSTGRES_USER=gitea
+      - POSTGRES_PASSWORD=gitea
+      - POSTGRES_DB=gitea
+    networks:
+      - gitea
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
 ```
 
 However there is are a few things still missing from the above.
@@ -226,42 +226,42 @@ In this case, the server should not start until the database is ready so `depend
 ```yaml
 version: "3"
 
-  services:
+services:
 
-    server:
-      image: gitea/gitea
-      restart: always
-      environment:
-        - USER_UID=1000
-        - USER_GID=1000
-        - DB_TYPE=postgres
-        - DB_HOST=db:5432
-        - DB_NAME=gitea
-        - DB_USER=gitea
-        - DB_PASSWD=gitea
-      networks:
-        - gitea
-      volumes:
-        - ./gitea:/data
-        - /etc/timezone:/etc/timezone:ro
-        - /etc/localtime:/etc/localtime:ro
-      ports:
-        - "3000:3000"
-        - "222:22"
-      depends_on:
-        - db
+  server:
+    image: gitea/gitea
+    restart: always
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - DB_TYPE=postgres
+      - DB_HOST=db:5432
+      - DB_NAME=gitea
+      - DB_USER=gitea
+      - DB_PASSWD=gitea
+    networks:
+      - gitea
+    volumes:
+      - ./gitea:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "3000:3000"
+      - "222:22"
+    depends_on:
+      - db
 
-    db:
-      image: postgres:9.6
-      restart: always
-      environment:
-        - POSTGRES_USER=gitea
-        - POSTGRES_PASSWORD=gitea
-        - POSTGRES_DB=gitea
-      networks:
-        - gitea
-      volumes:
-        - ./postgres:/var/lib/postgresql/data
+  db:
+    image: postgres:9.6
+    restart: always
+    environment:
+      - POSTGRES_USER=gitea
+      - POSTGRES_PASSWORD=gitea
+      - POSTGRES_DB=gitea
+    networks:
+      - gitea
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
 ```
 
 Simple as that, we have now defined a startup dependency and ensured that our containers are started in the correct order.
@@ -270,47 +270,47 @@ Let's move on to the network declaration now.
 ```yaml
 version: "3"
 
-  services:
+services:
 
-    server:
-      image: gitea/gitea
-      restart: always
-      environment:
-        - USER_UID=1000
-        - USER_GID=1000
-        - DB_TYPE=postgres
-        - DB_HOST=db:5432
-        - DB_NAME=gitea
-        - DB_USER=gitea
-        - DB_PASSWD=gitea
-      networks:
-        - gitea
-      volumes:
-        - ./gitea:/data
-        - /etc/timezone:/etc/timezone:ro
-        - /etc/localtime:/etc/localtime:ro
-      ports:
-        - "3000:3000"
-        - "222:22"
-      depends_on:
-        - db
+  server:
+    image: gitea/gitea
+    restart: always
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - DB_TYPE=postgres
+      - DB_HOST=db:5432
+      - DB_NAME=gitea
+      - DB_USER=gitea
+      - DB_PASSWD=gitea
+    networks:
+      - gitea
+    volumes:
+      - ./gitea:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "3000:3000"
+      - "222:22"
+    depends_on:
+      - db
 
-    db:
-      image: postgres:9.6
-      restart: always
-      environment:
-        - POSTGRES_USER=gitea
-        - POSTGRES_PASSWORD=gitea
-        - POSTGRES_DB=gitea
-      networks:
-        - gitea
-      volumes:
-        - ./postgres:/var/lib/postgresql/data
+  db:
+    image: postgres:9.6
+    restart: always
+    environment:
+      - POSTGRES_USER=gitea
+      - POSTGRES_PASSWORD=gitea
+      - POSTGRES_DB=gitea
+    networks:
+      - gitea
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
 
 
-  networks:
-    gitea:
-      external: false
+networks:
+  gitea:
+    external: false
 ```
 
 So we are defining a network named `gitea` and specifying that it is not external (meaning it was not created using `docker network create gitea` but is instead managed by docker-compose).
@@ -351,47 +351,47 @@ Let's see how the docker-compose file will look if we want to source the values 
 ```yaml
 version: "3"
 
-  services:
+services:
 
-    server:
-      image: gitea/gitea
-      restart: always
-      environment:
-        - USER_UID=$UUID
-        - USER_GID=$UGID
-        - DB_TYPE=postgres
-        - DB_HOST=db:5432
-        - DB_NAME=$DBNAME
-        - DB_USER=$DBUSER
-        - DB_PASSWD=$DBPASSWD
-      networks:
-        - gitea
-      volumes:
-        - ./gitea:/data
-        - /etc/timezone:/etc/timezone:ro
-        - /etc/localtime:/etc/localtime:ro
-      ports:
-        - "3000:3000"
-        - "222:22"
-      depends_on:
-        - db
+  server:
+    image: gitea/gitea
+    restart: always
+    environment:
+      - USER_UID=$UUID
+      - USER_GID=$UGID
+      - DB_TYPE=postgres
+      - DB_HOST=db:5432
+      - DB_NAME=$DBNAME
+      - DB_USER=$DBUSER
+      - DB_PASSWD=$DBPASSWD
+    networks:
+      - gitea
+    volumes:
+      - ./gitea:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "3000:3000"
+      - "222:22"
+    depends_on:
+      - db
 
-    db:
-      image: postgres:9.6
-      restart: always
-      environment:
-        - POSTGRES_USER=$PSTGRSUSR
-        - POSTGRES_PASSWORD=$PSTGRSPASSWD
-        - POSTGRES_DB=$PSTGRSDB
-      networks:
-        - gitea
-      volumes:
-        - ./postgres:/var/lib/postgresql/data
+  db:
+    image: postgres:9.6
+    restart: always
+    environment:
+      - POSTGRES_USER=$PSTGRSUSR
+      - POSTGRES_PASSWORD=$PSTGRSPASSWD
+      - POSTGRES_DB=$PSTGRSDB
+    networks:
+      - gitea
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
 
 
-  networks:
-    gitea:
-      external: false
+networks:
+  gitea:
+    external: false
 ```
 
 Pretty easy, right?
@@ -408,49 +408,49 @@ The final `docker-compose.yml` would look like this if you wanted to adopt my pe
 ```yaml
 version: "3"
 
-  services:
+services:
 
-    server:
-      name: gitea-server
-      container_name: gitea-server
-      image: gitea/gitea
-      restart: always
-      environment:
-        - USER_UID=$UUID
-        - USER_GID=$UGID
-        - DB_TYPE=postgres
-        - DB_HOST=db:5432
-        - DB_NAME=$DBNAME
-        - DB_USER=$DBUSER
-        - DB_PASSWD=$DBPASSWD
-      networks:
-        - gitea
-      volumes:
-        - ./gitea:/data
-        - /etc/timezone:/etc/timezone:ro
-        - /etc/localtime:/etc/localtime:ro
-      ports:
-        - "3000:3000"
-        - "222:22"
-      depends_on:
-        - db
+  server:
+    name: gitea-server
+    container_name: gitea-server
+    image: gitea/gitea
+    restart: always
+    environment:
+      - USER_UID=$UUID
+      - USER_GID=$UGID
+      - DB_TYPE=postgres
+      - DB_HOST=db:5432
+      - DB_NAME=$DBNAME
+      - DB_USER=$DBUSER
+      - DB_PASSWD=$DBPASSWD
+    networks:
+      - gitea
+    volumes:
+      - ./gitea:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "3000:3000"
+      - "222:22"
+    depends_on:
+      - db
 
-    db:
-      name: gitea-db
-      container_name: gitea-db
-      image: postgres:9.6
-      restart: always
-      environment:
-        - POSTGRES_USER=$PSTGRSUSR
-        - POSTGRES_PASSWORD=$PSTGRSPASSWD
-        - POSTGRES_DB=$PSTGRSDB
-      networks:
-        - gitea
-      volumes:
-        - ./postgres:/var/lib/postgresql/data
-  networks:
-    gitea:
-      external: false
+  db:
+    name: gitea-db
+    container_name: gitea-db
+    image: postgres:9.6
+    restart: always
+    environment:
+      - POSTGRES_USER=$PSTGRSUSR
+      - POSTGRES_PASSWORD=$PSTGRSPASSWD
+      - POSTGRES_DB=$PSTGRSDB
+    networks:
+      - gitea
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+networks:
+  gitea:
+    external: false
 ```
 
 ## Healthchecks
