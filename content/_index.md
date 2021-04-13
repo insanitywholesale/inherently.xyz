@@ -33,7 +33,7 @@ After making a couple silly programs with the language, I decided to try tacklin
 This took form as me diving into spring boot without any real end goal in mind.
 Unsurprisingly I ended up enjoying it but leaving it to the side as there was no project to work on.
 
-After that little bit of dipping a bit into backend stuff, I decided to give a "modern" stack a chance.
+After that little bit of dipping a bit into just backend stuff with java, I decided to give a "modern" full stack a chance.
 To that extent, I tried reactjs and nodejs and ended up making an incomplete (as of now) messaging site.
 The ecosystem as well as the language was not very pleasant to work with although there were a lot of tutorials and ready-made modules.
 All in all, I left that in the backburner with the intention of possibly trying it again some time in the future.
