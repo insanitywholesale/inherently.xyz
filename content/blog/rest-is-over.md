@@ -47,5 +47,6 @@ Currently I've been trying to decide among 2-3 options for how a service should 
 However, I hope this was a semi-educational read and got you a bit interested in the ecosystem.
 That's all for now, I hope you enjoyed reading.
 
-##### :^)
-~~check out the [tutorials]({{< ref "tutorials" >}}) section for my Go REST API Part 2 coming soon :P~~
+### pardon me
+~~check out the [tutorials]({{< ref "tutorials" >}}) section for my Go REST API Part 2 coming soon~~
+sorry, I had to :^)

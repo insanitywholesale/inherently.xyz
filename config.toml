@@ -6,6 +6,10 @@ title = "inherently's cabin"
 	name = "inherently"
 
 [markup]
+	[markup.tableOfContents]
+		ordered = false
+		startlevel = 2
+		endlevel = 4
 	[markup.highlight]
 		anchorLineNos = true
 		codeFences = true

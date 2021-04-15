@@ -139,6 +139,31 @@ input[type=submit] {
 	border-color: var(--h2boi);
 }
 
+/*sexy title ToC header color*/
+h2#toc-title {
+	color: #af005f;
+}
+
+/*make the separation of ToC clear*/
+hr#toc-hr {
+	color: #af005f;
+}
+
+/*this sucks*/
+nav#TableOfContents > ul > li > a {
+	color: #2aa198;
+}
+
+/*this also sucks*/
+nav#TableOfContents > ul > li > ul > li > a {
+	color: #af8700;
+}
+
+/*this is soggy cereal tbh*/
+nav#TableOfContents > ul > li > ul > li > ul > li > a {
+	color: #d7d7af;
+}
+
 /*load some dank fira sans undertale woot woot*/
 @font-face {
 	font-family: "Fira Sans";
@@ -147,6 +172,7 @@ input[type=submit] {
 	/*unicode-range: U+0020-007F; The bare minimum for the English Language */
 }
 
+/*load some dank fira mono for coding*/
 @font-face {
 	font-family: "Fira Mono";
 	src: url("/fonts/FiraMono-Regular.woff2") format("woff2");
