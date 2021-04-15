@@ -3,11 +3,9 @@
 	<head>
 		<meta charset="utf-8">
 		<title>{{.Title}}</title>
-		<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/img/Cabin-icon-144.png">
-		<link rel="apple-touch-icon-precomposed" sizes="114x114" href="/img/Cabin-icon-114.png">
-		<link rel="apple-touch-icon-precomposed" sizes="72x72" href="/img/Cabin-icon-72.png">
-		<link rel="apple-touch-icon-precomposed" href="/img/Cabin-icon-57.png">
-		<link rel="shortcut icon" href="/img/Cabin-icon-16.png" as="image" type="image/x-icon">
+
+		{{ partial "favicon.html" . }}
+
 		<link rel="preload" href="/fonts/FiraSans-Regular.woff2" as="font" type="font/woff2" crossorigin>
 		<link rel="preload" href="/fonts/FiraMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
 		<link rel="stylesheet" href="/css/basic.css">
