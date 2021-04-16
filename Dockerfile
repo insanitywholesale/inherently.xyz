@@ -13,3 +13,5 @@ RUN hugo
 FROM nginx:alpine
 COPY default.conf /etc/nginx/conf.d/
 COPY --from=buildsite /go/src/inheresite-hugo/public /usr/share/nginx/html
+#copy favicon to web root for compat sake maybe
+#COPY --from=buildsite /go/src/inheresite-hugo/public/img/favicon.ico /usr/share/nginx/html/
