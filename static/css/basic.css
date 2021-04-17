@@ -11,6 +11,8 @@
 	--linkfam: #689d6a;
 	--rawcode: #fbaed2;
 	--rawcodebg: #002b36;
+	--tocaccentdim: #af005f;
+	--tocaccentbright: #ff2e88;
 }
 
 * {
@@ -141,12 +143,12 @@ input[type=submit] {
 
 /*sexy title ToC header color*/
 h2#toc-title {
-	color: #af005f;
+	color: var(--tocaccentbright);
 }
 
 /*make the separation of ToC clear*/
 hr#toc-hr {
-	color: #af005f;
+	color: var(--tocaccentbright);
 }
 
 /*this sucks*/
