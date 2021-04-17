@@ -1,7 +1,7 @@
 ---
 title: "Fluxing My Cluster"
 date: 2021-04-17T17:24:22+03:00
-draft: true
+draft: false
 tags: ["homelab", "sysadmin", "devops", "kubernetes", "flux", "continuous deployment"]
 ---
 
