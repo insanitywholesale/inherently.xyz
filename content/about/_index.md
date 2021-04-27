@@ -19,6 +19,7 @@ I'll assume you read the front page or if you didn't, you can click [here]({{< r
 
 ## Highlighted Projects
 - [gifinator](https://gitlab.com/insanitywholesale/gifinator): port of a google codebase to use minio instead of gcs
+- [bookdir](https://gitlab.com/insanitywholesale/bookdir): microservice for managing a book collection
 - [go-usrv-tmpl](https://github.com/insanitywholesale/go-usrv-tmpl): template for microservices (still WIP)
 - [usrvtodo](https://gitlab.com/insanitywholesale/usrvtodo): todo microservice with a JS-free frontend
 - [infra](https://gitlab.com/insanitywholesale/infra): not super duper proud of it but it's improving
