@@ -14,7 +14,7 @@ The topic came up when I started trying to simulate a development pipeline who's
 What should that system be though?
 In this post, I'll take you through the things I tried first and then why I went with [drone](https://www.drone.io/) in the end.
 
-## Real World
+## Choose a Fighter
 My quest is to ultimately end up with the skills to set up kubernetes so that it can be deployed to everything from a DIY NAS and a stack of NUCs to a warehouse full of servers backed by distributed storage.
 I'm obviously more towards the first camp so that's where my journey is at.
 With that said, my goal is to have software small and lightweight enough that it can run on the former setup easily so that there can be multiple instances of it in the latter form.
@@ -22,7 +22,7 @@ The current mental model I have is developer organization with not much more tha
 Therefore the landscape needs to be explored and the obvious titan of the old world is [jenkins](https://www.jenkins.io/) with many newcomers eager to take its place.
 The obvious caveats still apply, it must be open-source, able to be self-hosted, support for gitea is needed and being able to run well on kubernetes is a foregone conclusion.
 
-## Jenkins
+### Jenkins
 It should need no introduction, most developers are familiar with the trusty crusty old butler software.
 [Jenkins](https://www.jenkins.io/) is probably one of the most prominent pieces of CI/CD software that was pushed to the forefront when the push for more automation and increased code quality really happened.
 Sadly there are a few reasons that annoyed me from the get-go.
@@ -35,7 +35,7 @@ Last but not least, it's a 2-in-1 solution which I don't find appealing as far a
 As a redeeming quality it has an official kubernetes pipeline plugin which is nice so they've at least put thought into this use case.
 Ultimately it wasn't the right fit for me so it was time to move on.
 
-## Drone
+### Drone
 While pondering this I remembered an old post from one of the blogs I read, specifically [this one](https://christine.website/blog/drone-kubernetes-cd-2020-07-10).
 I said what the hell, why not and started looking its website.
 [Drone](https://www.drone.io/) is a very nice and simple continuous integration tool.

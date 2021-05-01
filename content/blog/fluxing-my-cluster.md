@@ -23,7 +23,7 @@ Now that the stage has been set, let's see what I tried
 ## Solutions
 
 ### Drone CI plugin
-Initially the idea was that since I've alrady solved this for code using drone for CI, I could just use a plugin and be done.
+Initially the idea was that since I've alrady solved this for code using drone for CI (this will be discussed in a later post), I could just use a plugin and be done.
 However, my experience with writing helm charts is limited and the only official plugin for deploying to kubernetes is for helm charts, not kubernetes manifests.
 Furthermore, as I mentioned previously, not all software deployed on the cluster is something that I have written so even if there was an official kubernetes manifest plugin it wouldn't cover 3rd-party software.
 At this point, I was thinking of finding some all-inclusive CI/CD software that would cover everything I wanted to do.
