@@ -17,6 +17,7 @@
 	<body>
 		<h1>
 			{{ block "header" . }}
+				{{ .Title }}
 			{{ end 	}}
 		</h1>
 
@@ -25,6 +26,7 @@
 		<hr>
 
 		{{ block "main" . }}
+			{{ .Content }}
 		{{ end }}
 
 		<hr>

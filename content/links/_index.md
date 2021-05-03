@@ -8,16 +8,17 @@ draft: false
 ## Here are some other things on this site
 
 ### Websites
-[linklist on non-hugo distro.watch](https://distro.watch/links.html)  
+[linklist on non-hugo distro.watch](https://old.distro.watch/links.html)  
 
 #### Lists of links
-[interesting software](https://distro.watch/software.html)  
-[software I'd like to package](https://distro.watch/topackage.html)  
+[interesting software]({{< ref "links/software" >}})  
+[software I'd like to package]({{< ref "links/topackage" >}})  
 
 ### Programming stuff
 
 #### Microservices
 [gif creation](https://gitlab.com/insanitywholesale/gifinator)  
+[book directory](https://gitlab.com/insanitywholesale/bookdir)  
 [url shortener](https://gitlab.com/insanitywholesale/urlshort)  
 [paste](https://gitlab.com/insanitywholesale/ctrlshiftv)  
 [todo](https://gitlab.com/insanitywholesale/usrvtodo)  
