@@ -36,7 +36,6 @@ hr {
 }
 
 hr:last-of-type {
-	margin: 2rem;
 	margin-bottom: 1rem;
 }
 
