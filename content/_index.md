@@ -75,3 +75,6 @@ Kuberentes was a natural fit for the task.
 
 By now my experience with it is somewhat limited but in an effort to run everything on it, I've written YAML manifests, set up a continuous integration and continuous delivery pipeline on a test cluster and deployed several services to it.
 To not waste any more time let's just say it's been very fun tinkering with all of this and also very educational.
+
+## Future Endeavors
+One can never be sure of the future but I've documented some of my future plans [on this page]({{< ref "todo" >}}) as a list of short to medium term goals.
