@@ -1,7 +1,7 @@
 ---
 title: "TODO"
 date: 2021-05-05T16:44:40+03:00
-draft: true
+draft: false
 tags: ["todo"]
 ---
 
@@ -20,3 +20,4 @@ Here are the general things I'd like to work on in no specific order:
 - figure out the best patter for using grpc-gateway
 - finish bookdir [backend](https://gitlab.com/insanitywholesale/bookdir) + [frontend](https://gitlab.com/insanitywholesale/simple-react-boi)
 - make [gogenjson](https://gitlab.com/insanitywholesale/gogenjson) workable
+- explore java(spring boot) and python(django rest + flask) for microservices again
