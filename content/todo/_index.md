@@ -21,3 +21,5 @@ Here are the general things I'd like to work on in no specific order:
 - finish bookdir [backend](https://gitlab.com/insanitywholesale/bookdir) + [frontend](https://gitlab.com/insanitywholesale/simple-react-boi)
 - make [gogenjson](https://gitlab.com/insanitywholesale/gogenjson) workable
 - explore java(spring boot) and python(django rest + flask) for microservices again
+- write gitea downstreamer bot
+- selfhost sourcehut using ansible
