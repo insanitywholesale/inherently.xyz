@@ -24,3 +24,4 @@ Here are the general things I'd like to work on in no specific order:
 - write gitea downstreamer bot
 - selfhost sourcehut using ansible
 - make [gogenjson](https://gitlab.com/insanitywholesale/gogenjson) better
+- thread programming (Java/C)
