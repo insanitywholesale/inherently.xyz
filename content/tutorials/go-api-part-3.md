@@ -226,6 +226,10 @@ We will do that by having an interface that many different data storage backends
 Initially we will remove the specifics of the simple list we used and make it more generalized.
 Up until now all the code was in a single file and it's kind of crowded with data models, API routes, API functions and data storage so that will change.
 
+### Important note
+Since we will be splitting the contents of the `main` package over different files we won't be able to run our program using `go run main.go`.
+All the `.go` files need to be included so the command should instead be `go run *.go`
+
 ### Models
 First off let's put the models in their own file called `models.go` next to `main.go` like so:
 
@@ -267,6 +271,11 @@ import (
 	"net/http"
 	"strconv"
 )
+
+// Constant for Bad Request
+const BadReq string = `{"error": "bad request"}`
+// Constant for Not Found
+const NotFound string = `{"error": "not found"}`
 
 // Read all deliveries
 func GetAllDeliveries(w http.ResponseWriter, r *http.Request) {
@@ -386,8 +395,77 @@ func makeRouter() http.Handler {
 }
 ```
 
-Looking good.
-While we're cleaning things up and are planning to add a database, time to remove the list and put it in its own file.
+Looking nice and neat. We should probably tinker with `main.go` too though.
+
+#### Main after API restructure
+Let's adjust `main.go` to fit with the changes we've made.
+The list stuff will still be there but the line count is greatly reduced:
+
+```go
+package main
+
+import (
+	"log"
+	"net/http"
+)
+
+// type deliveries is slice of Delivery pointers
+type deliveryList []*Delivery
+
+// variable deliveryList is of type deliveries
+var deliveries deliveryList = []*Delivery{
+	&Delivery{
+		OrderNumber:      1,
+		City:             "Here",
+		Zipcode:          "52011",
+		Address:          "Home",
+		Phone1:           "6945123789",
+		Phone2:           "2313722903",
+		Cancelled: false,
+		Delivered:        false,
+		DeliveryAttempts: 0,
+		Driver: DeliveryDriver{
+			FirstName: "Mhtsos",
+			LastName:  "Iwannou",
+		},
+	},
+	&Delivery{
+		OrderNumber:      2,
+		City:             "There",
+		Zipcode:          "1701",
+		Address:          "Office",
+		Phone1:           "6932728091",
+		Cancelled: false,
+		Delivered:        true,
+		DeliveryAttempts: 1,
+		Driver: DeliveryDriver{
+			FirstName: "Lucas",
+			LastName:  "Johnson",
+		},
+	},
+	&Delivery{
+		OrderNumber:      3,
+		City:             "FarAway",
+		Zipcode:          "920639",
+		Address:          "Island",
+		Phone1:           "6900777123",
+		Cancelled: true,
+		Delivered:        false,
+		DeliveryAttempts: 24,
+		Driver: DeliveryDriver{
+			FirstName: "Pilotos",
+			LastName:  "Aeroplanou",
+		},
+	},
+}
+
+func main() {
+	// Start http server
+	router := makeRouter()
+	log.Fatal(http.ListenAndServe(":8000", router))
+}
+```
+Since we're cleaning things up and are planning to add a database, time to remove the list and put it in its own file.
 
 ### List
 Our `main.go` is getting emptier so let's remove the list stuff and put it in its own file called `listdb.go`
@@ -446,18 +524,18 @@ var deliveries deliveryList = []*Delivery{
 }
 ```
 
-Nice and easy, we've greatly reduced the code inside `main.go` and separated our code in nicely named files.
+Nice and easy, we radically reduced the code inside `main.go` and separated our code in nicely named files.
 
-### Main
-However we should adjust `main.go` to fit with the changes we've made.
+#### Main after list restructure
+Take a peek at `main.go` after all the changes.
 You will notice that it is a lot shorter and only deals with running our API server and not much else:
 
 ```go
 package main
 
 import (
-	"net/http"
 	"log"
+	"net/http"
 )
 
 func main() {
@@ -483,11 +561,11 @@ Take a look at what is in `models.go` now:
 package main
 
 type DeliveryDB interface {
-	GetAll() ([]Delivery, error)
-	GetOne(orderNumber int) (Delivery, error)
-	Store(Delivery) error
-	Change(orderNumber int) error
-	Remove(orderNumber) error
+	ReturnAll() ([]*Delivery, error)
+	ReturnOne(orderNumber int) (*Delivery, error)
+	Store(*Delivery) (*Delivery, error)
+	Change(orderNumber int, del *Delivery) (*Delivery, error)
+	Remove(orderNumber int) error
 }
 
 type DeliveryDriver struct {
@@ -516,63 +594,7 @@ For this we'll need to move quite a few things out of `api.go` into `listdb.go`.
 ### Abstracting
 We will start by moving the things related to data storage out of `api.go` into `listdb.go`.
 This will be done so we can implement the `DeliveryDB` interface.
-Here is the current state of the file:
-
-```go
-package main
-
-// type deliveries is slice of Delivery pointers
-type deliveryList []*Delivery
-
-// variable deliveryList is of type deliveries
-var deliveries deliveryList = []*Delivery{
-	&Delivery{
-		OrderNumber:      1,
-		City:             "Here",
-		Zipcode:          "52011",
-		Address:          "Home",
-		Phone1:           "6945123789",
-		Phone2:           "2313722903",
-		Cancelled: false,
-		Delivered:        false,
-		DeliveryAttempts: 0,
-		Driver: DeliveryDriver{
-			FirstName: "Mhtsos",
-			LastName:  "Iwannou",
-		},
-	},
-	&Delivery{
-		OrderNumber:      2,
-		City:             "There",
-		Zipcode:          "1701",
-		Address:          "Office",
-		Phone1:           "6932728091",
-		Cancelled: false,
-		Delivered:        true,
-		DeliveryAttempts: 1,
-		Driver: DeliveryDriver{
-			FirstName: "Lucas",
-			LastName:  "Johnson",
-		},
-	},
-	&Delivery{
-		OrderNumber:      3,
-		City:             "FarAway",
-		Zipcode:          "920639",
-		Address:          "Island",
-		Phone1:           "6900777123",
-		Cancelled: true,
-		Delivered:        false,
-		DeliveryAttempts: 24,
-		Driver: DeliveryDriver{
-			FirstName: "Pilotos",
-			LastName:  "Aeroplanou",
-		},
-	},
-}
-```
-
-Now for the actual work, here is a shortened version of the data-related parts of `api.go`:
+Before the actual work, take a look at a shortened version of the data-related parts of `api.go`:
 
 ```go
 // Read all deliveries
@@ -627,5 +649,115 @@ func DeleteDelivery(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+}
+```
+
+These is what we will grab and reshape to be the implementation of the `DeliveryDB` interface inside `listdb.go`.
+The `ReturnAll`, `ReturnOne`, `Store`, `Change` and `Remove` functions should be implemented on a type, in this case, `deliveryList`.
+There isn't much more to say so here it is:
+
+```go
+package main
+
+import (
+	"errors"
+)
+
+// type deliveries is slice of Delivery pointers
+type deliveryList []*Delivery
+
+// variable deliveryList is of type deliveries
+var deliveries deliveryList = []*Delivery{
+	&Delivery{
+		OrderNumber:      1,
+		City:             "Here",
+		Zipcode:          "52011",
+		Address:          "Home",
+		Phone1:           "6945123789",
+		Phone2:           "2313722903",
+		Cancelled:        false,
+		Delivered:        false,
+		DeliveryAttempts: 0,
+		Driver: DeliveryDriver{
+			FirstName: "Mhtsos",
+			LastName:  "Iwannou",
+		},
+	},
+	&Delivery{
+		OrderNumber:      2,
+		City:             "There",
+		Zipcode:          "1701",
+		Address:          "Office",
+		Phone1:           "6932728091",
+		Cancelled:        false,
+		Delivered:        true,
+		DeliveryAttempts: 1,
+		Driver: DeliveryDriver{
+			FirstName: "Lucas",
+			LastName:  "Johnson",
+		},
+	},
+	&Delivery{
+		OrderNumber:      3,
+		City:             "FarAway",
+		Zipcode:          "920639",
+		Address:          "Island",
+		Phone1:           "6900777123",
+		Cancelled:        true,
+		Delivered:        false,
+		DeliveryAttempts: 24,
+		Driver: DeliveryDriver{
+			FirstName: "Pilotos",
+			LastName:  "Aeroplanou",
+		},
+	},
+}
+
+var currentMaxIndex int
+
+func NewListDatabase() deliveryList {
+	currentMaxIndex = int(len(deliveries))
+	return deliveries
+}
+
+func (dl deliveryList) ReturnAll() ([]*Delivery, error) {
+	return deliveries, nil
+}
+
+func (dl deliveryList) ReturnOne(orderNumber int) (*Delivery, error) {
+	for _, d := range deliveries {
+		if d.OrderNumber == orderNumber {
+			return d, nil
+		}
+	}
+	return nil, errors.New(NotFound)
+}
+
+func (dl deliveryList) Store(d *Delivery) (*Delivery, error) {
+	currentMaxIndex = currentMaxIndex + 1
+	d.OrderNumber = currentMaxIndex
+	deliveries = append(deliveries, d)
+	return d, nil
+}
+
+func (dl deliveryList) Change(orderNumber int, del *Delivery) (*Delivery, error) {
+	for _, d := range deliveries {
+		if d.OrderNumber == orderNumber {
+			del.OrderNumber = orderNumber
+			d = del
+			return d, nil
+		}
+	}
+	return nil, errors.New(NotFound)
+}
+
+func (dl deliveryList) Remove(orderNumber int) error {
+	for _, d := range deliveries {
+		if d.OrderNumber == orderNumber {
+			d.Cancelled = true
+			return nil
+		}
+	}
+	return errors.New(NotFound)
 }
 ```
