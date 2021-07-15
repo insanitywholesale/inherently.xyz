@@ -5,5 +5,8 @@
 	{{ .Title }}
 {{ end }}
 {{ define "main" }}
+	<h2 id="toc-title">Table of Contents</h2>
+	{{ .TableOfContents }}
+	<hr id="toc-hr">
 	{{ .Content }}
 {{ end }}
