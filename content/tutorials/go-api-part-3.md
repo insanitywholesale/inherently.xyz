@@ -523,7 +523,6 @@ var deliveries deliveryList = []*Delivery{
 	},
 }
 ```
-
 Nice and easy, we radically reduced the code inside `main.go` and separated our code in nicely named files.
 
 #### Main after list database restructure
@@ -556,7 +555,6 @@ The fake database we used in part 2 is mostly in its own file called `listdb.go`
 Before ripping out what exists, we'll define our interface. Due to what it is, it fits best inside `models.go`.
 This is a simple interface of something that can essentially perform the same actions as the API except it only deals with talking to the database.
 Take a look at what is in `models.go` now:
-
 ```go
 package main
 
@@ -586,7 +584,6 @@ type Delivery struct {
 	Driver           DeliveryDriver `json:"deliverydriver"`
 }
 ```
-
 Short and sweet, does what it should.
 How do we use this abstraction though?
 For this we'll need to move quite a few things out of `api.go` into `listdb.go`.
@@ -595,7 +592,6 @@ For this we'll need to move quite a few things out of `api.go` into `listdb.go`.
 We will start by moving the things related to data storage out of `api.go` into `listdb.go`.
 This will be done so we can implement the `DeliveryDB` interface.
 Before the actual work, take a look at a shortened version of the data-related parts of `api.go`:
-
 ```go
 // Read all deliveries
 func GetAllDeliveries(w http.ResponseWriter, r *http.Request) {
@@ -651,13 +647,11 @@ func DeleteDelivery(w http.ResponseWriter, r *http.Request) {
 	}
 }
 ```
-
 These is what we will grab and reshape to be the implementation of the `DeliveryDB` interface inside `listdb.go`.
 The `ReturnAll`, `ReturnOne`, `Store`, `Change` and `Remove` functions should be implemented on a type, in this case, `deliveryList`.
 
 #### List database
 There isn't much more to say so here it is:
-
 ```go
 package main
 
@@ -759,12 +753,170 @@ func (dl deliveryList) Remove(orderNumber int) error {
 	return errors.New(NotFound)
 }
 ```
-
 We've moved everything related to data-handling out of the API code and have a mock database to work with.
 Obviously it's only in memory so if we stop and restart the application any changes made to the data isn't saved anywhere.
 
-#### Restructure API again
+#### Refactor API code
 <!-- TODO: rewrite API code to use abstracted db-->
+Before moving on to implementing a different database let's change the API code to use the generalized interface.
+I also changed a couple stuff related to HTTP error codes because some were incorrect and some because most clients expect a 200 response if a request is successful.
+At any rate, let's look at the refactored `api.go`:
+```go
+package main
+
+import (
+	"encoding/json"
+	"github.com/gorilla/mux"
+	"net/http"
+	"strconv"
+)
+
+// Constant for Bad Request
+const BadReq string = `{"error": "bad request"}`
+
+// Constant for Not Found
+const NotFound string = `{"error": "not found"}`
+
+// Read all deliveries
+func GetAllDeliveries(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	dels, err := deliverydb.ReturnAll()
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(BadReq))
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(dels)
+	return
+}
+
+// Read a specific delivery
+func GetDelivery(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	orderNum, err := strconv.Atoi(params["ordernumber"])
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(BadReq))
+		return
+	}
+	del, err := deliverydb.ReturnOne(orderNum)
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte(err.Error()))
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(del)
+	return
+}
+
+// Create a new delivery
+func AddDelivery(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	d := &Delivery{}
+	err := json.NewDecoder(r.Body).Decode(d)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(BadReq))
+		return
+	}
+	del, err := deliverydb.Store(d)
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte(err.Error()))
+		return
+	}
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(del)
+	return
+}
+
+// Update an existing delivery
+func UpdateDelivery(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	orderNum, err := strconv.Atoi(params["ordernumber"])
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(BadReq))
+		return
+	}
+	d := &Delivery{}
+	err = json.NewDecoder(r.Body).Decode(d)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(BadReq))
+		return
+	}
+	del, err := deliverydb.Change(orderNum, d)
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte(NotFound))
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(del)
+	return
+}
+
+// Delete a delivery (not really)
+func DeleteDelivery(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	orderNum, err := strconv.Atoi(params["ordernumber"])
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(BadReq))
+		return
+	}
+	err = deliverydb.Remove(orderNum)
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte(NotFound))
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	return
+}
+
+func makeRouter() http.Handler {
+	// Set up router
+	router := mux.NewRouter()
+	// Set up subrouter for api version 1
+	apiV1 := router.PathPrefix("/api/v1").Subrouter()
+	// Set up routes
+	apiV1.HandleFunc("/deliveries", GetAllDeliveries).Methods(http.MethodGet)
+	apiV1.HandleFunc("/delivery/{ordernumber}", GetDelivery).Methods(http.MethodGet)
+	apiV1.HandleFunc("/delivery", AddDelivery).Methods(http.MethodPost)
+	apiV1.HandleFunc("/delivery/{ordernumber}", UpdateDelivery).Methods(http.MethodPut)
+	apiV1.HandleFunc("/delivery/{ordernumber}", DeleteDelivery).Methods(http.MethodDelete)
+	return router
+}
+```
+
+And here is `main.go` where the `DeliveryDB` is initialized:
+
+```go
+package main
+
+import (
+	"log"
+	"net/http"
+)
+
+var deliverydb DeliveryDB
+
+func main() {
+	// Create a database
+	deliverydb = NewListDatabase()
+	// Start http server
+	router := makeRouter()
+	log.Fatal(http.ListenAndServe(":8000", router))
+}
+```
 
 ### Postgres
 There are lots of databases out there but for the purposes of this tutorial I chose postgres.
