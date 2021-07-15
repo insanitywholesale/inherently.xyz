@@ -33,7 +33,7 @@ I'll assume you read the front page or if you didn't, you can click [here]({{< r
 I use multiple git forges to host my code, here are the links to them:
 
 ### Gitea
-- [Hosted on this server and mirroring the rest](https://git.distro.watch/inherently)
+- [Hosted on this server and mirroring the rest](https://git.inherently.xyz/inherently)
 
 ### Gitlab
 - [Primary place used for publishing source code](https://gitlab.com/insanitywholesale)

@@ -578,7 +578,7 @@ Play around with it if you want, I've been liking it lately and using it (mostly
 Time to move back to docker-compose.
 Traefik came to my attention when looking up reverse proxy options.
 To be precise, [this tutorial about traefik v1.x](https://www.smarthomebeginner.com/traefik-reverse-proxy-tutorial-for-docker/ "traefik reverse proxy tutorial for docker") which was the latest version available back then, as well as [a new guide for traefik v2.x](https://www.smarthomebeginner.com/traefik-2-docker-tutorial/ "traefik 2 docker tutorial") and I've greatly benefited from both.
-In my view, they're amazing for a public-facing server (that's what [my site](https://distro.watch) is using) but for LAN-only setups the solutions from the above tutorials seem overcomplicated and overkill.
+In my view, they're amazing for a public-facing server (that's what this site is using) but for LAN-only setups the solutions from the above tutorials seem overcomplicated and overkill.
 Below I'll share my `docker-compose.yml` as well as traefik-related configuration.
 Feel free to to also look at the raw files in [the repository](https://gitlab.com/insanitywholesale/docks-and-whales/-/blob/master/code/2dock2furious/ "code for this tutorial") for more help.
 Specifically, for how to run nextcloud without https which took me a good 20 minutes of searching to find the relevant documentation (always love multiple major version old docs linked from a forum post made at least half a decade ago).

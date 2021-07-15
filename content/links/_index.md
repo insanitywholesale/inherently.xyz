@@ -8,7 +8,7 @@ draft: false
 ## Here are some other things on this site
 
 ### Websites
-[linklist on non-hugo distro.watch](https://old.distro.watch/links.html)  
+[linklist on non-hugo version of the site](https://old.inherently.xyz/links.html)  
 
 #### Lists of links
 [interesting software]({{< ref "links/software" >}})  
