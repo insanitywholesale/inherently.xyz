@@ -526,7 +526,7 @@ var deliveries deliveryList = []*Delivery{
 
 Nice and easy, we radically reduced the code inside `main.go` and separated our code in nicely named files.
 
-#### Main after list restructure
+#### Main after list database restructure
 Take a peek at `main.go` after all the changes.
 You will notice that it is a lot shorter and only deals with running our API server and not much else:
 
@@ -591,7 +591,7 @@ Short and sweet, does what it should.
 How do we use this abstraction though?
 For this we'll need to move quite a few things out of `api.go` into `listdb.go`.
 
-### Abstracting
+### Separating concerns
 We will start by moving the things related to data storage out of `api.go` into `listdb.go`.
 This will be done so we can implement the `DeliveryDB` interface.
 Before the actual work, take a look at a shortened version of the data-related parts of `api.go`:
@@ -654,6 +654,8 @@ func DeleteDelivery(w http.ResponseWriter, r *http.Request) {
 
 These is what we will grab and reshape to be the implementation of the `DeliveryDB` interface inside `listdb.go`.
 The `ReturnAll`, `ReturnOne`, `Store`, `Change` and `Remove` functions should be implemented on a type, in this case, `deliveryList`.
+
+#### List database
 There isn't much more to say so here it is:
 
 ```go
@@ -713,10 +715,7 @@ var deliveries deliveryList = []*Delivery{
 	},
 }
 
-var currentMaxIndex int
-
 func NewListDatabase() deliveryList {
-	currentMaxIndex = int(len(deliveries))
 	return deliveries
 }
 
@@ -734,8 +733,7 @@ func (dl deliveryList) ReturnOne(orderNumber int) (*Delivery, error) {
 }
 
 func (dl deliveryList) Store(d *Delivery) (*Delivery, error) {
-	currentMaxIndex = currentMaxIndex + 1
-	d.OrderNumber = currentMaxIndex
+	d.OrderNumber = int(len(deliveries))
 	deliveries = append(deliveries, d)
 	return d, nil
 }
@@ -761,3 +759,87 @@ func (dl deliveryList) Remove(orderNumber int) error {
 	return errors.New(NotFound)
 }
 ```
+
+We've moved everything related to data-handling out of the API code and have a mock database to work with.
+Obviously it's only in memory so if we stop and restart the application any changes made to the data isn't saved anywhere.
+
+#### Restructure API again
+<!-- TODO: rewrite API code to use abstracted db-->
+
+### Postgres
+There are lots of databases out there but for the purposes of this tutorial I chose postgres.
+It's essentially the only one out of the traditional RDBMS systems worth using.
+The Go standard library is pretty rich so there is a `database/sql` package although we have to provide a database driver to it.
+The two most popular drivers for postgres are [pq](https://github.com/lib/pq) and [pgx](github.com/jackc/pgx).
+Since pq is in maintenance mode and pgx is the recommended alternative by the pq authors we'll go with that.
+The [guide on the pgx wiki](https://github.com/jackc/pgx/wiki/Getting-started-with-pgx-through-database-sql) is a great starting point but we'll add a big more to it.
+Enough rambling, let's see how we can start using postgres.
+Create a file called `postgres.go` with the following contents:
+```go
+package main
+
+import (
+	"database/sql"
+	_ "github.com/jackc/pgx/v4/stdlib"
+)
+
+type postgresDB struct {
+	client *sql.DB
+	pgURL  string
+}
+
+func newPostgresClient(url string) (*sql.DB, error) {
+	client, err := sql.Open("pgx", url)
+	if err != nil {
+		return nil, err
+	}
+	err = client.Ping()
+	if err != nil {
+		return nil, err
+	}
+	return client, nil
+}
+
+func NewPostgresDB(url string) (*postgresDB, error) {
+	pgclient, err := newPostgresClient(url)
+	if err != nil {
+		return nil, err
+	}
+	db := &postgresDB{
+		pgURL:  url,
+		client: pgclient,
+	}
+	return db, nil
+}
+
+func (pdb *postgresDB) ReturnAll() ([]*Delivery, error) {
+	return []*Delivery{}, nil
+}
+
+func (pdb *postgresDB) ReturnOne(orderNumber int) (*Delivery, error) {
+	return &Delivery{}, nil
+}
+
+func (pdb *postgresDB) Store(*Delivery) (*Delivery, error) {
+	return &Delivery{}, nil
+}
+
+func (pdb *postgresDB) Change(orderNumber int, del *Delivery) (*Delivery, error) {
+	return &Delivery{}, nil
+}
+
+func (pdb *postgresDB) Remove(orderNumber int) error {
+	return nil
+}
+
+```
+Quite a few stuff going on.
+First up, the imports.
+As discussed we can use `database/sql` from the standard library and then combine it with a driver.
+The line `_ "github.com/jackc/pgx/v4/stdlib"` means that we're importing that dependency but we won't have to write `stdlib.Something` to use its functions and variables but instead just write `Something`.
+Following that we have the `postgresDB` struct which will implement the `DeliveryDB` interface and which stores the database URL and the database client that uses that URL.
+Next up, there is the initialization code which is split into two functions, one private and one public as indicated by the lowercase/uppercase letter.
+The private function, named `newPostgresClient` creates a client for the database through `sql.Open` using the `pgx` driver and then pings the database to make sure it's accessible.
+The public function runs `newPostgresClient` with the provided URL and if there are no errors it saves the URL as well as the client to a new instance of `postgresDB` and returns it to the caller.
+Last but not least we see that `ReturnAll`, `ReturnOne`, `Store`, `Change` and `Remove` methods are implemented on the `postgresDB` struct as indicated by `(pdb *postgresDB`.
+Right now they don't really do anything, they're there just so the `DeliveryDB` interface is satisfied and the compiler doesn't exit with an error.
