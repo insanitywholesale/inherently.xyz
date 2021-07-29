@@ -926,6 +926,8 @@ The Go standard library is pretty rich so there is a `database/sql` package alth
 The two most popular drivers for postgres are [pq](https://github.com/lib/pq) and [pgx](github.com/jackc/pgx).
 Since pq is in maintenance mode and pgx is the recommended alternative by the pq authors we'll go with that.
 The [guide on the pgx wiki](https://github.com/jackc/pgx/wiki/Getting-started-with-pgx-through-database-sql) is a great starting point but we'll add a big more to it.
+
+#### Connection setup
 Enough rambling, let's see how we can start using postgres.
 Create a file called `postgres.go` with the following contents:
 ```go
@@ -996,3 +998,7 @@ The private function, named `newPostgresClient` creates a client for the databas
 The public function runs `newPostgresClient` with the provided URL and if there are no errors it saves the URL as well as the client to a new instance of `postgresDB` and returns it to the caller.
 Last but not least we see that `ReturnAll`, `ReturnOne`, `Store`, `Change` and `Remove` methods are implemented on the `postgresDB` struct as indicated by `(pdb *postgresDB`.
 Right now they don't really do anything, they're there just so the `DeliveryDB` interface is satisfied and the compiler doesn't exit with an error.
+
+#### Implementation
+In order to work with the database we will need to write queries to be used.
+For the sake of simplicity we won't deduplicate the delivery drivers but that is something you could do in case you're looking for ways to tweak the project on your own.
