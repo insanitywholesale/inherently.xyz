@@ -927,7 +927,7 @@ The two most popular drivers for postgres are [pq](https://github.com/lib/pq) an
 Since pq is in maintenance mode and pgx is the recommended alternative by the pq authors we'll go with that.
 The [guide on the pgx wiki](https://github.com/jackc/pgx/wiki/Getting-started-with-pgx-through-database-sql) is a great starting point but we'll add a big more to it.
 
-#### Connection setup
+#### Connection code
 Enough rambling, let's see how we can start using postgres.
 Create a file called `postgres.go` with the following contents:
 ```go
@@ -996,9 +996,159 @@ Following that we have the `postgresDB` struct which will implement the `Deliver
 Next up, there is the initialization code which is split into two functions, one private and one public as indicated by the lowercase/uppercase letter.
 The private function, named `newPostgresClient` creates a client for the database through `sql.Open` using the `pgx` driver and then pings the database to make sure it's accessible.
 The public function runs `newPostgresClient` with the provided URL and if there are no errors it saves the URL as well as the client to a new instance of `postgresDB` and returns it to the caller.
-Last but not least we see that `ReturnAll`, `ReturnOne`, `Store`, `Change` and `Remove` methods are implemented on the `postgresDB` struct as indicated by `(pdb *postgresDB`.
+Last but not least we see that `ReturnAll`, `ReturnOne`, `Store`, `Change` and `Remove` methods are implemented on the `postgresDB` struct as indicated by `(pdb *postgresDB)`.
 Right now they don't really do anything, they're there just so the `DeliveryDB` interface is satisfied and the compiler doesn't exit with an error.
 
-#### Implementation
+#### Choose database
+Now that we have written code to connect to postgres, we should probably set it up in `main.go` so if the environment variable `PG_URL` is set, we use that connection string to connect to postgres.
+
+```go
+package main
+
+import (
+	"log"
+	"net/http"
+	"os"
+)
+
+var deliverydb DeliveryDB
+
+func main() {
+	// Create a database
+	pgURL := os.Getenv("PG_URL")
+	if pgURL != "" {
+		db, err := NewPostgresDB(pgURL)
+		if err != nil {
+			log.Fatalf("error with postgres connection %v", err)
+		}
+		log.Println("connected to postgres")
+		deliverydb = db
+	}
+	deliverydb = NewListDatabase()
+	log.Println("connected to listdb")
+	// Start http server
+	router := makeRouter()
+	log.Fatal(http.ListenAndServe(":8000", router))
+}
+```
+It's pretty simple, we get the value of the `PG_URL` variable and if it's not empty, we use it to connect to postgres.
+If it's empty we just use the fake list database instead so our web service can still run.
+
+#### Test connection
+While we are confident that we did everything right, it doesn't hurt to test it out.
+Using docker we can quickly create a test database without permanently storing any data.
+The following command should bring up a database we can use for testing:
+```bash
+docker run -d --rm --name testpostgres -p 5432:5432 -e POSTGRES_PASSWORD=Apasswd -e POSTGRES_USER=tester postgres:latest
+```
+After it's done, set the `PG_URL` environment variable like so:
+```bash
+export PG_URL="postgresql://tester:Apasswd@localhost:5432?sslmode=disable"
+```
+And then run the service the same way we've been doing all along:
+```bash
+go run *.go
+```
+The message `connected to postgres` should appear in the command line.
+And there we go, our connection is working and we can move on.
+Kill the running database with:
+```bash
+docker stop testpostgres
+```
+And let's see how to write some SQL queries.
+
+#### Queries
 In order to work with the database we will need to write queries to be used.
 For the sake of simplicity we won't deduplicate the delivery drivers but that is something you could do in case you're looking for ways to tweak the project on your own.
+With that in mind, what queries are we going to need?
+One per method of the delivery database interface should be enough, along with one to create the table on first run.
+Let's begin then by creating a file called `queries.go` with the create table query:
+```go
+package main
+
+var createDeliveryTableQuery = `CREATE IF NOT EXISTS Deliveries
+	OrderNumber SERIAL PRIMARY KEY,
+	City VARCHAR,
+	Zipcode VARCHAR,
+	Address VARCHAR,
+	Phone1 VARCHAR,
+	Phone2 VARCHAR,
+	Cancelled BOOL,
+	Delivered BOOL,
+	DeliveryAttempts INTEGER,
+	DriverFirstName VARCHAR,
+	DriverLastName VARCHAR
+);`
+```
+This is an SQL representation of our `Delivery` model.
+One thing you might not have seen is `SERIAL PRIMARY KEY`.
+It will automatically increment when a new entry is inserted so we don't have to keep track of it ourselves.
+
+##### Create table query
+Let's incorporate this query into the `postgres.go` code:
+```go
+package main
+
+import (
+	"database/sql"
+	_ "github.com/jackc/pgx/v4/stdlib"
+)
+
+type postgresDB struct {
+	client *sql.DB
+	pgURL  string
+}
+
+func newPostgresClient(url string) (*sql.DB, error) {
+	client, err := sql.Open("pgx", url)
+	if err != nil {
+		return nil, err
+	}
+	err = client.Ping()
+	if err != nil {
+		return nil, err
+	}
+	_, err = client.Exec(createListTableQuery)
+	if err != nil {
+		return nil, err
+	}
+	return client, nil
+}
+
+func NewPostgresDB(url string) (*postgresDB, error) {
+	pgclient, err := newPostgresClient(url)
+	if err != nil {
+		return nil, err
+	}
+	db := &postgresDB{
+		pgURL:  url,
+		client: pgclient,
+	}
+	return db, nil
+}
+
+func (pdb *postgresDB) ReturnAll() ([]*Delivery, error) {
+	return []*Delivery{}, nil
+}
+
+func (pdb *postgresDB) ReturnOne(orderNumber int) (*Delivery, error) {
+	return &Delivery{}, nil
+}
+
+func (pdb *postgresDB) Store(*Delivery) (*Delivery, error) {
+	return &Delivery{}, nil
+}
+
+func (pdb *postgresDB) Change(orderNumber int, del *Delivery) (*Delivery, error) {
+	return &Delivery{}, nil
+}
+
+func (pdb *postgresDB) Remove(orderNumber int) error {
+	return nil
+}
+
+```
+Just 4 new lines and our database will be set up on first connection.
+You can run the connection test again as we did in the previous section.
+
+##### See all deliveries
