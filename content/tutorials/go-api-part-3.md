@@ -6,6 +6,10 @@ summary: "Adding a database to a REST API in golang part 3"
 tags: ["tutorial", "programming", "golang", "api", "database"]
 ---
 
+# TODO
+- fix api getdelivery (use notfound)
+- fix links in prev relevant tut
+
 ## Previous relevant tutorial
 The development of the CRUD REST API was described [in part 2]
 and the introduction to the series can be found in [part 1] so read those first if you're new.
@@ -781,7 +785,6 @@ const NotFound string = `{"error": "not found"}`
 // Read all deliveries
 func GetAllDeliveries(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
 	dels, err := deliverydb.ReturnAll()
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -975,7 +978,7 @@ func (pdb *postgresDB) ReturnOne(orderNumber int) (*Delivery, error) {
 	return &Delivery{}, nil
 }
 
-func (pdb *postgresDB) Store(*Delivery) (*Delivery, error) {
+func (pdb *postgresDB) Store(d *Delivery) (*Delivery, error) {
 	return &Delivery{}, nil
 }
 
@@ -1021,11 +1024,12 @@ func main() {
 		if err != nil {
 			log.Fatalf("error with postgres connection %v", err)
 		}
-		log.Println("connected to postgres")
 		deliverydb = db
+		log.Println("connected to postgres")
+	} else {
+		deliverydb = NewListDatabase()
+		log.Println("connected to listdb")
 	}
-	deliverydb = NewListDatabase()
-	log.Println("connected to listdb")
 	// Start http server
 	router := makeRouter()
 	log.Fatal(http.ListenAndServe(":8000", router))
@@ -1062,11 +1066,13 @@ In order to work with the database we will need to write queries to be used.
 For the sake of simplicity we won't deduplicate the delivery drivers but that is something you could do in case you're looking for ways to tweak the project on your own.
 With that in mind, what queries are we going to need?
 One per method of the delivery database interface should be enough, along with one to create the table on first run.
+
+##### Create table query
 Let's begin then by creating a file called `queries.go` with the create table query:
 ```go
 package main
 
-var createDeliveryTableQuery = `CREATE IF NOT EXISTS Deliveries
+var createDeliveriesTableQuery = `CREATE TABLE IF NOT EXISTS Deliveries (
 	OrderNumber SERIAL PRIMARY KEY,
 	City VARCHAR,
 	Zipcode VARCHAR,
@@ -1083,8 +1089,6 @@ var createDeliveryTableQuery = `CREATE IF NOT EXISTS Deliveries
 This is an SQL representation of our `Delivery` model.
 One thing you might not have seen is `SERIAL PRIMARY KEY`.
 It will automatically increment when a new entry is inserted so we don't have to keep track of it ourselves.
-
-##### Create table query
 Let's incorporate this query into the `postgres.go` code:
 ```go
 package main
@@ -1108,7 +1112,7 @@ func newPostgresClient(url string) (*sql.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	_, err = client.Exec(createListTableQuery)
+	_, err = client.Exec(createDeliveriesTableQuery)
 	if err != nil {
 		return nil, err
 	}
@@ -1135,7 +1139,7 @@ func (pdb *postgresDB) ReturnOne(orderNumber int) (*Delivery, error) {
 	return &Delivery{}, nil
 }
 
-func (pdb *postgresDB) Store(*Delivery) (*Delivery, error) {
+func (pdb *postgresDB) Store(d *Delivery) (*Delivery, error) {
 	return &Delivery{}, nil
 }
 
@@ -1146,9 +1150,893 @@ func (pdb *postgresDB) Change(orderNumber int, del *Delivery) (*Delivery, error)
 func (pdb *postgresDB) Remove(orderNumber int) error {
 	return nil
 }
-
 ```
 Just 4 new lines and our database will be set up on first connection.
 You can run the connection test again as we did in the previous section.
 
 ##### See all deliveries
+This requires a simple query, we just select everything in the `Deliveries` table so take a loot at `queries.go`:
+```go
+package main
+
+var createDeliveriesTableQuery = `CREATE TABLE IF NOT EXISTS Deliveries (
+	OrderNumber SERIAL PRIMARY KEY,
+	City VARCHAR,
+	Zipcode VARCHAR,
+	Address VARCHAR,
+	Phone1 VARCHAR,
+	Phone2 VARCHAR,
+	Cancelled BOOL,
+	Delivered BOOL,
+	DeliveryAttempts INTEGER,
+	DriverFirstName VARCHAR,
+	DriverLastName VARCHAR
+);`
+var retrieveAllDeliveriesQuery = `SELECT 
+	OrderNumber,
+	City,
+	Zipcode,
+	Address,
+	Phone1,
+	Phone2,
+	Cancelled,
+	Delivered,
+	DeliveryAttempts,
+	DriverFirstName,
+	DriverLastName FROM Deliveries;`
+```
+And then we'll use it in the `ReturnAll` method inside `postgres.go`
+```go
+package main
+
+import (
+	"database/sql"
+	_ "github.com/jackc/pgx/v4/stdlib"
+)
+
+type postgresDB struct {
+	client *sql.DB
+	pgURL  string
+}
+
+func newPostgresClient(url string) (*sql.DB, error) {
+	client, err := sql.Open("pgx", url)
+	if err != nil {
+		return nil, err
+	}
+	err = client.Ping()
+	if err != nil {
+		return nil, err
+	}
+	_, err = client.Exec(createDeliveriesTableQuery)
+	if err != nil {
+		return nil, err
+	}
+	return client, nil
+}
+
+func NewPostgresDB(url string) (*postgresDB, error) {
+	pgclient, err := newPostgresClient(url)
+	if err != nil {
+		return nil, err
+	}
+	db := &postgresDB{
+		pgURL:  url,
+		client: pgclient,
+	}
+	return db, nil
+}
+
+func (pdb *postgresDB) ReturnAll() ([]*Delivery, error) {
+	var deliveryslice = []*Delivery{}
+	rows, err := pdb.client.Query(retrieveAllDeliveriesQuery)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var delivery = &Delivery{}
+		err = rows.Scan(
+			&delivery.OrderNumber,
+			&delivery.City,
+			&delivery.Zipcode,
+			&delivery.Address,
+			&delivery.Phone1,
+			&delivery.Phone2,
+			&delivery.Cancelled,
+			&delivery.Delivered,
+			&delivery.DeliveryAttempts,
+			&delivery.Driver.FirstName,
+			&delivery.Driver.LastName,
+		)
+		if err != nil {
+			return nil, err
+		}
+		deliveryslice = append(deliveryslice, delivery)
+	}
+	return deliveryslice, nil
+}
+
+func (pdb *postgresDB) ReturnOne(orderNumber int) (*Delivery, error) {
+	return &Delivery{}, nil
+}
+
+func (pdb *postgresDB) Store(d *Delivery) (*Delivery, error) {
+	return &Delivery{}, nil
+}
+
+func (pdb *postgresDB) Change(orderNumber int, del *Delivery) (*Delivery, error) {
+	return &Delivery{}, nil
+}
+
+func (pdb *postgresDB) Remove(orderNumber int) error {
+	return nil
+}
+```
+Initially, we create an empty list of deliveries to store all the deliveries retrieved from the database.
+Then we run the query, iterate over the rows returned, save the results to the delivery struct and append that struct to the list.
+Finally we return the list to the caller and that's all.
+
+##### See one delivery
+This one is also pretty simple, we select everything if the entry has the specified order number:
+```go
+package main
+
+var createDeliveriesTableQuery = `CREATE TABLE IF NOT EXISTS Deliveries (
+	OrderNumber SERIAL PRIMARY KEY,
+	City VARCHAR,
+	Zipcode VARCHAR,
+	Address VARCHAR,
+	Phone1 VARCHAR,
+	Phone2 VARCHAR,
+	Cancelled BOOL,
+	Delivered BOOL,
+	DeliveryAttempts INTEGER,
+	DriverFirstName VARCHAR,
+	DriverLastName VARCHAR
+);`
+var retrieveAllDeliveriesQuery = `SELECT 
+	OrderNumber,
+	City,
+	Zipcode,
+	Address,
+	Phone1,
+	Phone2,
+	Cancelled,
+	Delivered,
+	DeliveryAttempts,
+	DriverFirstName,
+	DriverLastName FROM Deliveries;`
+var retrieveOneDeliveryQuery = `SELECT
+	OrderNumber,
+	City,
+	Zipcode,
+	Address,
+	Phone1,
+	Phone2,
+	Cancelled,
+	Delivered,
+	DeliveryAttempts,
+	DriverFirstName,
+	DriverLastName
+FROM Deliveries WHERE OrderNumber=$1;`
+```
+And now we need to use it inside our `ReturnOne` method:
+```go
+package main
+
+import (
+	"database/sql"
+	_ "github.com/jackc/pgx/v4/stdlib"
+)
+
+type postgresDB struct {
+	client *sql.DB
+	pgURL  string
+}
+
+func newPostgresClient(url string) (*sql.DB, error) {
+	client, err := sql.Open("pgx", url)
+	if err != nil {
+		return nil, err
+	}
+	err = client.Ping()
+	if err != nil {
+		return nil, err
+	}
+	_, err = client.Exec(createDeliveriesTableQuery)
+	if err != nil {
+		return nil, err
+	}
+	return client, nil
+}
+
+func NewPostgresDB(url string) (*postgresDB, error) {
+	pgclient, err := newPostgresClient(url)
+	if err != nil {
+		return nil, err
+	}
+	db := &postgresDB{
+		pgURL:  url,
+		client: pgclient,
+	}
+	return db, nil
+}
+
+func (pdb *postgresDB) ReturnAll() ([]*Delivery, error) {
+	var deliveryslice = []*Delivery{}
+	row, err := pdb.client.Query(retrieveOneDeliveryQuery, orderNumber)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var delivery = &Delivery{}
+		err = rows.Scan(
+			&delivery.OrderNumber,
+			&delivery.City,
+			&delivery.Zipcode,
+			&delivery.Address,
+			&delivery.Phone1,
+			&delivery.Phone2,
+			&delivery.Cancelled,
+			&delivery.Delivered,
+			&delivery.DeliveryAttempts,
+			&delivery.Driver.FirstName,
+			&delivery.Driver.LastName,
+		)
+		if err != nil {
+			return nil, err
+		}
+		deliveryslice = append(deliveryslice, delivery)
+	}
+	return deliveryslice, nil
+}
+
+func (pdb *postgresDB) ReturnOne(orderNumber int) (*Delivery, error) {
+	var delivery = &Delivery{}
+	row, err := pdb.client.Query(retrieveOneDeliveryQuery)
+	if err != nil {
+		return nil, err
+	}
+	err = row.Scan(
+		&delivery.OrderNumber,
+		&delivery.City,
+		&delivery.Zipcode,
+		&delivery.Address,
+		&delivery.Phone1,
+		&delivery.Phone2,
+		&delivery.Cancelled,
+		&delivery.Delivered,
+		&delivery.DeliveryAttempts,
+		&delivery.Driver.FirstName,
+		&delivery.Driver.LastName,
+	)
+	return delivery, nil
+}
+
+func (pdb *postgresDB) Store(d *Delivery) (*Delivery, error) {
+	return &Delivery{}, nil
+}
+
+func (pdb *postgresDB) Change(orderNumber int, del *Delivery) (*Delivery, error) {
+	return &Delivery{}, nil
+}
+
+func (pdb *postgresDB) Remove(orderNumber int) error {
+	return nil
+}
+```
+This is basically the same as `ReturnAll` but even simpler so I won't cover it in detail.
+
+#### Add one delivery
+In order to test the retrieve methods, we need to have a way to store stuff first.
+Since the database generates the order number, the query needs to return it when we run it.
+```go
+package main
+
+var createDeliveriesTableQuery = `CREATE TABLE IF NOT EXISTS Deliveries (
+	OrderNumber SERIAL PRIMARY KEY,
+	City VARCHAR,
+	Zipcode VARCHAR,
+	Address VARCHAR,
+	Phone1 VARCHAR,
+	Phone2 VARCHAR,
+	Cancelled BOOL,
+	Delivered BOOL,
+	DeliveryAttempts INTEGER,
+	DriverFirstName VARCHAR,
+	DriverLastName VARCHAR
+);`
+var retrieveAllDeliveriesQuery = `SELECT 
+	OrderNumber,
+	City,
+	Zipcode,
+	Address,
+	Phone1,
+	Phone2,
+	Cancelled,
+	Delivered,
+	DeliveryAttempts,
+	DriverFirstName,
+	DriverLastName FROM Deliveries;`
+var retrieveOneDeliveryQuery = `SELECT
+	OrderNumber,
+	City,
+	Zipcode,
+	Address,
+	Phone1,
+	Phone2,
+	Cancelled,
+	Delivered,
+	DeliveryAttempts,
+	DriverFirstName,
+	DriverLastName
+FROM Deliveries WHERE OrderNumber=$1;`
+var storeDeliveryQuery = `INSERT INTO Deliveries (
+	City,
+	Zipcode,
+	Address,
+	Phone1,
+	Phone2,
+	Cancelled,
+	Delivered,
+	DeliveryAttempts,
+	DriverFirstName,
+	DriverLastName
+) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING OrderNumber;`
+```
+This way when we insert an entry, we will get back its order number.
+Let's see how the `Store` method will be implemented
+```go
+package main
+
+import (
+	"database/sql"
+	_ "github.com/jackc/pgx/v4/stdlib"
+)
+
+type postgresDB struct {
+	client *sql.DB
+	pgURL  string
+}
+
+func newPostgresClient(url string) (*sql.DB, error) {
+	client, err := sql.Open("pgx", url)
+	if err != nil {
+		return nil, err
+	}
+	err = client.Ping()
+	if err != nil {
+		return nil, err
+	}
+	_, err = client.Exec(createDeliveriesTableQuery)
+	if err != nil {
+		return nil, err
+	}
+	return client, nil
+}
+
+func NewPostgresDB(url string) (*postgresDB, error) {
+	pgclient, err := newPostgresClient(url)
+	if err != nil {
+		return nil, err
+	}
+	db := &postgresDB{
+		pgURL:  url,
+		client: pgclient,
+	}
+	return db, nil
+}
+
+func (pdb *postgresDB) ReturnAll() ([]*Delivery, error) {
+	var deliveryslice = []*Delivery{}
+	rows, err := pdb.client.Query(retrieveAllDeliveriesQuery)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var delivery = &Delivery{}
+		err = rows.Scan(
+			&delivery.OrderNumber,
+			&delivery.City,
+			&delivery.Zipcode,
+			&delivery.Address,
+			&delivery.Phone1,
+			&delivery.Phone2,
+			&delivery.Cancelled,
+			&delivery.Delivered,
+			&delivery.DeliveryAttempts,
+			&delivery.Driver.FirstName,
+			&delivery.Driver.LastName,
+		)
+		if err != nil {
+			return nil, err
+		}
+		deliveryslice = append(deliveryslice, delivery)
+	}
+	return deliveryslice, nil
+}
+
+func (pdb *postgresDB) ReturnOne(orderNumber int) (*Delivery, error) {
+	var delivery = &Delivery{}
+	row, err := pdb.client.Query(retrieveOneDeliveryQuery, orderNumber)
+	if err != nil {
+		return nil, err
+	}
+	err = row.Scan(
+		&delivery.OrderNumber,
+		&delivery.City,
+		&delivery.Zipcode,
+		&delivery.Address,
+		&delivery.Phone1,
+		&delivery.Phone2,
+		&delivery.Cancelled,
+		&delivery.Delivered,
+		&delivery.DeliveryAttempts,
+		&delivery.Driver.FirstName,
+		&delivery.Driver.LastName,
+	)
+	return delivery, nil
+}
+
+func (pdb *postgresDB) Store(d *Delivery) (*Delivery, error) {
+	err := pdb.client.QueryRow(storeDeliveryQuery,
+		d.City,
+		d.Zipcode,
+		d.Address,
+		d.Phone1,
+		d.Phone2,
+		d.Cancelled,
+		d.Delivered,
+		d.DeliveryAttempts,
+		d.Driver.FirstName,
+		d.Driver.LastName,
+	).Scan(&d.OrderNumber)
+	if err != nil {
+		return nil, err
+	}
+	return d, nil
+}
+
+func (pdb *postgresDB) Change(orderNumber int, del *Delivery) (*Delivery, error) {
+	return &Delivery{}, nil
+}
+
+func (pdb *postgresDB) Remove(orderNumber int) error {
+	return nil
+}
+```
+In this method we just insert what the user sent, ignoring the order number they specified, and then return the entry as it was saved.
+
+#### Update delivery
+There are a few ways to go about updating existing entries.
+We can check each thing about the `Delivery` that is sent to us and update only the things that are changed.
+Another alternative is to swap out all existing values with what is sent which is the dumb method.
+The first option allows for sending less data and maybe saving some bandwidth but the second one is easier to implement so we'll hope whoever uses our API does so responsibly.
+Below is `queries.go` with our update query added.
+Note that I used some different SQL syntax this time to keep it a little interesting:
+```go
+package main
+
+var createDeliveriesTableQuery = `CREATE TABLE IF NOT EXISTS Deliveries (
+	OrderNumber SERIAL PRIMARY KEY,
+	City VARCHAR,
+	Zipcode VARCHAR,
+	Address VARCHAR,
+	Phone1 VARCHAR,
+	Phone2 VARCHAR,
+	Cancelled BOOL,
+	Delivered BOOL,
+	DeliveryAttempts INTEGER,
+	DriverFirstName VARCHAR,
+	DriverLastName VARCHAR
+);`
+var retrieveAllDeliveriesQuery = `SELECT 
+	OrderNumber,
+	City,
+	Zipcode,
+	Address,
+	Phone1,
+	Phone2,
+	Cancelled,
+	Delivered,
+	DeliveryAttempts,
+	DriverFirstName,
+	DriverLastName FROM Deliveries;`
+var retrieveOneDeliveryQuery = `SELECT
+	OrderNumber,
+	City,
+	Zipcode,
+	Address,
+	Phone1,
+	Phone2,
+	Cancelled,
+	Delivered,
+	DeliveryAttempts,
+	DriverFirstName,
+	DriverLastName
+FROM Deliveries WHERE OrderNumber=$1;`
+var storeDeliveryQuery = `INSERT INTO Deliveries (
+	City,
+	Zipcode,
+	Address,
+	Phone1,
+	Phone2,
+	Cancelled,
+	Delivered,
+	DeliveryAttempts,
+	DriverFirstName,
+	DriverLastName
+) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING OrderNumber;`
+var changeDeliveryQuery = `UPDATE Deliveries SET
+	City=$2,
+	Zipcode=$3,
+	Address=$4,
+	Phone1=$5,
+	Phone2=$6,
+	Cancelled=$7,
+	Delivered=$8,
+	DeliveryAttempts=$9,
+	DriverFirstName=$10
+	DriverLastName=$11
+WHERE OrderNumber=$1;`
+```
+Not too bad I'd say, we just set the values given if the entry has the order number given.
+Using this in postgres is not too hard since we've seen the previous ones, give it a look:
+```go
+package main
+
+import (
+	"database/sql"
+	_ "github.com/jackc/pgx/v4/stdlib"
+)
+
+type postgresDB struct {
+	client *sql.DB
+	pgURL  string
+}
+
+func newPostgresClient(url string) (*sql.DB, error) {
+	client, err := sql.Open("pgx", url)
+	if err != nil {
+		return nil, err
+	}
+	err = client.Ping()
+	if err != nil {
+		return nil, err
+	}
+	_, err = client.Exec(createDeliveriesTableQuery)
+	if err != nil {
+		return nil, err
+	}
+	return client, nil
+}
+
+func NewPostgresDB(url string) (*postgresDB, error) {
+	pgclient, err := newPostgresClient(url)
+	if err != nil {
+		return nil, err
+	}
+	db := &postgresDB{
+		pgURL:  url,
+		client: pgclient,
+	}
+	return db, nil
+}
+
+func (pdb *postgresDB) ReturnAll() ([]*Delivery, error) {
+	var deliveryslice = []*Delivery{}
+	rows, err := pdb.client.Query(retrieveAllDeliveriesQuery)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var delivery = &Delivery{}
+		err = rows.Scan(
+			&delivery.OrderNumber,
+			&delivery.City,
+			&delivery.Zipcode,
+			&delivery.Address,
+			&delivery.Phone1,
+			&delivery.Phone2,
+			&delivery.Cancelled,
+			&delivery.Delivered,
+			&delivery.DeliveryAttempts,
+			&delivery.Driver.FirstName,
+			&delivery.Driver.LastName,
+		)
+		if err != nil {
+			return nil, err
+		}
+		deliveryslice = append(deliveryslice, delivery)
+	}
+	return deliveryslice, nil
+}
+
+func (pdb *postgresDB) ReturnOne(orderNumber int) (*Delivery, error) {
+	var delivery = &Delivery{}
+	row, err := pdb.client.Query(retrieveOneDeliveryQuery, orderNumber)
+	if err != nil {
+		return nil, err
+	}
+	err = row.Scan(
+		&delivery.OrderNumber,
+		&delivery.City,
+		&delivery.Zipcode,
+		&delivery.Address,
+		&delivery.Phone1,
+		&delivery.Phone2,
+		&delivery.Cancelled,
+		&delivery.Delivered,
+		&delivery.DeliveryAttempts,
+		&delivery.Driver.FirstName,
+		&delivery.Driver.LastName,
+	)
+	return delivery, nil
+}
+
+func (pdb *postgresDB) Store(d *Delivery) (*Delivery, error) {
+	err := pdb.client.QueryRow(storeDeliveryQuery,
+		d.City,
+		d.Zipcode,
+		d.Address,
+		d.Phone1,
+		d.Phone2,
+		d.Cancelled,
+		d.Delivered,
+		d.DeliveryAttempts,
+		d.Driver.FirstName,
+		d.Driver.LastName,
+	).Scan(&d.OrderNumber)
+	if err != nil {
+		return nil, err
+	}
+	return d, nil
+}
+
+func (pdb *postgresDB) Change(orderNumber int, del *Delivery) (*Delivery, error) {
+	err := pdb.client.Exec(changeDeliveryQuery,
+		orderNumber,
+		del.City,
+		del.Zipcode,
+		del.Address,
+		del.Phone1,
+		del.Phone2,
+		del.Cancelled,
+		del.Delivered,
+		del.DeliveryAttempts,
+		del.Driver.FirstName,
+		del.Driver.LastName,
+	)
+	if err != nil {
+		return nil, err
+	}
+	return pdb.ReturnOne(orderNumber)
+}
+
+func (pdb *postgresDB) Remove(orderNumber int) error {
+	return nil
+}
+```
+As you can see we don't use the order number from the delivery object since the user might have maliciously changed it.
+In addition, `ReturnOne` is called to make sure that we send back the changed entry as it is in the database so there is no data discrepancies between what we store and what we show.
+
+#### Delete delivery
+If you remember, we don't actually delete deliveries, we just set the `Cancelled` status to `true`.
+However for the sake of showing how the query would be, I'll include another one along with its usage inside prostgres as comments alongside the proper one.
+```go
+package main
+
+var createDeliveriesTableQuery = `CREATE TABLE IF NOT EXISTS Deliveries (
+	OrderNumber SERIAL PRIMARY KEY,
+	City VARCHAR,
+	Zipcode VARCHAR,
+	Address VARCHAR,
+	Phone1 VARCHAR,
+	Phone2 VARCHAR,
+	Cancelled BOOL,
+	Delivered BOOL,
+	DeliveryAttempts INTEGER,
+	DriverFirstName VARCHAR,
+	DriverLastName VARCHAR
+);`
+var retrieveAllDeliveriesQuery = `SELECT 
+	OrderNumber,
+	City,
+	Zipcode,
+	Address,
+	Phone1,
+	Phone2,
+	Cancelled,
+	Delivered,
+	DeliveryAttempts,
+	DriverFirstName,
+	DriverLastName FROM Deliveries;`
+var retrieveOneDeliveryQuery = `SELECT
+	OrderNumber,
+	City,
+	Zipcode,
+	Address,
+	Phone1,
+	Phone2,
+	Cancelled,
+	Delivered,
+	DeliveryAttempts,
+	DriverFirstName,
+	DriverLastName
+FROM Deliveries WHERE OrderNumber=$1;`
+var storeDeliveryQuery = `INSERT INTO Deliveries (
+	City,
+	Zipcode,
+	Address,
+	Phone1,
+	Phone2,
+	Cancelled,
+	Delivered,
+	DeliveryAttempts,
+	DriverFirstName,
+	DriverLastName
+) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING OrderNumber;`
+var changeDeliveryQuery = `UPDATE Deliveries SET
+	City=$2,
+	Zipcode=$3,
+	Address=$4,
+	Phone1=$5,
+	Phone2=$6,
+	Cancelled=$7,
+	Delivered=$8,
+	DeliveryAttempts=$9,
+	DriverFirstName=$10
+	DriverLastName=$11
+WHERE OrderNumber=$1;`
+var removeDeliveryQuery = `UPDATE Deliveries SET Cancelled=true WHERE OrderNumber=$1`
+//commented out so the compiler doesn't complain about unused variables
+//var removeDeliveryForRealQuery = `DELETE FROM Deliveries WHERE OrderNumber=$1`
+```
+The query we'll use is another update, this time it simply sets the `Cancelled` field to `true`.
+Here is the postgres part of it:
+```go
+package main
+
+import (
+	"database/sql"
+	_ "github.com/jackc/pgx/v4/stdlib"
+)
+
+type postgresDB struct {
+	client *sql.DB
+	pgURL  string
+}
+
+func newPostgresClient(url string) (*sql.DB, error) {
+	client, err := sql.Open("pgx", url)
+	if err != nil {
+		return nil, err
+	}
+	err = client.Ping()
+	if err != nil {
+		return nil, err
+	}
+	_, err = client.Exec(createDeliveriesTableQuery)
+	if err != nil {
+		return nil, err
+	}
+	return client, nil
+}
+
+func NewPostgresDB(url string) (*postgresDB, error) {
+	pgclient, err := newPostgresClient(url)
+	if err != nil {
+		return nil, err
+	}
+	db := &postgresDB{
+		pgURL:  url,
+		client: pgclient,
+	}
+	return db, nil
+}
+
+func (pdb *postgresDB) ReturnAll() ([]*Delivery, error) {
+	var deliveryslice = []*Delivery{}
+	rows, err := pdb.client.Query(retrieveAllDeliveriesQuery)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var delivery = &Delivery{}
+		err = rows.Scan(
+			&delivery.OrderNumber,
+			&delivery.City,
+			&delivery.Zipcode,
+			&delivery.Address,
+			&delivery.Phone1,
+			&delivery.Phone2,
+			&delivery.Cancelled,
+			&delivery.Delivered,
+			&delivery.DeliveryAttempts,
+			&delivery.Driver.FirstName,
+			&delivery.Driver.LastName,
+		)
+		if err != nil {
+			return nil, err
+		}
+		deliveryslice = append(deliveryslice, delivery)
+	}
+	return deliveryslice, nil
+}
+
+func (pdb *postgresDB) ReturnOne(orderNumber int) (*Delivery, error) {
+	var delivery = &Delivery{}
+	row, err := pdb.client.Query(retrieveOneDeliveryQuery, orderNumber)
+	if err != nil {
+		return nil, err
+	}
+	err = row.Scan(
+		&delivery.OrderNumber,
+		&delivery.City,
+		&delivery.Zipcode,
+		&delivery.Address,
+		&delivery.Phone1,
+		&delivery.Phone2,
+		&delivery.Cancelled,
+		&delivery.Delivered,
+		&delivery.DeliveryAttempts,
+		&delivery.Driver.FirstName,
+		&delivery.Driver.LastName,
+	)
+	return delivery, nil
+}
+
+func (pdb *postgresDB) Store(d *Delivery) (*Delivery, error) {
+	err := pdb.client.QueryRow(storeDeliveryQuery,
+		d.City,
+		d.Zipcode,
+		d.Address,
+		d.Phone1,
+		d.Phone2,
+		d.Cancelled,
+		d.Delivered,
+		d.DeliveryAttempts,
+		d.Driver.FirstName,
+		d.Driver.LastName,
+	).Scan(&d.OrderNumber)
+	if err != nil {
+		return nil, err
+	}
+	return d, nil
+}
+
+func (pdb *postgresDB) Change(orderNumber int, del *Delivery) (*Delivery, error) {
+	err := pdb.client.Exec(changeDeliveryQuery,
+		orderNumber,
+		del.City,
+		del.Zipcode,
+		del.Address,
+		del.Phone1,
+		del.Phone2,
+		del.Cancelled,
+		del.Delivered,
+		del.DeliveryAttempts,
+		del.Driver.FirstName,
+		del.Driver.LastName,
+	)
+	if err != nil {
+		return nil, err
+	}
+	return pdb.ReturnOne(orderNumber)
+}
+
+func (pdb *postgresDB) Remove(orderNumber int) error {
+	err := pdb.client.Exec(removeDeliveryQuery, orderNumber)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+```
+Just pass the order number and execute the query.
+Simple enough.
