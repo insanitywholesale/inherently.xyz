@@ -385,7 +385,7 @@ func DeleteDelivery(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func makeRouter() http.Handler {
+func MakeRouter() http.Handler {
 	// Set up router
 	router := mux.NewRouter()
 	// Set up subrouter for api version 1
@@ -466,13 +466,13 @@ var deliveries deliveryList = []*Delivery{
 
 func main() {
 	// Start http server
-	router := makeRouter()
+	router := MakeRouter()
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
 ```
 Since we're cleaning things up and are planning to add a database, time to remove the list and put it in its own file.
 
-### List
+### List Restructure
 Our `main.go` is getting emptier so let's remove the list stuff and put it in its own file called `listdb.go`
 
 ```go
@@ -544,7 +544,7 @@ import (
 
 func main() {
 	// Start http server
-	router := makeRouter()
+	router := MakeRouter()
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
 ```
