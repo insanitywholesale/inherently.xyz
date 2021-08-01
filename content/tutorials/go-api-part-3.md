@@ -1061,13 +1061,13 @@ docker stop testpostgres
 ```
 And let's see how to write some SQL queries.
 
-#### Queries
+### Queries
 In order to work with the database we will need to write queries to be used.
 For the sake of simplicity we won't deduplicate the delivery drivers but that is something you could do in case you're looking for ways to tweak the project on your own.
 With that in mind, what queries are we going to need?
 One per method of the delivery database interface should be enough, along with one to create the table on first run.
 
-##### Create table query
+#### Create table query
 Let's begin then by creating a file called `queries.go` with the create table query:
 ```go
 package main
@@ -1154,7 +1154,7 @@ func (pdb *postgresDB) Remove(orderNumber int) error {
 Just 4 new lines and our database will be set up on first connection.
 You can run the connection test again as we did in the previous section.
 
-##### See all deliveries
+#### See all deliveries
 This requires a simple query, we just select everything in the `Deliveries` table so take a loot at `queries.go`:
 ```go
 package main
@@ -1277,7 +1277,7 @@ Initially, we create an empty list of deliveries to store all the deliveries ret
 Then we run the query, iterate over the rows returned, save the results to the delivery struct and append that struct to the list.
 Finally we return the list to the caller and that's all.
 
-##### See one delivery
+#### See one delivery
 This one is also pretty simple, we select everything if the entry has the specified order number:
 ```go
 package main
