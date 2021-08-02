@@ -1,6 +1,6 @@
 ---
 title: "Docker Multi-Binary Images"
-date: 2021-08-02T17:43:30+03:00
+date: 2021-08-01T17:43:30+03:00
 draft: false
 tags: ["docker", "devops", "linux"]
 ---
