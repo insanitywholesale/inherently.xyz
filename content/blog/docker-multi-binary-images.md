@@ -1,7 +1,7 @@
 ---
 title: "Docker Multi-Binary Images"
-date: 2021-08-01T17:43:30+03:00
-draft: true
+date: 2021-08-02T17:43:30+03:00
+draft: false
 tags: ["docker", "devops", "linux"]
 ---
 
@@ -73,6 +73,9 @@ There is no `CMD` or `ENTRYPOINT` as you can see, this will probably result in t
 
 ### Kubernetes deployment manifests
 With the Dockerfle out of the way, let's look at the way these images are deployed.
+The primary way I run containers is through kubernetes so we'll be looking at kubernetes manifests.
+Same as the Dockerfile you can find the source for these manifests on gitlab, I'll be linking each one.
+[kube/manifests/gifinator/render/deployment.yml](https://gitlab.com/insanitywholesale/infra/-/blob/master/kube/manifests/gifinator/render/deployment.yml)
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -97,6 +100,7 @@ spec:
         command: ["/render"]
 #the rest of the file is omitted
 ```
+[kube/manifests/gifinator/gifcreator-server/deployment.yml](https://gitlab.com/insanitywholesale/infra/-/blob/master/kube/manifests/gifinator/gifcreator-server/deployment.yml)
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -121,6 +125,7 @@ spec:
         command: ["/gifcreator"]
 #the rest of the file is omitted
 ```
+[kube/manifests/gifinator/gifcreator-worker/deployment.yml](https://gitlab.com/insanitywholesale/infra/-/blob/master/kube/manifests/gifinator/gifcreator-worker/deployment.yml)
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -145,6 +150,7 @@ spec:
         command: ["/gifcreator", "-worker"]
 #the rest of the file is omitted
 ```
+[kube/manifests/gifinator/frontend/deployment.yml](https://gitlab.com/insanitywholesale/infra/-/blob/master/kube/manifests/gifinator/frontend/deployment.yml)
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -171,3 +177,7 @@ spec:
 ```
 Here are 4 different services, all easily using the same image.
 Just by redifining the command it's easy to simplify the development process by a quite a lot.
+It's worth noting that I've only shown the deployment manifests since the other ones don't have anything to do with the container image used.
+
+## Conclusion
+This is a short post mostly made up of code snippets but I hope you learned something and can improve your workflow with distributed microservice applications.
