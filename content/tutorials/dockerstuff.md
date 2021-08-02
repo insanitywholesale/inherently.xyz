@@ -476,7 +476,10 @@ First, you should make an account if you don't have one already by going over on
 ### Tagging
 Since we just finished making our reactjs-based image, let's use it here too. Previously we only tagged it as `reactjs-counters:0.0.1` but we need something more now. The format of the image name should be `username/image:tag`. There at least 2 ways to go about this. Either rebuild the image and tag it differently or tag the existing one. I'll go over both of them.
 
-First, let's look at the "I wish I'd known sooner" method. As we know, images have a unique identifier. This is under the ``IMAGE ID` column in `docker image ls` output. A single image can be tagged with different names. So here is the way we'd build it with multiple tags, one of them being the properly versioned one and the other one being latest (don't forget to substitute `username` with your actual username):  
+First, let's look at the "I wish I'd known sooner" method.
+As we know, images have a unique identifier. This is under the `IMAGE ID` column in `docker image ls` output.
+A single image can be tagged with different names.
+So here is the way we'd build it with multiple tags, one of them being the properly versioned one and the other one being latest (don't forget to substitute `username` with your actual username):  
 `docker build -t username/reactjs-counters:0.0.1 -t username/reactjs-counters:latest .`  
 And there we have it. Simple enough, ain't it? But how about tagging an already existing image? Someone might not fancy rebuilding theirs.
 
