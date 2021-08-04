@@ -886,7 +886,7 @@ func DeleteDelivery(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func makeRouter() http.Handler {
+func MakeRouter() http.Handler {
 	// Set up router
 	router := mux.NewRouter()
 	// Set up subrouter for api version 1
@@ -917,7 +917,7 @@ func main() {
 	// Create a database
 	deliverydb = NewListDatabase()
 	// Start http server
-	router := makeRouter()
+	router := MakeRouter()
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
 ```
