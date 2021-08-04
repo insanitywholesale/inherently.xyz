@@ -471,6 +471,7 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
 ```
+
 Since we're cleaning things up and are planning to add a database, time to remove the list and put it in its own file.
 
 ### List Restructure
@@ -529,6 +530,7 @@ var deliveries deliveryList = []*Delivery{
 	},
 }
 ```
+
 Nice and easy, we radically reduced the code inside `main.go` and separated our code in nicely named files.
 
 #### Main after list database restructure
@@ -560,6 +562,7 @@ The fake database we used in part 2 is mostly in its own file called `listdb.go`
 Before ripping out what exists, we'll define our interface. Due to what it is, it fits best inside `models.go`.
 This is a simple interface of something that can essentially perform the same actions as the API except it only deals with talking to the database.
 Take a look at what is in `models.go` now:
+
 ```go
 package main
 
@@ -589,6 +592,7 @@ type Delivery struct {
 	Driver           DeliveryDriver `json:"deliverydriver"`
 }
 ```
+
 Short and sweet, does what it should.
 How do we use this abstraction though?
 For this we'll need to move quite a few things out of `api.go` into `listdb.go`.
@@ -597,6 +601,7 @@ For this we'll need to move quite a few things out of `api.go` into `listdb.go`.
 We will start by moving the things related to data storage out of `api.go` into `listdb.go`.
 This will be done so we can implement the `DeliveryDB` interface.
 Before the actual work, take a look at a shortened version of the data-related parts of `api.go`:
+
 ```go
 // Read all deliveries
 func GetAllDeliveries(w http.ResponseWriter, r *http.Request) {
@@ -652,11 +657,13 @@ func DeleteDelivery(w http.ResponseWriter, r *http.Request) {
 	}
 }
 ```
+
 These is what we will grab and reshape to be the implementation of the `DeliveryDB` interface inside `listdb.go`.
 The `ReturnAll`, `ReturnOne`, `Store`, `Change` and `Remove` functions should be implemented on a type, in this case, `deliveryList`.
 
 #### List database
 There isn't much more to say so here it is:
+
 ```go
 package main
 
@@ -758,6 +765,7 @@ func (dl deliveryList) Remove(orderNumber int) error {
 	return errors.New(NotFound)
 }
 ```
+
 We've moved everything related to data-handling out of the API code and have a mock database to work with.
 Obviously it's only in memory so if we stop and restart the application any changes made to the data isn't saved anywhere.
 
@@ -766,6 +774,7 @@ Obviously it's only in memory so if we stop and restart the application any chan
 Before moving on to implementing a different database let's change the API code to use the generalized interface.
 I also changed a couple stuff related to HTTP error codes because some were incorrect and some because most clients expect a 200 response if a request is successful.
 At any rate, let's look at the refactored `api.go`:
+
 ```go
 package main
 
@@ -809,7 +818,7 @@ func GetDelivery(w http.ResponseWriter, r *http.Request) {
 	del, err := deliverydb.ReturnOne(orderNum)
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
-		w.Write([]byte(err.Error()))
+		w.Write([]byte(NotFound))
 		return
 	}
 	w.WriteHeader(http.StatusOK)
@@ -830,7 +839,7 @@ func AddDelivery(w http.ResponseWriter, r *http.Request) {
 	del, err := deliverydb.Store(d)
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
-		w.Write([]byte(err.Error()))
+		w.Write([]byte(NotFound))
 		return
 	}
 	w.WriteHeader(http.StatusCreated)
@@ -933,6 +942,7 @@ The [guide on the pgx wiki](https://github.com/jackc/pgx/wiki/Getting-started-wi
 #### Connection code
 Enough rambling, let's see how we can start using postgres.
 Create a file called `postgres.go` with the following contents:
+
 ```go
 package main
 
@@ -990,6 +1000,7 @@ func (pdb *postgresDB) Remove(orderNumber int) error {
 	return nil
 }
 ```
+
 Quite a few stuff going on.
 First up, the imports.
 As discussed we can use `database/sql` from the standard library and then combine it with a driver.
@@ -1034,6 +1045,7 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
 ```
+
 It's pretty simple, we get the value of the `PG_URL` variable and if it's not empty, we use it to connect to postgres.
 If it's empty we just use the fake list database instead so our web service can still run.
 
@@ -1041,23 +1053,31 @@ If it's empty we just use the fake list database instead so our web service can 
 While we are confident that we did everything right, it doesn't hurt to test it out.
 Using docker we can quickly create a test database without permanently storing any data.
 The following command should bring up a database we can use for testing:
+
 ```bash
 docker run -d --rm --name testpostgres -p 5432:5432 -e POSTGRES_PASSWORD=Apasswd -e POSTGRES_USER=tester postgres:latest
 ```
+
 After it's done, set the `PG_URL` environment variable like so:
+
 ```bash
 export PG_URL="postgresql://tester:Apasswd@localhost:5432?sslmode=disable"
 ```
+
 And then run the service the same way we've been doing all along:
+
 ```bash
 go run *.go
 ```
+
 The message `connected to postgres` should appear in the command line.
 And there we go, our connection is working and we can move on.
 Kill the running database with:
+
 ```bash
 docker stop testpostgres
 ```
+
 And let's see how to write some SQL queries.
 
 ### Queries
@@ -1068,6 +1088,7 @@ One per method of the delivery database interface should be enough, along with o
 
 #### Create table query
 Let's begin then by creating a file called `queries.go` with the create table query:
+
 ```go
 package main
 
@@ -1150,11 +1171,13 @@ func (pdb *postgresDB) Remove(orderNumber int) error {
 	return nil
 }
 ```
+
 Just 4 new lines and our database will be set up on first connection.
 You can run the connection test again as we did in the previous section.
 
 #### See all deliveries
 This requires a simple query, we just select everything in the `Deliveries` table so take a loot at `queries.go`:
+
 ```go
 package main
 
@@ -1184,7 +1207,9 @@ var retrieveAllDeliveriesQuery = `SELECT
 	DriverFirstName,
 	DriverLastName FROM Deliveries;`
 ```
+
 And then we'll use it in the `ReturnAll` method inside `postgres.go`
+
 ```go
 package main
 
@@ -1272,12 +1297,14 @@ func (pdb *postgresDB) Remove(orderNumber int) error {
 	return nil
 }
 ```
+
 Initially, we create an empty list of deliveries to store all the deliveries retrieved from the database.
 Then we run the query, iterate over the rows returned, save the results to the delivery struct and append that struct to the list.
 Finally we return the list to the caller and that's all.
 
 #### See one delivery
 This one is also pretty simple, we select everything if the entry has the specified order number:
+
 ```go
 package main
 
@@ -1320,7 +1347,9 @@ var retrieveOneDeliveryQuery = `SELECT
 	DriverLastName
 FROM Deliveries WHERE OrderNumber=$1;`
 ```
+
 And now we need to use it inside our `ReturnOne` method:
+
 ```go
 package main
 
@@ -1364,7 +1393,7 @@ func NewPostgresDB(url string) (*postgresDB, error) {
 
 func (pdb *postgresDB) ReturnAll() ([]*Delivery, error) {
 	var deliveryslice = []*Delivery{}
-	row, err := pdb.client.Query(retrieveOneDeliveryQuery, orderNumber)
+	rows, err := pdb.client.Query(retrieveAllDeliveriesQuery)
 	if err != nil {
 		return nil, err
 	}
@@ -1394,11 +1423,7 @@ func (pdb *postgresDB) ReturnAll() ([]*Delivery, error) {
 
 func (pdb *postgresDB) ReturnOne(orderNumber int) (*Delivery, error) {
 	var delivery = &Delivery{}
-	row, err := pdb.client.Query(retrieveOneDeliveryQuery)
-	if err != nil {
-		return nil, err
-	}
-	err = row.Scan(
+	err := pdb.client.QueryRow(retrieveOneDeliveryQuery, orderNumber).Scan(
 		&delivery.OrderNumber,
 		&delivery.City,
 		&delivery.Zipcode,
@@ -1411,6 +1436,9 @@ func (pdb *postgresDB) ReturnOne(orderNumber int) (*Delivery, error) {
 		&delivery.Driver.FirstName,
 		&delivery.Driver.LastName,
 	)
+	if err != nil {
+		return nil, err
+	}
 	return delivery, nil
 }
 
@@ -1426,11 +1454,13 @@ func (pdb *postgresDB) Remove(orderNumber int) error {
 	return nil
 }
 ```
+
 This is basically the same as `ReturnAll` but even simpler so I won't cover it in detail.
 
 #### Add one delivery
 In order to test the retrieve methods, we need to have a way to store stuff first.
 Since the database generates the order number, the query needs to return it when we run it.
+
 ```go
 package main
 
@@ -1485,8 +1515,10 @@ var storeDeliveryQuery = `INSERT INTO Deliveries (
 	DriverLastName
 ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING OrderNumber;`
 ```
+
 This way when we insert an entry, we will get back its order number.
 Let's see how the `Store` method will be implemented
+
 ```go
 package main
 
@@ -1560,11 +1592,7 @@ func (pdb *postgresDB) ReturnAll() ([]*Delivery, error) {
 
 func (pdb *postgresDB) ReturnOne(orderNumber int) (*Delivery, error) {
 	var delivery = &Delivery{}
-	row, err := pdb.client.Query(retrieveOneDeliveryQuery, orderNumber)
-	if err != nil {
-		return nil, err
-	}
-	err = row.Scan(
+	err := pdb.client.QueryRow(retrieveOneDeliveryQuery, orderNumber).Scan(
 		&delivery.OrderNumber,
 		&delivery.City,
 		&delivery.Zipcode,
@@ -1577,6 +1605,9 @@ func (pdb *postgresDB) ReturnOne(orderNumber int) (*Delivery, error) {
 		&delivery.Driver.FirstName,
 		&delivery.Driver.LastName,
 	)
+	if err != nil {
+		return nil, err
+	}
 	return delivery, nil
 }
 
@@ -1607,15 +1638,17 @@ func (pdb *postgresDB) Remove(orderNumber int) error {
 	return nil
 }
 ```
+
 In this method we just insert what the user sent, ignoring the order number they specified, and then return the entry as it was saved.
 
-#### Update delivery
+#### Update one delivery
 There are a few ways to go about updating existing entries.
 We can check each thing about the `Delivery` that is sent to us and update only the things that are changed.
 Another alternative is to swap out all existing values with what is sent which is the dumb method.
 The first option allows for sending less data and maybe saving some bandwidth but the second one is easier to implement so we'll hope whoever uses our API does so responsibly.
 Below is `queries.go` with our update query added.
 Note that I used some different SQL syntax this time to keep it a little interesting:
+
 ```go
 package main
 
@@ -1682,8 +1715,10 @@ var changeDeliveryQuery = `UPDATE Deliveries SET
 	DriverLastName=$11
 WHERE OrderNumber=$1;`
 ```
+
 Not too bad I'd say, we just set the values given if the entry has the order number given.
 Using this in postgres is not too hard since we've seen the previous ones, give it a look:
+
 ```go
 package main
 
@@ -1757,11 +1792,7 @@ func (pdb *postgresDB) ReturnAll() ([]*Delivery, error) {
 
 func (pdb *postgresDB) ReturnOne(orderNumber int) (*Delivery, error) {
 	var delivery = &Delivery{}
-	row, err := pdb.client.Query(retrieveOneDeliveryQuery, orderNumber)
-	if err != nil {
-		return nil, err
-	}
-	err = row.Scan(
+	err := pdb.client.QueryRow(retrieveOneDeliveryQuery, orderNumber).Scan(
 		&delivery.OrderNumber,
 		&delivery.City,
 		&delivery.Zipcode,
@@ -1774,6 +1805,9 @@ func (pdb *postgresDB) ReturnOne(orderNumber int) (*Delivery, error) {
 		&delivery.Driver.FirstName,
 		&delivery.Driver.LastName,
 	)
+	if err != nil {
+		return nil, err
+	}
 	return delivery, nil
 }
 
@@ -1797,7 +1831,7 @@ func (pdb *postgresDB) Store(d *Delivery) (*Delivery, error) {
 }
 
 func (pdb *postgresDB) Change(orderNumber int, del *Delivery) (*Delivery, error) {
-	err := pdb.client.Exec(changeDeliveryQuery,
+	_, err := pdb.client.Exec(changeDeliveryQuery,
 		orderNumber,
 		del.City,
 		del.Zipcode,
@@ -1820,12 +1854,14 @@ func (pdb *postgresDB) Remove(orderNumber int) error {
 	return nil
 }
 ```
+
 As you can see we don't use the order number from the delivery object since the user might have maliciously changed it.
 In addition, `ReturnOne` is called to make sure that we send back the changed entry as it is in the database so there is no data discrepancies between what we store and what we show.
 
-#### Delete delivery
+#### Delete one delivery
 If you remember, we don't actually delete deliveries, we just set the `Cancelled` status to `true`.
 However for the sake of showing how the query would be, I'll include another one along with its usage inside prostgres as comments alongside the proper one.
+
 ```go
 package main
 
@@ -1895,8 +1931,10 @@ var removeDeliveryQuery = `UPDATE Deliveries SET Cancelled=true WHERE OrderNumbe
 //commented out so the compiler doesn't complain about unused variables
 //var removeDeliveryForRealQuery = `DELETE FROM Deliveries WHERE OrderNumber=$1`
 ```
+
 The query we'll use is another update, this time it simply sets the `Cancelled` field to `true`.
 Here is the postgres part of it:
+
 ```go
 package main
 
@@ -1970,11 +2008,7 @@ func (pdb *postgresDB) ReturnAll() ([]*Delivery, error) {
 
 func (pdb *postgresDB) ReturnOne(orderNumber int) (*Delivery, error) {
 	var delivery = &Delivery{}
-	row, err := pdb.client.Query(retrieveOneDeliveryQuery, orderNumber)
-	if err != nil {
-		return nil, err
-	}
-	err = row.Scan(
+	err := pdb.client.QueryRow(retrieveOneDeliveryQuery, orderNumber).Scan(
 		&delivery.OrderNumber,
 		&delivery.City,
 		&delivery.Zipcode,
@@ -1987,6 +2021,9 @@ func (pdb *postgresDB) ReturnOne(orderNumber int) (*Delivery, error) {
 		&delivery.Driver.FirstName,
 		&delivery.Driver.LastName,
 	)
+	if err != nil {
+		return nil, err
+	}
 	return delivery, nil
 }
 
@@ -2010,7 +2047,7 @@ func (pdb *postgresDB) Store(d *Delivery) (*Delivery, error) {
 }
 
 func (pdb *postgresDB) Change(orderNumber int, del *Delivery) (*Delivery, error) {
-	err := pdb.client.Exec(changeDeliveryQuery,
+	_, err := pdb.client.Exec(changeDeliveryQuery,
 		orderNumber,
 		del.City,
 		del.Zipcode,
@@ -2030,12 +2067,13 @@ func (pdb *postgresDB) Change(orderNumber int, del *Delivery) (*Delivery, error)
 }
 
 func (pdb *postgresDB) Remove(orderNumber int) error {
-	err := pdb.client.Exec(removeDeliveryQuery, orderNumber)
+	_, err := pdb.client.Exec(removeDeliveryQuery, orderNumber)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 ```
+
 Just pass the order number and execute the query.
 Simple enough.
