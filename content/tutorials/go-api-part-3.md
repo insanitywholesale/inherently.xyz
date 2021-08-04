@@ -236,7 +236,7 @@ Since we will be splitting the contents of the `main` package over different fil
 All the `.go` files need to be included so the command should instead be `go run *.go`
 
 ### Models
-First off let's put the models in their own file called `models.go` next to `main.go` like so:
+First off let's cut and then paste the models in their own file called `models.go` next to `main.go` like so:
 
 ```go
 package main
@@ -261,11 +261,13 @@ type Delivery struct {
 ```
 
 Simple enough I'd say.
+Remember to delete the code from `main.go` otherwise the compiler will error out.
 Next let's handle the API stuff.
 
 ### API
 In a new file called `api.go` we will first copy the relevant functions and then do a little refactoring like renaming `main()` since we can't have two of them as well as making that function return something that can be easily used by the actual `main()` function.
 In this case we'll just return the router and let the code in `main.go` handle what port it will run at.
+Once again, remember to delete this code from `main.go` otherwise it won't run.
 
 ```go
 package main
@@ -465,7 +467,6 @@ var deliveries deliveryList = []*Delivery{
 }
 
 func main() {
-	// Start http server
 	router := MakeRouter()
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
@@ -543,7 +544,6 @@ import (
 )
 
 func main() {
-	// Start http server
 	router := MakeRouter()
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
