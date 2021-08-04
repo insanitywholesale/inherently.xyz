@@ -989,7 +989,6 @@ func (pdb *postgresDB) Change(orderNumber int, del *Delivery) (*Delivery, error)
 func (pdb *postgresDB) Remove(orderNumber int) error {
 	return nil
 }
-
 ```
 Quite a few stuff going on.
 First up, the imports.
@@ -1031,7 +1030,7 @@ func main() {
 		log.Println("connected to listdb")
 	}
 	// Start http server
-	router := makeRouter()
+	router := MakeRouter()
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
 ```
