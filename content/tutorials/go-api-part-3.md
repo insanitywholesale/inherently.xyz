@@ -2077,3 +2077,32 @@ func (pdb *postgresDB) Remove(orderNumber int) error {
 
 Just pass the order number and execute the query.
 Simple enough.
+
+## Run last test
+With the code completed, run postgres using the docker command:
+
+```bash
+docker run -d --rm --name testpostgres -p 5432:5432 -e POSTGRES_PASSWORD=Apasswd -e POSTGRES_USER=tester postgres:latest
+```
+
+and then run the following commands to test all functionality:
+
+```bash
+curl http://localhost:8000/api/v1/deliveries
+curl -X POST -d '{"ordernumber":2,"city":"There","zipcode":"1701","address":"Office","phone1":"6932728091","cancelled":false,"delivered":true,"deliveryattempts":1,"deliverydriver":{"firstname":"Lucas","lastname":"Johnson"}}' http://localhost/api/v1/delivery
+curl http://localhost:8000/api/v1/deliveries
+curl -X UPDATE -d '{"ordernumber":97,"city":"Here","zipcode":"1701","address":"Home Office","phone1":"6932728091","cancelled":false,"delivered":true,"deliveryattempts":1,"deliverydriver":{"firstname":"Lucas","lastname":"Johnson"}}' http://localhost/api/v1/delivery
+curl http://localhost:8000/api/v1/deliveries
+curl -X DELETE http://localhost/api/v1/delivery/1
+curl http://localhost:8000/api/v1/deliveries
+```
+
+Ta-da! We now have a web service backed by a database.
+It's sophisticated enough to do the basic CRUD operations and it's a fairly relatable domain; deliveries.
+
+## Conclusion
+That was a long one, wasn't it?
+It took forever to write, about a month of working on it on and off.
+Tried my best to give a complete picture and go through the process step by step, let me know how you think that went.
+Next time I'd like to cover testing but I'm not sure when that part will come out.
+Until then, I hope you learned something.
