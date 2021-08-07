@@ -1,7 +1,7 @@
 ---
 title: "Go Api Part 3"
 date: 2021-07-10T15:56:21+03:00
-draft: true
+draft: false
 summary: "Adding a database to a REST API in golang part 3"
 tags: ["tutorial", "programming", "golang", "api", "database"]
 ---
