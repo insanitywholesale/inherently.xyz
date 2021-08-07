@@ -1,18 +1,14 @@
 ---
-title: "Go Api Part 3"
+title: "Go API Part 3"
 date: 2021-07-10T15:56:21+03:00
 draft: false
 summary: "Adding a database to a REST API in golang part 3"
 tags: ["tutorial", "programming", "golang", "api", "database"]
 ---
 
-# TODO
-- fix api getdelivery (use notfound)
-- fix links in prev relevant tut
-
 ## Previous relevant tutorial
-The development of the CRUD REST API was described [in part 2]
-and the introduction to the series can be found in [part 1] so read those first if you're new.
+The development of the CRUD REST API was described [in part 2]({{< ref "tutorials/go-api-part-2" >}})
+and the introduction to the series can be found in [part 1]({{< ref "tutorials/go-api-part-1" >}}) so read those first if you're new.
 
 ## Intro
 After creating a minimally functional API, we're going to add persistent storage to it in the form of a database.
