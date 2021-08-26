@@ -49,18 +49,22 @@ h1 {
 
 h2 {
 	color: var(--h2boi);
+	font-size: 24px;
 }
 
 h3 {
 	color: var(--h3boi);
+	font-size: 20px;
 }
 
 h4 {
 	color: var(--h4boi);
+	font-size: 18px;
 }
 
 h5 {
 	color green;
+	font-size: 16px;
 }
 
 a {
