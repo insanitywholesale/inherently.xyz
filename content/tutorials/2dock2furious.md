@@ -915,6 +915,6 @@ and afterwards add an extra option in `/etc/docker/daemon.json` so the file look
 
 [//]: # (k3s but with docker to use the registry -- k8s w/ kubeadm makes master not work)
 
-[//]: # (mern_first (update images too) -- 2 ports, one port for main one port for websocket)
+[//]: # (mern_first 2 ports, one port for main one port for websocket and update images)
 
 [//]: # (hashes in FROM statements for extra security)
