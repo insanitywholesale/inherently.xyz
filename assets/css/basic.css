@@ -1,0 +1,190 @@
+:root {
+	/*configure colorboiz*/
+	--puplebg: #221122;
+	--tantext: #ebdbb2;
+	--hrcomplaint: #dfff00;
+	--h1boi: #458587;
+	--h2boi: #d79821;
+	--h3boi: #83a598;
+	--h4boi: #6ab825;
+	--linkfam: #689d6a;
+	--rawcode: #fbaed2;
+	--rawcodebg: #002b36;
+	--tocaccentdim: #af005f;
+	--tocaccentbright: #ff2e88;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	background: var(--puplebg);
+	color: var(--tantext);
+	font-family: "Fira Sans", Roboto, sans-serif;
+	max-width: 920px;
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: 0.8em;
+	padding-right: 0.8em;
+}
+
+hr {
+	color: var(--hrcomplaint);
+	border: 1px solid;
+	width: 95%;
+}
+
+hr:last-of-type {
+	margin-bottom: 1rem;
+}
+
+h1 {
+	color: var(--h1boi);
+	font-size: 2rem;
+	font-weight: bold;
+	text-align: center;
+	margin-bottom: 1em;
+}
+
+h2 {
+	color: var(--h2boi);
+	font-size: 24px;
+}
+
+h3 {
+	color: var(--h3boi);
+	font-size: 20px;
+}
+
+h4 {
+	color: var(--h4boi);
+	font-size: 18px;
+}
+
+h5 {
+	color green;
+	font-size: 16px;
+}
+
+a {
+	color: var(--linkfam);
+}
+
+p {
+	margin-top: 0.5rem;
+	margin-bottom: 1rem;
+}
+
+li {
+	text-align: left;
+}
+
+a > h2 {
+	display: inline;
+}
+
+/*for inline code*/
+p > code {
+	font-family: Consolas, monospace;
+	color: var(--rawcode);
+	background-color: var(--rawcodebg);
+}
+
+/*for code blocks*/
+pre > code {
+	font-family: "Fira Mono", Consolas, monospace;
+}
+
+/*mainly to cover golang is rad inline code*/
+li > code {
+	font-family: Consolas, monospace;
+	color: var(--rawcode);
+	background-color: var(--rawcodebg);
+}
+
+/*for line numbers -- doesn't work cause highlight color is inline*/
+tr td:first-child code:first-child span {
+	color: var(--h5boi);
+}
+
+div.highlight {
+	border: 2px solid;
+	border-color: var(--h5boi);
+}
+
+blockquote {
+	color: var(--h5boi);
+	margin-top: 10px;
+	margin-bottom: 10px;
+	margin-left: 30px;
+	padding-left: 10px;
+	border-left: 5px solid var(--h4boi);
+}
+
+blockquote > blockquote {
+	color: var(--h5boi);
+	margin-left: 10px;
+	border-left: 5px solid var(--hrcomplaint);
+}
+
+input {
+	color: var(--rawcode);
+	background-color: var(--rawcodebg);
+	border-size: 2px;
+	border-color: var(--linkfam);
+}
+
+input[type=submit] {
+	font-weight: bold;
+	font-size: 16px;
+	border-size: 5px;
+	border-color: var(--h2boi);
+}
+
+/*sexy title ToC header color*/
+h2#toc-title {
+	color: var(--tocaccentbright);
+}
+
+/*make the separation of ToC clear*/
+hr#toc-hr {
+	color: var(--tocaccentdim);
+}
+
+/*this sucks*/
+nav#TableOfContents > ul > li > a {
+	color: #2aa198;
+}
+
+/*this also sucks*/
+nav#TableOfContents > ul > li > ul > li > a {
+	color: #af8700;
+}
+
+/*this is soggy cereal tbh*/
+nav#TableOfContents > ul > li > ul > li > ul > li > a {
+	color: #d7d7af;
+}
+
+/*load some dank fira sans undertale woot woot*/
+@font-face {
+	font-family: "Fira Sans";
+	src: url("/fonts/FiraSans-Regular.woff2") format("woff2");
+	font-display: optional;
+	/*unicode-range: U+0020-007F; The bare minimum for the English Language */
+}
+
+/*load some dank fira mono for coding*/
+@font-face {
+	font-family: "Fira Mono";
+	src: url("/fonts/FiraMono-Regular.woff2") format("woff2");
+	font-display: optional;
+}
+
+/*media query for bigger touch area*/
+@media (pointer: coarse) {
+	a {
+		padding: 0.8em 0em 0.8em 0em;
+	}
+}
