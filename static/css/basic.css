@@ -171,7 +171,7 @@ nav#TableOfContents > ul > li > ul > li > ul > li > a {
 @font-face {
 	font-family: "Fira Sans";
 	src: url("/fonts/FiraSans-Regular.woff2") format("woff2");
-	font-display: swap;
+	font-display: optional;
 	/*unicode-range: U+0020-007F; The bare minimum for the English Language */
 }
 
@@ -179,7 +179,7 @@ nav#TableOfContents > ul > li > ul > li > ul > li > a {
 @font-face {
 	font-family: "Fira Mono";
 	src: url("/fonts/FiraMono-Regular.woff2") format("woff2");
-	font-display: swap;
+	font-display: optional;
 }
 
 /*media query for bigger touch area*/
