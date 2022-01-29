@@ -17,7 +17,7 @@ Here are the general things I'd like to work on in no specific order:
 - switch to postgres operator from statefulset
 - research metallb and switching to it if possible
 - dynamic inventoy in ansible by getting the IPs from terraform
-- figure out the best patter for using grpc-gateway
+- figure out the best pattern for using grpc-gateway
 - finish bookdir [backend](https://gitlab.com/insanitywholesale/bookdir) + [frontend](https://gitlab.com/insanitywholesale/simple-react-boi)
 - finish [folding at home microservices in python](https://gitlab.com/insanitywholesale/fahusrvs)
 - explore java [spring boot](https://spring.io/projects/spring-boot) and maybe [micronaut](https://micronaut.io) for microservices again
