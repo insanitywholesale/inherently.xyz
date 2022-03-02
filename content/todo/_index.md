@@ -8,9 +8,11 @@ tags: ["todo"]
 ## projects to work on
 Here are the general things I'd like to work on in no specific order:
 
+- look into adding apko to grpc example
+- reconcile [forks of etcdhcp]()
 - selfhost go playground
 - implement main nestedcomments sql query
-- set renovatebot for k8s
+- set up renovatebot for k8s
 - use go client library for kubernetes for security demo
 - moving over to [a different ansible role](https://github.com/PyratLabs/ansible-role-k3s) for k3s
 - going through the [rust book](https://doc.rust-lang.org/book)
