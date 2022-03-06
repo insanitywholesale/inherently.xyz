@@ -9,9 +9,9 @@ tags: ["todo"]
 Here are the general things I'd like to work on in no specific order:
 
 - look into adding apko to grpc example
-- reconcile [forks of etcdhcp]()
+- reconcile [forks of etcdhcp](https://forkfreshness.com/lclarkmichalek/etcdhcp)
 - selfhost go playground
-- implement main nestedcomments sql query
+- fix nestedcomments [sql query](https://gitlab.com/insanitywholesale/nestedcomments/-/blob/99d25bd0b2837de829555545b93291cba3182659/repo/postgres/queries.go#L26)
 - set up renovatebot for k8s
 - use go client library for kubernetes for security demo
 - moving over to [a different ansible role](https://github.com/PyratLabs/ansible-role-k3s) for k3s
