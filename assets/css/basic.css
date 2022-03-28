@@ -14,9 +14,11 @@
 	--tocaccentbright: #ff2e88;
 }
 
+/*
 * {
 	box-sizing: border-box;
 }
+*/
 
 body {
 	background: var(--puplebg);
