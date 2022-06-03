@@ -115,6 +115,7 @@ div.highlight {
 	overflow: scroll;
 	border: 2px solid;
 	border-color: var(--h5boi);
+	overflow: hidden;
 }
 
 blockquote {
