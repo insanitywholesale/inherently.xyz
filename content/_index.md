@@ -22,9 +22,9 @@ If you want to read more about me, you can read the [about page]({{< ref "about"
 ## Highlighted Projects
 - [infra](https://gitlab.com/insanitywholesale/infra): automation of home infrastructure (always a work-in-progress)
 - [go-grpc-microservice-template](https://gitlab.com/insanitywholesale/go-grpc-microservice-template): advanced gRPC microservice template with lots of configs (still WIP)
-- [go-usrv-tmpl](https://github.com/insanitywholesale/go-usrv-tmpl): simple template for microservices (still WIP)
 - [gifinator](https://gitlab.com/insanitywholesale/gifinator): port of a google codebase to use minio instead of gcs
 - [bookdir](https://gitlab.com/insanitywholesale/bookdir): microservice for managing a book collection
+- [go-usrv-tmpl](https://github.com/insanitywholesale/go-usrv-tmpl): simple template for microservices (still WIP)
 - [interocitor](https://github.com/insanitywholesale/interocitor): ansible playbook to set up vfio
 
 ## Reach Me
