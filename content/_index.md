@@ -10,7 +10,7 @@ My little cabin in the vast woods of the internet.
 If you want to read more about me, you can read the [about page]({{< ref "about" >}}) that includes my background.
 
 ## Skills
-- Go, Java, Bash and other languages
+- Go, Java, SQL, Bash and other languages
 - Docker (deployment, development, debugging and more)
 - Kubernetes (self-deployed and self-managed clusters, upstream k8s as well as k3s)
 - Ansible and Terraform for automation
