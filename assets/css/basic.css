@@ -1,17 +1,37 @@
 :root {
 	/*configure colorboiz*/
-	--puplebg: #221122;
-	--tantext: #ebdbb2;
-	--hrcomplaint: #dfff00;
-	--h1boi: #458587;
-	--h2boi: #d79821;
-	--h3boi: #83a598;
-	--h4boi: #6ab825;
-	--linkfam: #689d6a;
-	--rawcode: #fbaed2;
-	--rawcodebg: #002b36;
-	--tocaccentdim: #af005f;
-	--tocaccentbright: #ff2e88;
+	--darkbg: #221122;
+	--darktext: #ebdbb2;
+	--darkhr: #dfff00;
+	--darkh1: #458587;
+	--darkh2: #d79821;
+	--darkh3: #83a598;
+	--darkh4: #6ab825;
+	--darklink: #689d6a;
+	--darkrawcode: #fbaed2;
+	--darkrawcodebg: #002b36;
+	--darktocaccent1: #af005f;
+	--darktocaccent2: #ff2e88;
+	--darktoclevel1: #2aa198;
+	--darktoclevel2: #af8700;
+	--darktoclevel3: #d7d7af;
+
+	--lightbg: #fee2b3;
+	--lighttext: #220055;
+	--lighthr: #70b1e5;
+	--lighth1: #562389;
+	--lighth2: #155e15;
+	--lighth3: #6166ed;
+	--lighth4: #be2a22;
+	--lighth5: #7a7501;
+	--lightlink: #0b5e55;
+	--lightrawcode: #fbaed2;
+	--lightrawcodebg: #002b36;
+	--lighttocaccent1: #b00c00;
+	--lighttocaccent2: #b00b1e;
+	--lighttoclevel1: #07171c;
+	--lighttoclevel2: #155e15;
+	--lighttoclevel3: #57006e;
 }
 
 /*
@@ -21,8 +41,8 @@
 */
 
 body {
-	background: var(--puplebg);
-	color: var(--tantext);
+	background: var(--darkbg);
+	color: var(--darktext);
 	font-family: sans-serif;
 	max-width: 920px;
 	margin-left: auto;
@@ -32,7 +52,7 @@ body {
 }
 
 hr {
-	color: var(--hrcomplaint);
+	color: var(--darkhr);
 	border: 1px solid;
 	width: 95%;
 }
@@ -42,7 +62,7 @@ hr:last-of-type {
 }
 
 h1 {
-	color: var(--h1boi);
+	color: var(--darkh1);
 	font-size: 2rem;
 	font-weight: bold;
 	text-align: center;
@@ -50,17 +70,17 @@ h1 {
 }
 
 h2 {
-	color: var(--h2boi);
+	color: var(--darkh2);
 	font-size: 24px;
 }
 
 h3 {
-	color: var(--h3boi);
+	color: var(--darkh3);
 	font-size: 20px;
 }
 
 h4 {
-	color: var(--h4boi);
+	color: var(--darkh4);
 	font-size: 18px;
 }
 
@@ -70,7 +90,7 @@ h5 {
 }
 
 a {
-	color: var(--linkfam);
+	color: var(--darklink);
 }
 
 p {
@@ -90,8 +110,8 @@ a > h2 {
 /*for inline code*/
 p > code {
 	font-family: Consolas, monospace;
-	color: var(--rawcode);
-	background-color: var(--rawcodebg);
+	color: var(--darkrawcode);
+	background-color: var(--darkrawcodebg);
 }
 
 /*for code blocks*/
@@ -102,79 +122,240 @@ pre > code {
 /*mainly to cover golang is rad inline code*/
 li > code {
 	font-family: Consolas, monospace;
-	color: var(--rawcode);
-	background-color: var(--rawcodebg);
+	color: var(--darkrawcode);
+	background-color: var(--darkrawcodebg);
 }
 
 /*for line numbers -- doesn't work cause highlight color is inline*/
 tr td:first-child code:first-child span {
-	color: var(--h5boi);
+	color: var(--darkh5);
 }
 
 div.highlight {
 	overflow: scroll;
 	border: 2px solid;
-	border-color: var(--h5boi);
+	border-color: var(--darkh5);
 	overflow: hidden;
 }
 
 blockquote {
-	color: var(--h5boi);
+	color: var(--darkh5);
 	margin-top: 10px;
 	margin-bottom: 10px;
 	margin-left: 30px;
 	padding-left: 10px;
-	border-left: 5px solid var(--h4boi);
+	border-left: 5px solid var(--darkh4);
 }
 
 blockquote > blockquote {
-	color: var(--h5boi);
+	color: var(--darkh5);
 	margin-left: 10px;
-	border-left: 5px solid var(--hrcomplaint);
+	border-left: 5px solid var(--darkhr);
 }
 
 input {
-	color: var(--rawcode);
-	background-color: var(--rawcodebg);
+	color: var(--darkrawcode);
+	background-color: var(--darkrawcodebg);
 	border-size: 2px;
-	border-color: var(--linkfam);
+	border-color: var(--darklink);
 }
 
 input[type=submit] {
 	font-weight: bold;
 	font-size: 16px;
 	border-size: 5px;
-	border-color: var(--h2boi);
+	border-color: var(--darkh2);
 }
 
 /*sexy title ToC header color*/
 h2#toc-title {
-	color: var(--tocaccentbright);
+	color: var(--darktocaccent2);
 }
 
 /*make the separation of ToC clear*/
 hr#toc-hr {
-	color: var(--tocaccentdim);
+	color: var(--darktocaccent1);
 }
 
 /*this sucks*/
 nav#TableOfContents > ul > li > a {
-	color: #2aa198;
+	color: var(--darktoclevel1);
 }
 
 /*this also sucks*/
 nav#TableOfContents > ul > li > ul > li > a {
-	color: #af8700;
+	color: var(--darktoclevel2);
 }
 
 /*this is soggy cereal tbh*/
 nav#TableOfContents > ul > li > ul > li > ul > li > a {
-	color: #d7d7af;
+	color: var(--darktoclevel3);
 }
 
 /*media query for bigger touch area*/
 @media (pointer: coarse) {
 	a {
 		padding: 0.8em 0em 0.8em 0em;
+	}
+}
+
+@media (prefers-color-scheme: light) {
+	body {
+		background: var(--lightbg);
+		color: var(--lighttext);
+		font-family: sans-serif;
+		max-width: 920px;
+		margin-left: auto;
+		margin-right: auto;
+		padding-left: 0.8em;
+		padding-right: 0.8em;
+	}
+	
+	hr {
+		color: var(--lighthr);
+		border: 1px solid;
+		width: 95%;
+	}
+	
+	hr:last-of-type {
+		margin-bottom: 1rem;
+	}
+	
+	h1 {
+		color: var(--lighth1);
+		font-size: 2rem;
+		font-weight: bold;
+		text-align: center;
+		margin-bottom: 1em;
+	}
+	
+	h2 {
+		color: var(--lighth2);
+		font-size: 24px;
+	}
+	
+	h3 {
+		color: var(--lighth3);
+		font-size: 20px;
+	}
+	
+	h4 {
+		color: var(--lighth4);
+		font-size: 18px;
+	}
+	
+	h5 {
+		color: var(--lighth5);
+		font-size: 16px;
+	}
+	
+	a {
+		color: var(--lightlink);
+	}
+	
+	p {
+		margin-top: 0.5rem;
+		margin-bottom: 1rem;
+		font-size: 16px;
+	}
+	
+	li {
+		text-align: left;
+	}
+	
+	a > h2 {
+		display: inline;
+	}
+	
+	/*for inline code*/
+	p > code {
+		font-family: Consolas, monospace;
+		color: var(--lightrawcode);
+		background-color: var(--lightrawcodebg);
+	}
+	
+	/*for code blocks*/
+	pre > code {
+		font-family: Consolas, monospace;
+	}
+	
+	/*mainly to cover golang is rad inline code*/
+	li > code {
+		font-family: Consolas, monospace;
+		color: var(--lightrawcode);
+		background-color: var(--lightrawcodebg);
+	}
+	
+	/*for line numbers -- doesn't work cause highlight color is inline*/
+	tr td:first-child code:first-child span {
+		color: var(--lighth5boi);
+	}
+	
+	div.highlight {
+		overflow: scroll;
+		border: 2px solid;
+		border-color: var(--lighth5boi);
+		overflow: hidden;
+	}
+	
+	blockquote {
+		color: var(--lighth5);
+		margin-top: 10px;
+		margin-bottom: 10px;
+		margin-left: 30px;
+		padding-left: 10px;
+		border-left: 5px solid var(--lighth4);
+	}
+	
+	blockquote > blockquote {
+		color: var(--lighth5);
+		margin-left: 10px;
+		border-left: 5px solid var(--lighthr);
+	}
+	
+	input {
+		color: var(--lightrawcode);
+		background-color: var(--lightrawcodebg);
+		border-size: 2px;
+		border-color: var(--lightlink);
+	}
+	
+	input[type=submit] {
+		font-weight: bold;
+		font-size: 16px;
+		border-size: 5px;
+		border-color: var(--lighth2);
+	}
+	
+	/*sexy title ToC header color*/
+	h2#toc-title {
+		color: var(--lighttocaccent1);
+	}
+	
+	/*make the separation of ToC clear*/
+	hr#toc-hr {
+		color: var(--lighttocaccent2);
+	}
+	
+	/*this sucks*/
+	nav#TableOfContents > ul > li > a {
+		color: var(--lighttoclevel1);
+	}
+	
+	/*this also sucks*/
+	nav#TableOfContents > ul > li > ul > li > a {
+		color: var(--lighttoclevel2);
+	}
+	
+	/*this is soggy cereal tbh*/
+	nav#TableOfContents > ul > li > ul > li > ul > li > a {
+		color: var(--lighttoclevel3);
+	}
+	
+	/*media query for bigger touch area*/
+	@media (pointer: coarse) {
+		a {
+			padding: 0.8em 0em 0.8em 0em;
+		}
 	}
 }
