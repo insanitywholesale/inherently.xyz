@@ -284,7 +284,7 @@ Congratulations, you just built your first docker image. But things are never th
 
 #### Multi-stage golang example build
 
-I am going to be using [this](https://github.com/insanitywholesale/microsrv) for demonstration. Ignore the included dockerfile, our main focus now is to understand the steps required to make images. After cloning the project and entering its directory, delete the included Dockerfile (it's not as correct as the one we're going to make anyway) and make an empty one. Just the same as before, we're going to start with a `FROM ` statement.
+I am going to be using [a microservice written by following a tutorial](https://github.com/insanitywholesale/microsrv) for demonstration. Ignore the included dockerfile, our main focus now is to understand the steps required to make images. After cloning the project and entering its directory, delete the included Dockerfile (it's not as correct as the one we're going to make anyway) and make an empty one. Just the same as before, we're going to start with a `FROM ` statement.
 ```dockerfile
 FROM golang:1.14.2
 ```
@@ -408,7 +408,7 @@ If everything went according to plan, a JSON object with the coffees was returne
 
 Now that our backend is all packed up, time to see how we'd go about doing the same thing with the frontend. This time we have to interact with nodejs during the build but it's not required for runtime. I think you get an idea of what's to come so let's not hesitate.
 
-The project I'll be using for this demonstration is [this](https://gitlab.com/insanitywholesale/reactionary), just a simple one-page counter application. Same as the previous example, we'll clone it, change into its directory and delete the included Dockerfile since we'll be remaking it from scratch.
+The project I'll be using for the following demonstration is [a simple one-page counter application](https://gitlab.com/insanitywholesale/reactionary). Same as the previous example, we'll clone it, change into its directory and delete the included Dockerfile since we'll be remaking it from scratch.
 As I mentioned, it's good to know the project's tooling, in this case we need node and npm for building the application but not for running it. We'll start with a `FROM` statement to grab the node image but pre-emptively optimize by going with the alpine flavour. The size comparison between the regular version is as follows and should explain why this is a better choice.  
 ```bash
 $ docker images | grep node
