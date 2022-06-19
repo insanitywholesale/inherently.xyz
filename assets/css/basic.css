@@ -7,9 +7,11 @@
 	--darkh2: #d79821;
 	--darkh3: #83a598;
 	--darkh4: #6ab825;
+	--darkh5: var(--darktext); /*green; /*perhaps change to tocaccent1 or tocaccent2*/
 	--darklink: #689d6a;
 	--darkrawcode: #fbaed2;
 	--darkrawcodebg: #002b36;
+	--darkhighlightborder: green;
 	--darktocaccent1: #af005f;
 	--darktocaccent2: #ff2e88;
 	--darktoclevel1: #2aa198;
@@ -28,6 +30,7 @@
 	--lightlink: #0b5e55;
 	--lightrawcode: #fbaed2;
 	--lightrawcodebg: #002b36;
+	--lighthighlightborder: var(--lighth5);
 	--lighttocaccent1: #b00c00;
 	--lighttocaccent2: #b00b1e;
 	--lighttoclevel1: #07171c;
@@ -86,7 +89,7 @@ h4 {
 }
 
 h5 {
-	color green;
+	color: var(--darkh5);
 	font-size: 16px;
 }
 
@@ -127,15 +130,18 @@ li > code {
 	background-color: var(--darkrawcodebg);
 }
 
-/*for line numbers -- doesn't work cause highlight color is inline*/
-tr td:first-child code:first-child span {
+/*
+for line numbers -- doesn't work cause highlight color is inline
+correction: it does work and somehow takes precedence over syntax.css
+tr td:first-child pre code:first-child span a {
 	color: var(--darkh5);
 }
+*/
 
 div.highlight {
 	overflow: scroll;
 	border: 2px solid;
-	border-color: var(--darkh5);
+	border-color: var(--darkhighlightborder);
 	overflow: hidden;
 }
 
@@ -287,15 +293,18 @@ nav#TableOfContents > ul > li > ul > li > ul > li > a {
 		background-color: var(--lightrawcodebg);
 	}
 	
-	/*for line numbers -- doesn't work cause highlight color is inline*/
+	/*
+	for line numbers -- doesn't work cause highlight color is inline
+	correction: it does work and somehow takes precedence over syntax.css
 	tr td:first-child code:first-child span {
-		color: var(--lighth5boi);
+		color: var(--lighth5);
 	}
+	*/
 	
 	div.highlight {
 		overflow: scroll;
 		border: 2px solid;
-		border-color: var(--lighth5boi);
+		border-color: var(--lighthighlightborder);
 		overflow: hidden;
 	}
 	

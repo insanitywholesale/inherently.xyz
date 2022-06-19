@@ -9,6 +9,7 @@
 		<meta name="description" content="{{ block "desc" . }}{{ end }}">
 		<meta name="theme-color" content="#440044">
 		{{ with resources.Get "css/basic.css" | minify }}<style>{{ .Content | safeCSS }}</style>{{ end }}
+		{{ with resources.Get "css/syntax.css" | minify }}<style>{{ .Content | safeCSS }}</style>{{ end }}
 	</head>
 	<body>
 		<h1>{{ block "header" . }}{{ .Title }}{{ end }}</h1>
