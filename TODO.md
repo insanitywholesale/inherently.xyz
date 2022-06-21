@@ -8,5 +8,6 @@
 Notes about stuff that happened
 
 ## Theme/CSS
-noclasses and syntax.css might not be needed to override line number color since the selector in basic.css that says it doesn't work for line numbers but does seem to work.
-CORRECTION: it works but only with noclass=true
+- noclasses and syntax.css might not be needed to override line number color since the selector in basic.css that says it doesn't work for line numbers but does seem to work.
+    * CORRECTION: it works but only with noclass=true
+- fix code block background not filling the border
