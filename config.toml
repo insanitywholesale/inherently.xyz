@@ -11,7 +11,7 @@ title = "inherently's cabin"
 		startlevel = 2
 		endlevel = 4
 	[markup.highlight]
-		anchorLineNos = true
+		anchorLineNos = false
 		codeFences = true
 		guessSyntax = true
 		hl_Lines = ""
