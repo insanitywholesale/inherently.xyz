@@ -142,7 +142,7 @@ div.highlight {
 	overflow: scroll;
 	border: 2px solid;
 	border-color: var(--darkhighlightborder);
-	overflow: hidden;
+	/*overflow: hidden;*/
 }
 
 blockquote {
@@ -305,7 +305,7 @@ nav#TableOfContents > ul > li > ul > li > ul > li > a {
 		overflow: scroll;
 		border: 2px solid;
 		border-color: var(--lighthighlightborder);
-		overflow: hidden;
+		/*overflow: hidden;*/
 	}
 	
 	blockquote {
