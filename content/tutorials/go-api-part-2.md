@@ -21,7 +21,9 @@ We will also create a slice (essentially a list) of pointers for the instances o
 The HTTP Method we specify that we accept is `http.MethodGet` since whoever is accessing the API is getting data from us, not sending us anything.
 In addition, we set the http status code to `http.StatusOK` in order to communicate that the request went well.
 
-```go
+
+{{< highlight go >}}
+// main.go
 package main
 
 import (
@@ -72,7 +74,7 @@ func main() {
 	// Start http server
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
-```
+{{< /highlight >}}
 
 As you can see it's fairly familiar.
 The subrouter is based on the path so anything starting with `/api/v1` is sent to that subrouter and all the `HandleFunc` only needs to specify the path under the path of the subrouter, in this case `/deliveries`.
@@ -81,7 +83,8 @@ We can run this using `go run main.go` and visit `localhost:8000/api/v1/deliveri
 ## Get all
 Let's add some data then, 3 example entries should suffice:
 
-```go
+{{< highlight go "hl_lines=32-77" >}}
+// main.go
 package main
 
 import (
@@ -176,7 +179,7 @@ func main() {
 	// Start http server
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
-```
+{{< /highlight >}}
 
 Now after running `go run main.go` and going to `localhost:8000/api/v1/deliveries` we can see a whole lot more and if you're using firefox you'll get some pretty sweet formatting too (that's due to setting `Content-Type` to `application/json`, if you delete that line it won't format it).
 
@@ -187,7 +190,8 @@ We'll use `/api/v1/delivery/ordernumber` (notice that `delivery` is singular) an
 As for the code within the function, we'll check the parameters to make sure that the argument is actually a number we can use to find the delivery and if it's fine we will return the delivery as JSON as well as set the status code to `http.StatusOK`.
 However if it's wrong, we'll set the status code to `http.StatusNotFound` and then return an error message.
 
-```go
+{{< highlight go "hl_lines=9 80-83 92-112 121" >}}
+// main.go
 package main
 
 import (
@@ -311,7 +315,7 @@ func main() {
 	// Start http server
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
-```
+{{< /highlight >}}
 
 I went ahead and made the errors `const` variables in the global scope so we can use them anywhere we want without having to repeat ourselves, this is not necessary but it makes life a bit easier.
 Let's look at a couple things that seem a bit odd.
@@ -340,7 +344,8 @@ If the `ordernumber` in their JSON is empty, we don't mind since we'll override 
 Following that, we will use `append` to add the delivery to the list and then set the HTTP status code to `http.StatusCreated`.
 Finally we will return the item that we actually inserted into our list of deliveries so the sender knows what was actually saved.
 
-```go
+{{< highlight go "hl_lines=114-134 144" >}}
+// main.go
 package main
 
 import (
@@ -487,7 +492,7 @@ func main() {
 	// Start http server
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
-```
+{{< /highlight >}}
 
 We've also added another route that is used when the HTTP method is `POST` which calls the `AddDelivery` function we just created.
 In order to test it out, I made this [`delivery.json` file](https://gitlab.com/insanitywholesale/ongoing/-/blob/master/delivery.json) that you can also use.
@@ -524,7 +529,8 @@ The appropriate HTTP method for this is `PUT` and the status code is `http.Statu
 The `UpdateDelivery` function we're going to make has elements we saw previously in `GetDelivery` as well as `AddDelivery`.
 Not much of this is new so let's see how we get things done.
 
-```go
+{{< highlight go "hl_lines=136-163 174" >}}
+// main.go
 package main
 
 import (
@@ -701,7 +707,7 @@ func main() {
 	// Start http server
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
-```
+{{< /highlight >}}
 
 As we can see, nothing special, same stuff we've done before.
 Check order number, return error bad request if it's bad.
@@ -737,12 +743,13 @@ If we want to have a history of deliveries, we don't want any of them to be lost
 What we're going to do instead is set the `Cancelled` to true.
 Let's think about why for a bit.
 If the order is successfully delivered, we use the `UpdateDelivery` method to set it and it's all good.
-So it's the job of `DeleteDelivery` to handle completed deliveries but rather deliveries that need to be invalidated in some other way.
-The only other way I can think of is if they're cancelled so that's what we'll do.
+So it's the job of `DeleteDelivery` to handle deliveries that need to be invalidated in some other way, not completed deliveries.
+The only reason I can think of that you'd want to "delete" a delivery is if the order being cancelled so that's what we'll do.
 We do the normal check for the path parameter, if we find a delivery with that number we set it to cancelled and if not we return error not found.
 Here is the code:
 
-```go
+{{< highlight go "hl_lines=165-186 198" >}}
+// main.go
 package main
 
 import (
@@ -943,12 +950,12 @@ func main() {
 	// Start http server
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
-```
+{{< /highlight >}}
 
 First we start the server with `go run main.go` and then to test our newly added functionality, in my case with cURL, we can run:
 
 ```bash
-curl -X DELETE http://localhost:8000/api/v1/delivery/3
+curl -X DELETE http://localhost:8000/api/v1/delivery/1
 ```
 
 and get back:
