@@ -1,7 +1,7 @@
 ---
 title: "Network Design Document"
 date: 2022-07-16T18:45:44+03:00
-draft: true
+draft: false
 tags: ["networking", "homelab"]
 ---
 
