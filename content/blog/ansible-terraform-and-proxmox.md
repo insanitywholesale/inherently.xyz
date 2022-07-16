@@ -1,7 +1,7 @@
 ---
 title: "Ansible, Terraform and Proxmox"
 date: 2022-06-24T23:24:57+03:00
-draft: true
+draft: false
 tags: ["ansible", "terraform", "proxmox", "devops", "homelab"]
 ---
 
