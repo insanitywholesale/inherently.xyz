@@ -8,6 +8,13 @@ tags: ["networking", "homelab"]
 ## Intro
 I recently started remaking my network at home and decided to publish some of the design documentation here
 
+## Network Layout
+VDSL Internet comes in through an RJ11 port to a Vodafone H300s modem-router.
+LAN port 2 of the H300s is plugged into port 2 (untagged VLAN 10) of the Netgear GS724Tv4 switch.
+Switch port 23 (untagged VLAN 1, tagged in all other VLANs) is plugged into the gigabit ethernet port of the pfsense router.
+All devices are plugged directly into the switch since they fit.
+Inter-VLAN routing happens through pfsense and the switch operates as a managed L2 switch even though it has L3 capabilities.
+
 ## VLANs
 Probably overkill but certainly enough:
 | VLAN | Description       | Subnet          | Gateway        |
@@ -33,3 +40,6 @@ Probably overkill but certainly enough:
 | 666  | Native            | -               | -              |
 | 1022 | Unused Port       | -               | -              |
 | 1337 | Danger            | -               | -              |
+
+## Conclusion
+That's my home LAN currently, I'll try to keep this updated as I change stuff but no promises.
