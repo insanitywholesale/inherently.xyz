@@ -17,7 +17,8 @@ In this case it is going to be postgres running inside docker for ease of instal
 ## Starting point
 Here is where we left off last time:
 
-```go
+{{< highlight go >}}
+// main.go
 package main
 
 import (
@@ -218,7 +219,7 @@ func main() {
 	// Start http server
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
-```
+{{< /highlight >}}
 
 ## Restructuring
 In my opinion a good first move is to abstract away the specifics of the database before moving further.
@@ -234,7 +235,8 @@ All the `.go` files need to be included so the command should instead be `go run
 ### Models
 First off let's cut and then paste the models in their own file called `models.go` next to `main.go` like so:
 
-```go
+{{< highlight go >}}
+// models.go
 package main
 
 type DeliveryDriver struct {
@@ -254,7 +256,7 @@ type Delivery struct {
 	DeliveryAttempts int            `json:"deliveryattempts"`
 	Driver           DeliveryDriver `json:"deliverydriver"`
 }
-```
+{{< /highlight >}}
 
 Simple enough I'd say.
 Remember to delete the code from `main.go` otherwise the compiler will error out.
@@ -265,7 +267,8 @@ In a new file called `api.go` we will first copy the relevant functions and then
 In this case we'll just return the router and let the code in `main.go` handle what port it will run at.
 Once again, remember to delete this code from `main.go` otherwise it won't run.
 
-```go
+{{< highlight go >}}
+// api.go
 package main
 
 import (
@@ -396,15 +399,16 @@ func MakeRouter() http.Handler {
 	apiV1.HandleFunc("/delivery/{ordernumber}", DeleteDelivery).Methods(http.MethodDelete)
 	return router
 }
-```
+{{< /highlight >}}
 
 Looking nice and neat. We should probably tinker with `main.go` too though.
 
 #### Main after API restructure
 Let's adjust `main.go` to fit with the changes we've made.
-The list stuff will still be there but the line count is greatly reduced:
+The list stuff is still here (for now) but the line count is greatly reduced:
 
-```go
+{{< highlight go >}}
+// main.go
 package main
 
 import (
@@ -466,14 +470,15 @@ func main() {
 	router := MakeRouter()
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
-```
+{{< /highlight >}}
 
 Since we're cleaning things up and are planning to add a database, time to remove the list and put it in its own file.
 
 ### List Restructure
 Our `main.go` is getting emptier so let's remove the list stuff and put it in its own file called `listdb.go`
 
-```go
+{{< highlight go >}}
+// listdb.go
 package main
 
 // type deliveries is slice of Delivery pointers
@@ -525,7 +530,7 @@ var deliveries deliveryList = []*Delivery{
 		},
 	},
 }
-```
+{{< /highlight >}}
 
 Nice and easy, we radically reduced the code inside `main.go` and separated our code in nicely named files.
 
@@ -533,7 +538,7 @@ Nice and easy, we radically reduced the code inside `main.go` and separated our 
 Take a peek at `main.go` after all the changes.
 You will notice that it is a lot shorter and only deals with running our API server and not much else:
 
-```go
+{{< highlight go >}}
 package main
 
 import (
@@ -545,7 +550,7 @@ func main() {
 	router := MakeRouter()
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
-```
+{{< /highlight >}}
 
 ## Database
 This is a big addition so we'll have to think about it a little bit.
@@ -559,7 +564,8 @@ Before ripping out what exists, we'll define our interface. Due to what it is, i
 This is a simple interface of something that can essentially perform the same actions as the API except it only deals with talking to the database.
 Take a look at what is in `models.go` now:
 
-```go
+{{< highlight go >}}
+// models.go
 package main
 
 type DeliveryDB interface {
@@ -587,7 +593,7 @@ type Delivery struct {
 	DeliveryAttempts int            `json:"deliveryattempts"`
 	Driver           DeliveryDriver `json:"deliverydriver"`
 }
-```
+{{< /highlight >}}
 
 Short and sweet, does what it should.
 How do we use this abstraction though?
@@ -598,7 +604,9 @@ We will start by moving the things related to data storage out of `api.go` into 
 This will be done so we can implement the `DeliveryDB` interface.
 Before the actual work, take a look at a shortened version of the data-related parts of `api.go`:
 
-```go
+{{< highlight go >}}
+// api.go
+
 // Read all deliveries
 func GetAllDeliveries(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(deliveries)
@@ -652,7 +660,7 @@ func DeleteDelivery(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
-```
+{{< /highlight >}}
 
 These is what we will grab and reshape to be the implementation of the `DeliveryDB` interface inside `listdb.go`.
 The `ReturnAll`, `ReturnOne`, `Store`, `Change` and `Remove` functions should be implemented on a type, in this case, `deliveryList`.
@@ -660,7 +668,8 @@ The `ReturnAll`, `ReturnOne`, `Store`, `Change` and `Remove` functions should be
 #### List database
 There isn't much more to say so here it is:
 
-```go
+{{< highlight go >}}
+// listdb.go
 package main
 
 import (
@@ -760,7 +769,7 @@ func (dl deliveryList) Remove(orderNumber int) error {
 	}
 	return errors.New(NotFound)
 }
-```
+{{< /highlight >}}
 
 We've moved everything related to data-handling out of the API code and have a mock database to work with.
 Obviously it's only in memory so if we stop and restart the application any changes made to the data isn't saved anywhere.
