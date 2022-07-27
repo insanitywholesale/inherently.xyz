@@ -1,7 +1,7 @@
 ---
 title: "QEMU Guest Agent for Terraform on Proxmox"
 date: 2022-07-27T13:38:18+03:00
-draft: true
+draft: false
 tags: ["homelab", "terraform", "proxmox"]
 ---
 
