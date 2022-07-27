@@ -1,5 +1,5 @@
 ---
-title: "Cloud-Init Images with QEMU Guest Agent for Terraform on Proxmox"
+title: "QEMU Guest Agent for Terraform on Proxmox"
 date: 2022-07-27T13:38:18+03:00
 draft: true
 tags: ["homelab", "terraform", "proxmox"]
