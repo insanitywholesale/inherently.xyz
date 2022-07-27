@@ -1,6 +1,6 @@
 # no official hugo image so this is necessary
 FROM ubuntu as buildsite
-RUN apt update && apt -y install hugo
+RUN apt update && apt -y full-upgrade && apt -y install hugo
 WORKDIR /inheresite-hugo
 COPY . .
 RUN hugo
