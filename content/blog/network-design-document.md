@@ -19,7 +19,7 @@ Inter-VLAN routing happens through pfsense and the switch operates as a managed 
 Probably overkill but certainly enough:
 | VLAN | Description       | Subnet          | Gateway        | DHCP range from pfsense |
 |------|-------------------|-----------------|----------------|-------------------------|
-| 1    | Default           | 192.168.0.0/16  | 192.168.0.1    | 192.168.1.1-254         |
+| 1    | Default           | -               |                | -                       |
 | 2    | Auto VoIP         | -               | -              | -                       |
 | 3    | Auto-Video        | -               | -              | -                       |
 | 10   | Border Router LAN | 10.0.10.0/24    | 10.0.10.1      | -                       |
@@ -34,9 +34,11 @@ Probably overkill but certainly enough:
 | 67   | DIY IoT           | 10.0.67.0/24    | 10.0.67.254    | 10.0.67.2-252           |
 | 70   | Security          | 10.0.70.0/24    | 10.0.70.254    | -                       |
 | 80   | DMZ               | 10.0.80.0/24    | 10.0.80.254    | -                       |
+| 90   | APIs              | 10.0.90.0/24    | 10.0.90.254    | -                       |
 | 99   | Management        | 10.99.0.0/16    | 10.99.0.1      | -                       |
-| 113  | MAAS              | 10.0.113.0/16   | 10.0.113.254   | -                       |
-| 123  | Windows           | 10.0.123.0/16   | 10.0.123.254   | -                       |
+| 111  | Kubernetes        | 10.0.111.0/24   | 10.0.111.254   | -                       |
+| 113  | MAAS              | 10.0.113.0/24   | 10.0.113.254   | -                       |
+| 123  | Windows           | 10.0.123.0/24   | 10.0.123.254   | -                       |
 | 150  | Test LAN          | -               | -              | -                       |
 | 666  | Native            | -               | -              | -                       |
 | 1022 | Unused Port       | -               | -              | -                       |
