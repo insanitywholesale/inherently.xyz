@@ -251,7 +251,195 @@ dev-python/pyudev
 #### Continuing with the chroot
 Now that that's handled, where was I?
 In the new system, right.
+Setting the timezone and locale and... oh right!
+I forgot to mask the packages earlier.
 
-##### Masking udesired software
+##### Masking undesired software
 After setting the timezone and locale I remembered that I only masked udev.
-We need to mask systemd, dbus, polkit, pam, (e)logind, networkmanager, pulseaudio, lvm, btrfs and wayland.
+We need to mask systemd, dbus, polkit, pam, networkmanager, pulseaudio, lvm, btrfs and wayland.
+
+First up `/etc/portage/package.mask/systemd`:
+```
+app-admin/systemdgenie
+dev-ml/systemd
+dev-python/python-systemd
+sys-apps/gentoo-systemd-integration
+sys-apps/systemd
+sys-apps/systemd-bootchart
+sys-apps/systemd-readahead
+sys-apps/systemd-tmpfiles
+#sys-apps/systemd-utils #masked. for now...
+sys-boot/systemd-boot
+sys-kernel/installkernel-systemd-boot
+sys-process/systemd-cron
+```
+
+Next up, `/etc/portage/package.mask/dbus`:
+```
+dev-cpp/sdbus-c++
+dev-dotnet/ndesk-dbus
+dev-dotnet/ndesk-dbus-glib
+dev-haskell/dbus
+dev-libs/dbus-c++
+dev-libs/dbus-glib
+dev-libs/libdbusmenu
+dev-libs/libdbusmenu-qt
+dev-libs/libmodbus
+dev-perl/Net-DBus
+dev-python/dbus-next
+dev-python/dbus-python
+dev-python/pydbus
+dev-python/python-dbus-next
+dev-python/python-dbusmock
+dev-qt/qdbus
+dev-qt/qdbusviewer
+dev-qt/qtdbus
+dev-util/dbus-test-runner
+dev-util/gdbus-codegen
+gnustep-libs/dbuskit
+kde-frameworks/kdbusaddons
+net-im/skype-dbus-mock
+net-libs/dleyna-connector-dbus
+sec-policy/selinux-dbus
+sys-apps/dbus
+sys-apps/dbus-broker
+sys-apps/xdg-dbus-proxy
+```
+
+Moving on to `/etc/portage/package.mask/polkit`:
+```
+gnome-extra/polkit-gnome
+kde-plasma/polkit-kde-agent
+mate-extra/mate-polkit
+sys-auth/polkit
+sys-auth/polkit-pkla-compat
+sys-auth/polkit-qt
+lxqt-base/lxqt-policykit
+sec-policy/selinux-policykit
+```
+
+Can't forget about `/etc/portage/package.mask/pam`:
+```
+dev-erlang/epam
+dev-ml/opam
+dev-ml/opam-client
+dev-ml/opam-core
+dev-ml/opam-file-format
+dev-ml/opam-format
+dev-ml/opam-installer
+dev-ml/opam-repository
+dev-ml/opam-solver
+dev-ml/opam-state
+dev-perl/Authen-PAM
+dev-php/pecl-pam
+dev-python/python-pam
+kde-plasma/kwallet-pam
+net-mail/checkpassword-pam
+sci-biology/paml
+sys-auth/google-authenticator-libpam-hardened
+sys-auth/nss-pam-ldapd
+sys-auth/pam-gnupg
+sys-auth/pam-pgsql
+sys-auth/pam-script
+sys-auth/pam_abl
+sys-auth/pam_dotfile
+sys-auth/pam_fprint
+sys-auth/pam_krb5
+sys-auth/pam_ldap
+sys-auth/pam_mktemp
+sys-auth/pam_mount
+sys-auth/pam_mysql
+sys-auth/pam_p11
+sys-auth/pam_require
+sys-auth/pam_skey
+sys-auth/pam_smb
+sys-auth/pam_ssh
+sys-auth/pam_ssh_agent_auth
+sys-auth/pam_u2f
+sys-auth/pam_yubico
+sys-auth/pambase
+sys-libs/pam
+sys-libs/pam_wrapper
+```
+
+Of course `/etc/portage/package.mask/networkmanager`:
+```
+kde-frameworks/networkmanager-qt
+net-misc/networkmanager
+net-vpn/networkmanager-fortisslvpn
+net-vpn/networkmanager-l2tp
+net-vpn/networkmanager-libreswan
+net-vpn/networkmanager-openconnect
+net-vpn/networkmanager-openvpn
+net-vpn/networkmanager-pptp
+net-vpn/networkmanager-sstp
+net-vpn/networkmanager-strongswan
+net-vpn/networkmanager-vpnc
+sec-policy/selinux-networkmanager
+gnome-extra/nm-applet
+gui-apps/nm-tray
+```
+
+Getting there `/etc/portage/package.mask/pulseaudio`:
+```
+ev-python/pulsectl
+media-libs/libpulse
+media-libs/pulseaudio-qt
+media-plugins/gst-plugins-pulse
+#media-sound/apulse #we might need this
+media-sound/pulseaudio
+media-sound/pulseaudio-ctl
+media-sound/pulseaudio-daemon
+media-sound/pulseaudio-modules-bt
+media-sound/pulseaudio-virtualmic
+media-sound/pulseeffects
+media-sound/pulsemixer
+net-misc/pulseaudio-dlna
+sec-policy/selinux-pulseaudio
+xfce-extra/xfce4-pulseaudio-plugin
+xfce-extra/xfce4-volumed-pulse
+```
+
+After that, `/etc/portage/package.mask/lvm`:
+```
+app-backup/mylvmbackup
+sys-fs/lvm2
+```
+
+Followed up by `/etc/portage/package.mask/btrfs`:
+```
+app-backup/grub-btrfs
+sys-fs/btrfs-heatmap
+sys-fs/btrfs-progs
+sys-fs/btrfsmaintenance
+sys-fs/python-btrfs
+```
+
+Move b get out the way `/etc/portage/package.mask/wayland`:
+```
+app-misc/wayland-utils
+dev-cpp/waylandpp
+dev-libs/plasma-wayland-protocols
+dev-libs/wayland
+dev-libs/wayland-protocols
+dev-qt/qtwayland
+dev-qt/qtwaylandscanner
+dev-util/wayland-scanner
+gui-apps/wayland-logout
+gui-libs/egl-wayland
+kde-frameworks/kwayland
+kde-plasma/kwayland-integration
+kde-plasma/kwayland-server
+x11-apps/xisxwayland
+x11-base/xwayland
+```
+
+Last and loneliest `/etc/portage/package.mask/logind`:
+```
+sys-auth/elogind
+```
+
+This should about just about cover most of our bases.
+I might have gone a bit overboard in a few cases but not without reason.
+I'd rather block something related to the unwanted software and then find out I want to use it and need to comment it out than have to comb through all packages for any offenders.
+
