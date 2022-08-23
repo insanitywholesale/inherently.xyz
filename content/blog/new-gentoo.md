@@ -251,4 +251,7 @@ dev-python/pyudev
 #### Continuing with the chroot
 Now that that's handled, where was I?
 In the new system, right.
-I had left the handbook open at [the timezone section](https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Base#OpenRC) so I'll handle that next.
+
+##### Masking udesired software
+After setting the timezone and locale I remembered that I only masked udev.
+We need to mask systemd, dbus, polkit, pam, (e)logind, networkmanager, pulseaudio, lvm, btrfs and wayland.
