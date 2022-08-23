@@ -85,7 +85,6 @@ Initially I'll just set the basics:
 ```
 USE="-systemd -udev -logind -consolekit -policykit -dbus -pam -networkmanager -pulseaudio -wayland -lvm -btrfs -perl -lua -ruby -python -fortran -ocaml -haskell -racket"
 ````
-You'll notice I didn't add `-fortran` yet and that's because it causes a GCC rebuild which takes quite a while on my weak laptop but we'll add it later.
 
 #### `repos.conf`
 Git syncing is generally faster and doesn't seem to have a per-day sync limit so I want to use that over rsync however the stage3 doesn't include `git` so we leave those options commented out for now.
@@ -197,12 +196,19 @@ Total: 17 packages (17 new), Size of downloads: 34352 KiB
 ```
 
 That's too much lua so we're going with `vim` instead but it was worth checking out.
-A little `echo 'app-editors/vim X -lua -perl -python -racket -ruby -terminal -vim-pager' > /etc/portage/package.use/vim && emerge -v vim` later and we're set.
+A little `echo 'app-editors/vim X -lua -perl -python -racket -ruby -terminal -vim-pager' > /etc/portage/package.use/vim` later and we're set.
 
-#### First issue
+#### First encounter with udev
 After syncing, I saw the `eselect news read` prompt and decided to take a look.
 I remembered that unfortunately the default now is to use systemd udev instead of eudev so I was planning on masking `sys-fs/udev` but thanks to reading the latest news I know I need to mask `sys-apps/systemd-utils` instead.
 The road is getting rocky already but we'll move forward regardless.
 Being a fan of the `s6` suite of software and `mdevd` being a device manager by the same author I thought I'd go with that but it's not available in the main repository.
 No worries, `mdev` provided by busybox can work too.
-Armed with some `echo 'sys-apps/busybox mdev' > /etc/portage/package.use/busybox && emerge -v busybox` we have a device manager.
+Armed with some `echo 'sys-apps/busybox mdev static' > /etc/portage/package.use/busybox` we have a device manager.
+To be honest I forgot about `static` initially.
+After this I updated the system using `emerge -avuDN @world` so the USE changes would be in effect.
+Then I noticed I was missing the `static` flag for busybox, I added it and re-updated.
+Such is life.
+The guide I followed for this part is the excellent [gentoo wiki article about mdev](https://wiki.gentoo.org/wiki/Mdev).
+
+
