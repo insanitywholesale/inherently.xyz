@@ -76,10 +76,10 @@ Sadly the installation media doesn't have `vim`, only `vi` but I can make do.
 
 #### `make.conf`
 
-#### MAKEOPTS
+##### MAKEOPTS
 First, I added `MAKEOPTS="-j2"` to better take advantage of the processing power.
 
-#### USE
+##### USE
 The big one, right.
 Initially I'll just set the basics:
 ```
@@ -204,11 +204,51 @@ I remembered that unfortunately the default now is to use systemd udev instead o
 The road is getting rocky already but we'll move forward regardless.
 Being a fan of the `s6` suite of software and `mdevd` being a device manager by the same author I thought I'd go with that but it's not available in the main repository.
 No worries, `mdev` provided by busybox can work too.
-Armed with some `echo 'sys-apps/busybox mdev static' > /etc/portage/package.use/busybox` we have a device manager.
-To be honest I forgot about `static` initially.
-After this I updated the system using `emerge -avuDN @world` so the USE changes would be in effect.
-Then I noticed I was missing the `static` flag for busybox, I added it and re-updated.
-Such is life.
+
 The guide I followed for this part is the excellent [gentoo wiki article about mdev](https://wiki.gentoo.org/wiki/Mdev).
+Armed with some `echo 'sys-apps/busybox mdev static' > /etc/portage/package.use/busybox` we have a device manager.
+To be honest I forgot about `static` initially so I ran `emerge -avuDN @world` so the USE changes would be in effect but without the correct flags for busybox.
+After I noticed I was missing the `static` flag, I added it and re-updated.
+Such is life sometimes.
+Running `emerge -avc` removed most of the undesireables but `sys-apps/systemd-utils` persisted.
+When trying to see what was keeping it here this is what I got:
+
+```
+emerge -avc systemd-utils
+
+Calculating dependencies... done!
+  sys-apps/systemd-utils-250.7 pulled in by:
+    virtual/tmpfiles-0-r3 requires sys-apps/systemd-utils[tmpfiles]
 
 
+emerge -avc virtual/tmpfiles
+
+Calculating dependencies... done!
+  virtual/tmpfiles-0-r3 pulled in by:
+    sys-apps/man-db-2.10.2-r1 requires virtual/tmpfiles, =virtual/tmpfiles-0-r3
+    sys-apps/openrc-0.44.10 requires virtual/tmpfiles, =virtual/tmpfiles-0-r3
+```
+
+So it seems like man and openrc depend on it which is unfortunate but they at least depend on a `virtual` package so that if a systemd-free options exists we can use that instead.
+I could get rid of man, it's not crucial, but that gets me nowhere since openrc also depends on tmpfiles.
+There is an alternative implementation that used to be the default by gentoo called [opentmpfiles](https://github.com/OpenRC/opentmpfiles) that isn't active anymore but should work and is [packaged by funtoo](https://github.com/funtoo-testing/kit-fixups/tree/81fd81bea6861ead3df21e664200027ddac9ad4d/core-kit/curated/sys-apps/opentmpfiles) so there is an ebuild for it already.
+Writing a modified `virtual/tmpfiles` ebuild to include this is a TODO for later.
+There is also [an implementation in rust](https://github.com/rust-torino/tmpfiles-rs).
+At any rate I seem to have gotten rid of udev which is a pretty big deal.
+To make sure we're alerted in case something tries to reinstall it, let's mask it.
+I made a file `/etc/portage/package.mask/udev` with the following contents:
+
+```
+virtual/udev
+sys-fs/udev
+sys-fs/eudev
+sys-fs/udev-init-scripts
+virtual/libudev
+dev-libs/libgudev
+dev-python/pyudev
+```
+
+#### Continuing with the chroot
+Now that that's handled, where was I?
+In the new system, right.
+I had left the handbook open at [the timezone section](https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Base#OpenRC) so I'll handle that next.
