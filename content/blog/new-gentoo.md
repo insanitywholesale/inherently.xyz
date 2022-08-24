@@ -254,7 +254,7 @@ In the new system, right.
 Setting the timezone and locale and... oh right!
 I forgot to mask the packages earlier.
 
-##### Masking undesired software
+#### Masking undesired software
 After setting the timezone and locale I remembered that I only masked udev.
 We need to mask systemd, dbus, polkit, pam, networkmanager, pulseaudio, lvm, btrfs and wayland.
 
@@ -443,3 +443,51 @@ This should about just about cover most of our bases.
 I might have gone a bit overboard in a few cases but not without reason.
 I'd rather block something related to the unwanted software and then find out I want to use it and need to comment it out than have to comb through all packages for any offenders.
 
+#### Colonel trouble
+Alright then with that handled we can install a kernel, a bootloader, fix up `/etc/fstab` and be on our merry way.
+Sounds easy enough, right? Right?
+This is coloring outside the lines expert edition, don't be naive.
+If you think you should go for one of the distribution kernels, don't or else dracut comes knocking on your door:
+
+```
+emerge -av gentoo-kernel-bin
+
+These are the packages that would be merged, in order:
+
+Calculating dependencies... done!
+
+!!! All ebuilds that could satisfy "virtual/udev" have been masked.
+!!! One of the following masked packages is required to complete your request:
+- virtual/udev-217-r5::gentoo (masked by: package.mask)
+- virtual/udev-217-r3::gentoo (masked by: package.mask)
+
+(dependency required by "sys-kernel/dracut-056-r1::gentoo" [ebuild])
+(dependency required by "sys-kernel/gentoo-kernel-bin-5.15.59::gentoo[initramfs]" [ebuild])
+(dependency required by "gentoo-kernel-bin" [argument])
+For more information, see the MASKED PACKAGES section in the emerge
+man page or refer to the Gentoo Handbook.
+```
+
+This seems easy enough to fix, `echo 'sys-kernel/gentoo-kernel-bin -initramfs' > /etc/portage/package.use/gentoo-kernel-bin`
+and we get:
+
+```
+emerge -av gentoo-kernel-bin
+
+These are the packages that would be merged, in order:
+
+Calculating dependencies... done!
+[ebuild  N     ] dev-libs/elfutils-0.187::gentoo  USE="bzip2 nls utils -lzma -static-libs -test (-threads) -valgrind -verify-sig -zstd" 9,027 KiB
+[ebuild  N     ] sys-devel/bc-1.07.1-r4::gentoo  USE="readline -libedit -static" 411 KiB
+[ebuild  N     ] virtual/libelf-3-r1:0/1::gentoo  0 KiB
+[ebuild  N     ] sys-kernel/gentoo-kernel-bin-5.15.59:5.15.59::gentoo  USE="-initramfs -test" 190,647 KiB
+[ebuild  N     ] virtual/dist-kernel-5.15.59:0/5.15.59::gentoo  0 KiB
+
+Total: 5 packages (5 new), Size of downloads: 200,083 KiB
+
+Would you like to merge these packages? [Yes/No]
+```
+
+#### Bootloader
+It's 3am right nowand I'd rather not fight a bootloader.
+I'm giving up on rEFInd for the moment and installing grub.
