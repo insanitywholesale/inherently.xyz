@@ -489,5 +489,19 @@ Would you like to merge these packages? [Yes/No]
 ```
 
 #### Bootloader
-It's 3am right nowand I'd rather not fight a bootloader.
+It's 3am right now and I'd rather not fight a bootloader.
 I'm giving up on rEFInd for the moment and installing grub.
+
+### Booting into the system
+Of all the things that could go wrong, XFS is what bit me.
+I might have forgotten to install something or `gentoo-kernel-bin` doesn't support XFS.
+After that I booted back into the live ISO, mounted the partitions, entered into the system, installed xfsprogs, rebooted and still no dice.
+The solution that feels better to me is to just reinstall and grab the opportunity to script this as well.
+I plan on doing that eventually but today is not the day so I went looking for a diffferent solution.
+
+#### Changing the filesystem
+A little scavenging online led me to a tool that says it can convert partitions from one filesystem to another, called [fstransform](https://github.com/cosmos72/fstransform).
+Since the laptop's eMMC drive had ubuntu on it, I booted into there, installed `git` (which is one of the first things I usually install so you can tell how much I use that ubuntu install), `build-essential`, `g++` and `automake` then compiled and ran the software according to the instructions in the README.
+With my fingers crossed, I tried booting into gentoo again and... SUCCESS!
+The fstab is wrong since I forgot to change it from XFS to ext4 so some errors came up and the partition UUID is different which caused a few more errors to appear but I booted into a tty.
+No matter that I never set a root password meaning I couldn't log in, this is great news.
