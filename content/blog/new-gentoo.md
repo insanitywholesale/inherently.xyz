@@ -504,4 +504,34 @@ A little scavenging online led me to a tool that says it can convert partitions 
 Since the laptop's eMMC drive had ubuntu on it, I booted into there, installed `git` (which is one of the first things I usually install so you can tell how much I use that ubuntu install), `build-essential`, `g++` and `automake` then compiled and ran the software according to the instructions in the README.
 With my fingers crossed, I tried booting into gentoo again and... SUCCESS!
 The fstab is wrong since I forgot to change it from XFS to ext4 so some errors came up and the partition UUID is different which caused a few more errors to appear but I booted into a tty.
-No matter that I never set a root password meaning I couldn't log in, this is great news.
+No matter that I never set a root password meaning I couldn't log in and didn't set up networking, this is still great news.
+
+### Small configuration and tools
+After rebooting to the gentoo installation media hopefully for the last time, I did some common basic setup.
+This section of the installation did not lead to any issues but I'll briefly cover it anyway.
+
+#### `/etc/fstab`
+First order of business was 
+
+#### Networking
+I set the hostname in `/etc/conf.d/hostname`, set the usb ethernet interface to dhcp in `/etc/conf.d/net`, added a couple alternate names for `127.0.0.1` in `/etc/hosts` and installed dhcpcd.
+
+#### System tools
+The suggested defaults of `sysklogd` and `cronie` are fine with me so I installed them along with `chrony` and `ntp` for time sync.
+I also installed `htop` as well as `sudo`.
+
+#### Package management extras
+I prefer `eix` for searching, `equery` and other utilites from `gentoolkit` are very useful and `eclean-kernel` is just good manners so I got all of them installed.
+Don't forget to run `eix-update`.
+
+#### User
+A non-root user is good security practice and some things won't even run as root so a little `useradd -m -G users,wheel,audio,video,usb,cdrom -s /bin/bash angle && passwd angle` sets us up.
+
+### Ready, set, go!
+With all of that complete, we're ready to reboot.
+When doing so, a couple `sh` errors from mdev show up and neither the wired or wireless interfaces show up.
+*Back into the live media we go*.
+Time to do the dance: install `linux-firmware`, re-emerge and `emerge --config` the kernel, remake the grub config and try again.
+Reboot again and the problem persists.
+I suspect the problem has to do with the kernel at this point, possibly because I disabled initramfs.
+Serves me right for trying to take a shortcut instead of just writing a proper kernel config.
