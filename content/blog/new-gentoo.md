@@ -535,3 +535,275 @@ Time to do the dance: install `linux-firmware`, re-emerge and `emerge --config` 
 Reboot again and the problem persists.
 I suspect the problem has to do with the kernel at this point, possibly because I disabled initramfs.
 Serves me right for trying to take a shortcut instead of just writing a proper kernel config.
+
+#### Investigation
+After a bit of digging, it turns out it's the module loading.
+I had to `modprobe r8152` which is the right one for my usb ethernet adapter and then it showed up.
+With this discovery we can say goodbye to the installation media and continue in our journey.
+
+### Graphical environment
+Now that we can successfully boot, let's try to get an X environment.
+According to [the gentoo wiki Xorg guide](https://wiki.gentoo.org/wiki/Xorg/Guide#Make.conf) we need to set `INPUT_DEVICES` and `VIDEO_CARDS` in `make.conf`.
+I know my laptop uses the intel i915 driver for graphics so I'll set the value to that and for input I'll leave libinput since it's there by default.
+Let's try emerging `xorg-server` now:
+
+```
+emerge -pv xorg-server
+
+These are the packages that would be merged, in order:
+
+Calculating dependencies... done!
+
+The following USE changes are necessary to proceed:
+ (see "package.use" in the portage(5) man page for more details)
+# required by media-libs/mesa-22.1.3::gentoo
+# required by media-libs/libepoxy-1.5.10-r1::gentoo[egl]
+# required by x11-base/xorg-server-21.1.4::gentoo[-minimal]
+# required by x11-drivers/xf86-input-libinput-1.2.1::gentoo
+# required by x11-base/xorg-drivers-21.1::gentoo[input_devices_libinput]
+>=media-libs/libglvnd-1.4.0 X
+# required by x11-base/xorg-drivers-21.1::gentoo[input_devices_libinput,-input_devices_evdev]
+>=x11-base/xorg-server-21.1.4 udev
+# required by x11-drivers/xf86-video-intel-2.99.917_p20201215::gentoo
+# required by x11-base/xorg-drivers-21.1::gentoo[video_cards_i915]
+# required by x11-base/xorg-server-21.1.4::gentoo[xorg]
+# required by x11-drivers/xf86-input-libinput-1.2.1::gentoo
+>=x11-libs/libdrm-2.4.112 video_cards_intel
+
+ * In order to avoid wasting time, backtracking has terminated early
+ * due to the above autounmask change(s). The --autounmask-backtrack=y
+ * option can be used to force further backtracking, but there is no
+ * guarantee that it will produce a solution.
+
+!!! All ebuilds that could satisfy "virtual/libudev:=" have been masked.
+!!! One of the following masked packages is required to complete your request:
+- virtual/libudev-232-r7::gentoo (masked by: package.mask)
+- virtual/libudev-232-r5::gentoo (masked by: package.mask)
+
+(dependency required by "dev-libs/libinput-1.21.0-r1::gentoo" [ebuild])
+(dependency required by "x11-drivers/xf86-input-libinput-1.2.1::gentoo" [ebuild])
+(dependency required by "x11-base/xorg-drivers-21.1::gentoo[input_devices_libinput]" [ebuild])
+(dependency required by "x11-base/xorg-server-21.1.4::gentoo[xorg]" [ebuild])
+(dependency required by "x11-drivers/xf86-video-intel-2.99.917_p20201215::gentoo[dri]" [ebuild])
+For more information, see the MASKED PACKAGES section in the emerge
+man page or refer to the Gentoo Handbook.
+```
+
+Hmm, this doesn't look very nice.
+The wiki article suggested tryint to emerge `xorg-drivers` on its own if the suggested settings don't work.
+I'm sure they didn't mean it this way but it's a good suggestion for troubleshooting.
+
+```
+emerge -pv xorg-drivers
+
+These are the packages that would be merged, in order:
+
+Calculating dependencies... done!
+
+The following USE changes are necessary to proceed:
+ (see "package.use" in the portage(5) man page for more details)
+# required by x11-base/xorg-drivers-21.1::gentoo[-input_devices_evdev,input_devices_libinput]
+# required by xorg-drivers (argument)
+>=x11-base/xorg-server-21.1.4 udev
+# required by x11-drivers/xf86-video-intel-2.99.917_p20201215::gentoo
+# required by x11-base/xorg-drivers-21.1::gentoo[video_cards_i915]
+# required by x11-base/xorg-server-21.1.4::gentoo[xorg]
+# required by x11-drivers/xf86-input-libinput-1.2.1::gentoo
+>=x11-libs/libdrm-2.4.112 video_cards_intel
+# required by media-libs/mesa-22.1.3::gentoo
+# required by media-libs/libepoxy-1.5.10-r1::gentoo[egl]
+# required by x11-base/xorg-server-21.1.4::gentoo[-minimal]
+# required by x11-drivers/xf86-input-libinput-1.2.1::gentoo
+# required by x11-base/xorg-drivers-21.1::gentoo[input_devices_libinput]
+# required by xorg-drivers (argument)
+>=media-libs/libglvnd-1.4.0 X
+
+ * In order to avoid wasting time, backtracking has terminated early
+ * due to the above autounmask change(s). The --autounmask-backtrack=y
+ * option can be used to force further backtracking, but there is no
+ * guarantee that it will produce a solution.
+
+!!! All ebuilds that could satisfy "virtual/libudev:=" have been masked.
+!!! One of the following masked packages is required to complete your request:
+- virtual/libudev-232-r7::gentoo (masked by: package.mask)
+- virtual/libudev-232-r5::gentoo (masked by: package.mask)
+
+(dependency required by "x11-base/xorg-server-21.1.4::gentoo[udev]" [ebuild])
+(dependency required by "x11-base/xorg-drivers-21.1::gentoo[-input_devices_evdev,input_devices_libinput]" [ebuild])
+(dependency required by "xorg-drivers" [argument])
+For more information, see the MASKED PACKAGES section in the emerge
+man page or refer to the Gentoo Handbook.
+```
+
+This looks a little simpler to make sense of so let's analyze the dependency chain:
+- we're trying to install xorg-drivers with libinput as an input device
+- which depends on xf86-input-libinput
+- which depends on libinput
+- which depends on libudev and udev
+- and also requires xorg-server with the udev use flag
+Since we need our input devices to work and that seems to require libinput, we should look at what exactly the xf86-input-libinput package wants since we'll need to install that for sure.
+The ebuild can be found [on gentoo's gitweb instance](https://gitweb.gentoo.org/repo/gentoo.git/tree/x11-drivers/xf86-input-libinput/xf86-input-libinput-1.2.1.ebuild) and says it needs libinput version 1.11.0 or higher.
+At this point I'll admit I cheated and tried to solve it before writing down the steps I took but this was the lightbulb moment.
+Since this isn't the first time I've attempted this I have an ebuild of libinput 1.15.5 that includes a patch from [KISS Linux](https://kisslinux.org/) to make the dependency on udev optional.
+The libinput version is pretty old and the patch has not been updated since but this solution might just work.
+We can create a local ebuild repository [according to this gentoo wiki article](https://wiki.gentoo.org/wiki/Creating_an_ebuild_repository).
+Install `eselect-repository` and then run `eselect repository create local`.
+Then I ran `mkdir -p /var/db/repos/local/dev-libs/libinput/files` to create all directories I'll need at once.
+I also installed `pkgdev` although it's not needed for this specific ebuild.
+Then I downloaded the ebuild, the patch and the manifest using:
+
+```
+curl -o /var/db/repos/local/dev-libs/libinput/libinput-1.15.5.ebuild https://gitlab.com/insanitywholesale/inherently-overlay/-/raw/master/dev-libs/libinput/libinput-1.15.5.ebuild
+curl -o /var/db/repos/local/dev-libs/libinput/files/libinput-optional-udev.patch https://gitlab.com/insanitywholesale/inherently-overlay/-/raw/master/dev-libs/libinput/files/libinput-optional-udev.patch
+curl -o /var/db/repos/local/dev-libs/libinput/Manifest https://gitlab.com/insanitywholesale/inherently-overlay/-/raw/master/dev-libs/libinput/Manifest`
+```
+
+To test if everything well we can pretend to emerge the exact version of libinput:
+
+```
+emerge -pv '=dev-libs/libinput-1.15.5'
+
+These are the packages that would be merged, in order:
+
+Calculating dependencies... done!
+[ebuild  N     ] sys-libs/mtdev-1.1.6::gentoo  290 KiB
+[ebuild  N     ] dev-libs/libevdev-1.12.1::gentoo  USE="-doc -test" 437 KiB
+[ebuild  N     ] dev-libs/libinput-1.15.5:0/10::local  USE="-doc -test" INPUT_DEVICES="-wacom" 570 KiB
+
+Total: 3 packages (3 new), Size of downloads: 1,295 KiB
+```
+
+Then we can mask the newer versions using `echo '>dev-libs/libinput-1.15.5' > /etc/portage/package.mask/libinput`
+But if we try installing `xorg-drivers` we see not all is well:
+
+```
+emerge -pv xorg-drivers
+
+These are the packages that would be merged, in order:
+
+Calculating dependencies... done!
+
+The following USE changes are necessary to proceed:
+ (see "package.use" in the portage(5) man page for more details)
+# required by x11-base/xorg-drivers-21.1::gentoo[input_devices_libinput,-input_devices_evdev]
+# required by xorg-drivers (argument)
+>=x11-base/xorg-server-21.1.4 udev
+# required by x11-drivers/xf86-video-intel-2.99.917_p20201215::gentoo
+# required by x11-base/xorg-drivers-21.1::gentoo[video_cards_i915]
+# required by x11-base/xorg-server-21.1.4::gentoo[xorg]
+# required by x11-drivers/xf86-input-libinput-1.2.1::gentoo
+>=x11-libs/libdrm-2.4.112 video_cards_intel
+# required by media-libs/mesa-22.1.3::gentoo
+# required by media-libs/libepoxy-1.5.10-r1::gentoo[egl]
+# required by x11-base/xorg-server-21.1.4::gentoo[-minimal]
+# required by x11-drivers/xf86-input-libinput-1.2.1::gentoo
+# required by x11-base/xorg-drivers-21.1::gentoo[input_devices_libinput]
+# required by xorg-drivers (argument)
+>=media-libs/libglvnd-1.4.0 X
+
+ * In order to avoid wasting time, backtracking has terminated early
+ * due to the above autounmask change(s). The --autounmask-backtrack=y
+ * option can be used to force further backtracking, but there is no
+ * guarantee that it will produce a solution.
+
+!!! All ebuilds that could satisfy "virtual/libudev:=" have been masked.
+!!! One of the following masked packages is required to complete your request:
+- virtual/libudev-232-r7::gentoo (masked by: package.mask)
+- virtual/libudev-232-r5::gentoo (masked by: package.mask)
+
+(dependency required by "x11-base/xorg-server-21.1.4::gentoo[udev]" [ebuild])
+(dependency required by "x11-base/xorg-drivers-21.1::gentoo[input_devices_libinput,-input_devices_evdev]" [ebuild])
+(dependency required by "xorg-drivers" [argument])
+For more information, see the MASKED PACKAGES section in the emerge
+man page or refer to the Gentoo Handbook.
+```
+
+The problem here is that the `xorg-drivers` ebuild [which you can read here](https://gitweb.gentoo.org/repo/gentoo.git/tree/x11-base/xorg-drivers/xorg-drivers-21.1.ebuild#n66) forces `xorg-server` to have the `udev` USE flag enabled.
+We'll have to go through a similar procedure as before to fix this.
+Run `mkdir -p /var/db/repos/local/x11-base/xorg-drivers` to create the directory structure for this package and then
+
+```
+curl -o /var/db/repos/local/x11-base/xorg-drivers/xorg-drivers-21.1.ebuild https://gitweb.gentoo.org/repo/gentoo.git/plain/x11-base/xorg-drivers/xorg-drivers-21.1.ebuild
+```
+
+Following that, delete lines 61 and 66 and then `cd /var/db/repos/local/x11-base/xorg-drivers && pkgdev manifest`.
+In my case the local ebuild repository has higher priority so now when trying to install `xorg-server` get:
+
+```
+Calculating dependencies... done!
+[ebuild  N     ] x11-misc/util-macros-1.19.3::gentoo  83 KiB
+[ebuild  N     ] x11-misc/xbitmaps-1.1.2-r1::gentoo  127 KiB
+[ebuild  N     ] sys-devel/llvm-common-14.0.6::gentoo  USE="-verify-sig" 103,143 KiB
+[ebuild  N     ] x11-libs/pixman-0.40.0::gentoo  USE="(-loongson2f) -static-libs -test" CPU_FLAGS_X86="mmxext sse2 -ssse3" 620 KiB
+[ebuild  N     ] x11-misc/xkeyboard-config-2.36::gentoo  861 KiB
+[ebuild  N     ] gui-libs/display-manager-init-1.0-r4::gentoo  0 KiB
+[ebuild  N     ] sys-libs/mtdev-1.1.6::gentoo  290 KiB
+[ebuild  N     ] sys-libs/binutils-libs-2.38-r2:0/2.38::gentoo  USE="nls -64-bit-bfd (-cet) -multitarget -static-libs" 23,287 KiB
+[ebuild  N     ] app-crypt/rhash-1.4.2::gentoo  USE="nls ssl -debug -static-libs" 408 KiB
+[ebuild  N     ] dev-libs/jsoncpp-1.9.5:0/25::gentoo  USE="-doc -test" 211 KiB
+[ebuild  N     ] dev-python/pygments-2.12.0-r1::gentoo  USE="-test" PYTHON_TARGETS="python3_10 (-pypy3) -python3_8 -python3_9 (-python3_11)" 4,182 KiB
+[ebuild  N     ] dev-python/mako-1.2.1::gentoo  USE="-doc -test" PYTHON_TARGETS="python3_10 (-pypy3) -python3_8 -python3_9 (-python3_11)" 479 KiB
+[ebuild  N     ] x11-libs/libXext-1.3.4::gentoo  USE="-doc" 380 KiB
+[ebuild  N     ] media-fonts/font-util-1.3.3::gentoo  140 KiB
+[ebuild  N     ] x11-libs/libxkbfile-1.1.0::gentoo  357 KiB
+[ebuild  N     ] x11-libs/libxshmfence-1.3-r2::gentoo  302 KiB
+[ebuild  N     ] x11-libs/libXfixes-6.0.0::gentoo  USE="-doc" 291 KiB
+[ebuild  N     ] x11-apps/iceauth-1.0.9::gentoo  128 KiB
+[ebuild  N     ] x11-apps/rgb-1.0.6-r1::gentoo  136 KiB
+[ebuild  N     ] x11-libs/libxcvt-0.1.2::gentoo  10 KiB
+[ebuild  N     ] dev-libs/libevdev-1.12.1::gentoo  USE="-doc -test" 437 KiB
+[ebuild  N     ] x11-libs/libXrender-0.9.10-r2::gentoo  302 KiB
+[ebuild  N     ] app-arch/libarchive-3.6.1:0/13::gentoo  USE="acl bzip2 e2fsprogs iconv lzma xattr -blake2 -expat -lz4 -lzo -nettle -static-libs -verify-sig -zstd" 7,258 KiB
+[ebuild  N     ] dev-libs/libuv-1.44.1:0/1::gentoo  1,272 KiB
+[ebuild  N     ] x11-libs/libfontenc-1.1.4::gentoo  313 KiB
+[ebuild  N     ] dev-python/docutils-0.19::gentoo  PYTHON_TARGETS="python3_10 (-pypy3) -python3_8 -python3_9 (-python3_11)" 2,009 KiB
+[ebuild  N     ] x11-libs/libpciaccess-0.16-r1::gentoo  USE="zlib" 359 KiB
+[ebuild  N     ] media-libs/libglvnd-1.4.0::gentoo  USE="X -test" 551 KiB
+[ebuild  N     ] x11-libs/libXmu-1.1.3::gentoo  USE="ipv6 -doc" 386 KiB
+[ebuild  N     ] x11-apps/xkbcomp-1.4.5::gentoo  246 KiB
+[ebuild  N     ] x11-libs/libXfont2-2.0.5::gentoo  USE="bzip2 ipv6 -doc -truetype" 513 KiB
+[ebuild  N     ] x11-libs/libXScrnSaver-1.2.3::gentoo  USE="-doc" 285 KiB
+[ebuild  N     ] dev-libs/libinput-1.15.5:0/10::local  USE="-doc -test" INPUT_DEVICES="-wacom" 570 KiB
+[ebuild  N     ] x11-libs/libXxf86vm-1.1.4-r2::gentoo  USE="-doc" 289 KiB
+[ebuild  N     ] x11-libs/libXrandr-1.5.2::gentoo  USE="-doc" 323 KiB
+[ebuild  N     ] dev-util/cmake-3.22.4::gentoo  USE="ncurses -doc -emacs -qt5 -test" 9,553 KiB
+[ebuild  N     ] x11-libs/libdrm-2.4.112::gentoo  USE="-valgrind" VIDEO_CARDS="intel -amdgpu (-exynos) (-freedreno) -nouveau (-omap) -radeon (-tegra) (-vc4) (-vivante) -vmware" 442 KiB
+[ebuild  N     ] x11-apps/xauth-1.1.2::gentoo  154 KiB
+[ebuild  N     ] x11-apps/xrdb-1.2.1::gentoo  140 KiB
+[ebuild  N     ] x11-apps/xinit-1.4.1-r1::gentoo  USE="-twm" 173 KiB
+[ebuild  N     ] sys-devel/llvm-14.0.6-r2:14::gentoo  USE="binutils-plugin libffi ncurses -debug -doc -exegesis -libedit -test -verify-sig -xar -xml -z3" LLVM_TARGETS="(AArch64) (AMDGPU) (ARM) (AVR) (BPF) (Hexagon) (Lanai) (MSP430) (Mips)
+(NVPTX) (PowerPC) (RISCV) (Sparc) (SystemZ) (VE) (WebAssembly) (X86) (XCore) (-ARC) (-CSKY) (-M68k)" 229 KiB
+[ebuild  N     ] sys-devel/llvmgold-14::gentoo  0 KiB
+[ebuild  N     ] media-libs/mesa-22.1.3::gentoo  USE="X gles2 llvm zstd -d3d9 -debug -gles1 -lm-sensors -opencl -osmesa (-selinux) -test -unwind -vaapi -valgrind -vdpau -vulkan -vulkan-overlay -wayland -xa -xvmc -zink" CPU_FLAGS_X86="sse2" VIDEO_CARDS="(-freedreno) -intel (-lima) -nouveau (-panfrost) -r300 -r600 -radeon -radeonsi (-v3d) (-vc4) -virgl (-vivante) -vmware" 15,642 KiB
+[ebuild  N     ] media-libs/libepoxy-1.5.10-r1::gentoo  USE="X egl -test" 325 KiB
+[ebuild  N     ] x11-base/xorg-server-21.1.4:0/21.1.4::gentoo  USE="xorg -debug -elogind -minimal (-selinux) -suid -systemd -test -udev -unwind -xcsecurity -xephyr -xnest -xvfb" 4,825 KiB
+[ebuild  N     ] x11-base/xorg-drivers-21.1::local  INPUT_DEVICES="libinput -elographics -evdev -joystick -synaptics -vmmouse -void -wacom" VIDEO_CARDS="i915 -amdgpu -ast -dummy -fbdev (-freedreno) (-geode) -glint -intel -mga -nouveau -nv
+-nvidia (-omap) -qxl -r128 -radeon -radeonsi -siliconmotion (-tegra) (-vc4) -vesa -via -virtualbox -vmware" 0 KiB
+[ebuild  N     ] x11-drivers/xf86-input-libinput-1.2.1::gentoo  306 KiB
+[ebuild  N     ] x11-drivers/xf86-video-intel-2.99.917_p20201215::gentoo  USE="dri sna -debug -tools -udev -uxa -xvmc" 1,222 KiB
+
+Total: 48 packages (48 new), Size of downloads: 183,533 KiB
+
+The following USE changes are necessary to proceed:
+ (see "package.use" in the portage(5) man page for more details)
+# required by media-libs/mesa-22.1.3::gentoo
+# required by media-libs/libepoxy-1.5.10-r1::gentoo[egl]
+# required by x11-base/xorg-server-21.1.4::gentoo[-minimal]
+# required by x11-drivers/xf86-input-libinput-1.2.1::gentoo
+# required by x11-base/xorg-drivers-21.1::local[input_devices_libinput]
+>=media-libs/libglvnd-1.4.0 X
+# required by x11-drivers/xf86-video-intel-2.99.917_p20201215::gentoo
+# required by x11-base/xorg-drivers-21.1::local[video_cards_i915]
+# required by x11-base/xorg-server-21.1.4::gentoo[xorg]
+# required by x11-drivers/xf86-input-libinput-1.2.1::gentoo
+>=x11-libs/libdrm-2.4.112 video_cards_intel
+
+ * In order to avoid wasting time, backtracking has terminated early
+ * due to the above autounmask change(s). The --autounmask-backtrack=y
+ * option can be used to force further backtracking, but there is no
+ * guarantee that it will produce a solution.
+```
+
+Which is awesome!
+Just to be safe, I did `echo '>x11-base/xorg-drivers-21.1' > /etc/portage/package.mask/xorg-drivers` before installing `xorg-server`.
+Now we'll do `emerge -av` instead of `emerge -pv` so the USE changes are staged and then `etc-update` to finalize them before installing `xorg-server`.
