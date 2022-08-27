@@ -519,6 +519,8 @@ I set the hostname in `/etc/conf.d/hostname`, set the usb ethernet interface to 
 #### System tools
 The suggested defaults of `sysklogd` and `cronie` are fine with me so I installed them along with `chrony` and `ntp` for time sync.
 I also installed `htop` as well as `sudo`.
+Something I forgot was that `pam` provides `su` and since we're not using it, the shadow implementation of `su` can be used instead.
+I had to do `echo 'sys-apps/shadow su' > /etc/portage/package.use/shadow` and then update again.
 
 #### Package management extras
 I prefer `eix` for searching, `equery` and other utilites from `gentoolkit` are very useful and `eclean-kernel` is just good manners so I got all of them installed.
@@ -807,3 +809,7 @@ The following USE changes are necessary to proceed:
 Which is awesome!
 Just to be safe, I did `echo '>x11-base/xorg-drivers-21.1' > /etc/portage/package.mask/xorg-drivers` before installing `xorg-server`.
 Now we'll do `emerge -av` instead of `emerge -pv` so the USE changes are staged and then `etc-update` to finalize them before installing `xorg-server`.
+Additionally, `echo 'x11-base/xorg-server suid' > /etc/portage/package.use/xorg-server` because without (e)logind we need that to be able to start an X session.
+
+And now we can finally install `xorg-server`.
+Since it pulls in `llvm` I left it to install overnight.
