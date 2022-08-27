@@ -82,9 +82,10 @@ First, I added `MAKEOPTS="-j2"` to better take advantage of the processing power
 ##### USE
 The big one, right.
 Initially I'll just set the basics:
+
 ```
 USE="-systemd -udev -logind -consolekit -policykit -dbus -pam -networkmanager -pulseaudio -wayland -lvm -btrfs -perl -lua -ruby -python -fortran -ocaml -haskell -racket"
-````
+```
 
 #### `repos.conf`
 Git syncing is generally faster and doesn't seem to have a per-day sync limit so I want to use that over rsync however the stage3 doesn't include `git` so we leave those options commented out for now.
@@ -547,6 +548,8 @@ With this discovery we can say goodbye to the installation media and continue in
 Now that we can successfully boot, let's try to get an X environment.
 According to [the gentoo wiki Xorg guide](https://wiki.gentoo.org/wiki/Xorg/Guide#Make.conf) we need to set `INPUT_DEVICES` and `VIDEO_CARDS` in `make.conf`.
 I know my laptop uses the intel i915 driver for graphics so I'll set the value to that and for input I'll leave libinput since it's there by default.
+
+#### Installing Xorg
 Let's try emerging `xorg-server` now:
 
 ```
@@ -813,3 +816,9 @@ Additionally, `echo 'x11-base/xorg-server suid' > /etc/portage/package.use/xorg-
 
 And now we can finally install `xorg-server`.
 Since it pulls in `llvm` I left it to install overnight.
+
+#### Starting Xorg
+Since git is installed, I pulled down my customized versions of dwm and st to have a window manager and a terminal for testing.
+This required `libXft` and `libXinerama` to be installed since they're build dependencies.
+After a quick `echo 'exec dwm' > ~/.xinitrc` and `startx` dwm started up successfully.
+Keyboard and mouse don't seem to be working though.
