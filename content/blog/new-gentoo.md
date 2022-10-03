@@ -820,5 +820,11 @@ Since it pulls in `llvm` I left it to install overnight.
 #### Starting Xorg
 Since git is installed, I pulled down my customized versions of dwm and st to have a window manager and a terminal for testing.
 This required `libXft` and `libXinerama` to be installed since they're build dependencies.
-After a quick `echo 'exec dwm' > ~/.xinitrc` and `startx` dwm started up successfully.
+After a quick `echo 'exec dwm' > ~/.xinitrc` and `startx` dwm started up successfully!
 Keyboard and mouse don't seem to be working though.
+
+#### Input Devices
+The `gentoo-kernel-bin` package got me this far but now it's a bottleneck.
+To remedy the situation I described previously I configured a custom kernel and left it to compile.
+The important bit was to disable modules so everything is built-in and we don't need to worry about module loading and all the cruft that comes with that.
+Keeping in mind that this was done on a dual-core Celeron running at a maximum of 1.6GHz, it takes a while even with the unnecessary things disabled.
