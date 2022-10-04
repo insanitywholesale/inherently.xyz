@@ -828,3 +828,9 @@ The `gentoo-kernel-bin` package got me this far but now it's a bottleneck.
 To remedy the situation I described previously I configured a custom kernel and left it to compile.
 The important bit was to disable modules so everything is built-in and we don't need to worry about module loading and all the cruft that comes with that.
 Keeping in mind that this was done on a dual-core Celeron running at a maximum of 1.6GHz, it takes a while even with the unnecessary things disabled.
+
+After recompiling the kernel and rebooting into it, the same problem persists.
+This made me turn my attention to what input drivers I'm using.
+I assumed libinput would do the trick but it doesn't seem to be that simple.
+Next thing to try is enable synaptics by changing `INPUT_DEVICES="libinput"` to `INPUT_DEVICES="libinput synaptics"` in `/etc/portage/make.conf` and run an update.
+After rebooting and running `startx` nothing seems to have changed.
