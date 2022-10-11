@@ -2,7 +2,7 @@
 - test 2dock2furious docker-compose.yml examples (actually need to do this)
 - triple-check code in Go tutorial and write part 4 about testing
 - go-api-part-1: go mod init when adding `gorilla/mux`, remove useless `return`
-- move to [anchored headings](https://www.jakewiesler.com/blog/anchored-headings-in-hugo)
+- move to [anchored headings](https://www.jakewiesler.com/blog/anchored-headings-in-hugo) [alt impl](https://discourse.gohugo.io/t/creating-anchors-in-hugo-pages-solved/9552)
 
 # Notes
 Notes about stuff that happened
