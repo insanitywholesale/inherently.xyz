@@ -1,11 +1,13 @@
 ---
 title: "New Gentoo"
 date: 2022-08-23T15:09:04+03:00
-draft: true
+draft: false
 tags: ["linux"]
 ---
 
 ## Intro
+WARNING: this is an incomplete draft but I wanted to publish it just so it exists as a resource.
+
 As the summer is coming to a close and before the exam period starts I decided to reinstall gentoo on my university laptop.
 I don't plan on doing an ordinary follow the handbook and whabam you're up and running thing so I wanted to document it.
 
@@ -74,7 +76,7 @@ I'm used to `curl` instead of `wget` so a little `curl -O` incantation later and
 I'm not going to do *too* much configuration before the system is independently bootable but we'll take care of some basics.
 Sadly the installation media doesn't have `vim`, only `vi` but I can make do.
 
-#### `make.conf`
+#### make.conf
 
 ##### MAKEOPTS
 First, I added `MAKEOPTS="-j2"` to better take advantage of the processing power.
@@ -87,7 +89,7 @@ Initially I'll just set the basics:
 USE="-systemd -udev -logind -consolekit -policykit -dbus -pam -networkmanager -pulseaudio -wayland -lvm -btrfs -perl -lua -ruby -python -fortran -ocaml -haskell -racket"
 ```
 
-#### `repos.conf`
+#### repos.conf
 Git syncing is generally faster and doesn't seem to have a per-day sync limit so I want to use that over rsync however the stage3 doesn't include `git` so we leave those options commented out for now.
 
 ```
