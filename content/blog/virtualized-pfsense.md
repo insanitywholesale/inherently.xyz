@@ -1,8 +1,8 @@
 ---
 title: "Virtualized pfSense on ProxMox"
 date: 2022-09-20T01:12:49+03:00
-draft: true
-tags: [""]
+draft: false
+tags: ["virtualization", "proxmox", "networking", "pfsense"]
 ---
 
 ## Intro
