@@ -13,11 +13,15 @@ This tutorial will attempt to go through its architecture and provide the reader
 ## Baseline
 While kubernetes distributions exist, for the purposes of explanation and demonstration, upstream kubernetes will be used.
 
-## Architecture 
-A host participating in a kubernetes cluster can be a control plane node, a worker node or both.
-It is usually advised to keep concerns separated so cluster workloads don't affect cluster stability.
+## Architecture
+Each computer that is part of a cluster is called a node.
+A node can be part of the control plane node, be a worker node or both.
+It is considered good practice to keep concerns separated so cluster workloads don't affect cluster stability.
+To fulfill either role, a node will run several programs that interact with eachother.
 
 ### Control Plane
+The control plane consists of components that make decisions about the whole cluster and act on events.
+These components can technically run anywhere but they're usually aggregated on each control plane node.
 
 #### kube-apiserver
 #### kube-scheduler
@@ -25,20 +29,29 @@ It is usually advised to keep concerns separated so cluster workloads don't affe
 #### etcd
 
 ### Workers
+The worker nodes include components that handle running Pods and providing the runtime environment for workloads.
 
 #### kubelet
 The kubelet can be considered the launcher part of kubernetes.
 It is given a podspec by the API server and then it takes the appropriate action.
-In most cases this translates to communicating with the container runtime to start a container.
-However, somewhat recently, kubernetes gained the ability to talk to a WASM runtime in order to run code that way.
+This translates to communicating with the container runtime to start a container.
+A common interface called CRI (Container Runtime Interface) is used which makes the container runtime modular.
+The communication between the kubelet and the container runtime happens through gRPC.
 
 #### container runtime
+The container runtime is what actually launches the containers that are part of a Pod.
+Docker works in a similar way, the Docker daemon communicates with container runtime to start a container from a `docker run` command.
+At the moment, the most popular container runtimes used with kubernetes are contrainerd and CRI-O.
 
-### Pods
-In kubernetes, pods are the most important building block, the base unit of the system if you will.
+### kube-proxy
+
+### Resources or Objects
+
+#### Pods
+In kubernetes, Pod resources are the most important building block, the base unit of the system if you will.
 They're sets of at least one container but potentially more.
-Pods are used by other resource types such as deployment, horizontal pod autoscaler, daemonset and replicaset.
-An important thing to keep in mind is that the containers in a pod scale together.
-Due to this behavior, it is ill-advised to have an application backend and its database as two containers in a pod.
+Pods are used by other resource types such as Deployment, Horizontal Pod Autoscaler, DaemonSet and ReplicaSet.
+An important thing to keep in mind is that the containers in a Pod scale together.
+Due to this behavior, it is ill-advised to have an application backend and its database as two containers in one Pod.
 Conversely, something like a log scraper/collector is a more fitting option since they correspond to one application instance.
 Contrast this with the database example where one database serves multiple application instances.
