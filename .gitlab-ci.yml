@@ -1,6 +1,10 @@
 # The Docker image that will be used to build your app
 image: ubuntu
 pages:
+  before_script:
+    - apt update
+    - apt -y full-upgrade
+    - apt -y install hugo
   script:
     - hugo
   artifacts:
