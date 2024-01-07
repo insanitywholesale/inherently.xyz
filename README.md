@@ -8,7 +8,7 @@ site https://gitlab.com/insanitywholesale/distrowatch became a bit annoying to h
 
 ## run in dev mode on remote host (raspberry pi for example) with working links
 ```
-hugo server -D --disableFastRender --baseURL=http://fruitdoot.hell --bind=0.0.0.0
+hugo server -D --disableFastRender --baseURL=http://localhost --bind=0.0.0.0
 ```
 
 ## comments
