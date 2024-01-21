@@ -8,6 +8,7 @@
 		<meta name="author" content="{{ .Site.Author.name }}">
 		<meta name="description" content="{{ block "desc" . }}{{ end }}">
 		<meta name="theme-color" content="#440044">
+		<meta name="color-scheme" content="dark light">
 		{{ with resources.Get "css/basic.css" | minify }}<style>{{ .Content | safeCSS }}</style>{{ end }}
 		{{ with resources.Get "css/syntax.css" | minify }}<style>{{ .Content | safeCSS }}</style>{{ end }}
 	</head>
