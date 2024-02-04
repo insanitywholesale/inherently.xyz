@@ -36,6 +36,9 @@
 	--lighttoclevel1: #07171c;
 	--lighttoclevel2: #155e15;
 	--lighttoclevel3: #57006e;
+
+	/* configure scrollbar */
+	scrollbar-color: var(--darkh2) var(--darkrawcodebg);
 }
 
 /*
