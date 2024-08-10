@@ -3,7 +3,7 @@ image: ubuntu:22.04
 pages:
   before_script:
     - apt update
-    - apt -y install git hugo
+    - apt -y install git hugo tree
   script:
     - |
       set -x
@@ -19,7 +19,7 @@ pages:
         git checkout $branch
         hugo
         mkdir -p public_all/$CI_COMMIT_REF_NAME
-        cp -a public/* public_all/$CI_COMMIT_REF_NAME
+        cp -a public/* public_all/$CI_COMMIT_REF_NAME/
       done
 
       git checkout $CI_DEFAULT_BRANCH
@@ -27,6 +27,7 @@ pages:
       cp -r public/* public_all/
       rm -rf public/
       mv public_all public
+      tree -L 5 public
   artifacts:
     paths:
       # The folder that contains the files to be exposed at the Page URL
