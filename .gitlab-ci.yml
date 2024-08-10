@@ -20,6 +20,7 @@ pages:
         hugo
         mkdir -p public_all/$CI_COMMIT_REF_NAME
         cp -a public/* public_all/$CI_COMMIT_REF_NAME/
+        rm -rf public
       done
 
       git checkout $CI_DEFAULT_BRANCH
