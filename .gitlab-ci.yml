@@ -9,11 +9,10 @@ pages:
       set -x
       git fetch --all
       git checkout $CI_COMMIT_REF_NAME
-      git pull --all
 
       mkdir public_all
 
-      export BRANCHES=$(git branch --list --format='%(refname:short)')
+      export BRANCHES=$(git branch -a --list --format='%(refname:short)')
       for branch in $BRANCHES;
       do
         echo $branch
