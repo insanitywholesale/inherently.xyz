@@ -18,8 +18,8 @@ pages:
         echo $branch
         git checkout $branch
         hugo
-        mkdir -p public_all/$CI_COMMIT_REF_NAME
-        cp -a public/* public_all/$CI_COMMIT_REF_NAME/
+        mkdir -p public_all/$branch
+        cp -a public/* public_all/$branch
         rm -rf public
       done
 
