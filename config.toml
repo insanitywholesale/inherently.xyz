@@ -1,0 +1,25 @@
+baseURL = "https://inherently.xyz"
+languageCode = "en-us"
+title = "inherently's cabin"
+
+[author]
+	name = "inherently"
+
+[markup]
+	[markup.tableOfContents]
+		ordered = false
+		startlevel = 2
+		endlevel = 4
+	[markup.highlight]
+		anchorLineNos = false
+		codeFences = true
+		guessSyntax = true
+		hl_Lines = ""
+		lineAnchors = ""
+		lineNoStart = 1
+		lineNos = true
+		lineNumbersInTable = true
+		noClasses = false
+		style = "native"
+		tabWidth = 4
+		lineOs = "table"
