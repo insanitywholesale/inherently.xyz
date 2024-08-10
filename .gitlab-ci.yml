@@ -12,7 +12,7 @@ pages:
 
       mkdir public_all
 
-      export BRANCHES=$(git branch -a --list --format='%(refname:short)')
+      export BRANCHES=$(git branch -a --format='%(refname:short)' | cut -d'/' -f 2 | sort -u | grep -v origin)
       for branch in $BRANCHES;
       do
         echo $branch
