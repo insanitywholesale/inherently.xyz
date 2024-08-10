@@ -18,12 +18,13 @@ pages:
         echo $branch
         git checkout $branch
         hugo
-        mv public public_all/$CI_COMMIT_REF_NAME
+        mkdir public_all/$CI_COMMIT_REF_NAME
+        cp -a public/* public_all/$CI_COMMIT_REF_NAME
       done
 
       git checkout $CI_DEFAULT_BRANCH
       hugo
-      cp -a public/* public_all/
+      cp -r public/* public_all/
       rm -rf public/
       mv public_all public
   artifacts:
