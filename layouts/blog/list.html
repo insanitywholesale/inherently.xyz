@@ -1,0 +1,16 @@
+{{ define "desc" }}
+	young old man shouts into the void blog posts
+{{ end }}
+{{ define "header" }}
+	{{ .Title }}
+{{ end }}
+{{ define "main" }}
+	<ul>
+	{{ range .RegularPages }}
+		<li>
+			<a href="{{ .Permalink }}"><h2>{{ .Title }}</h2></a>
+			<p>{{ .PublishDate.Format "January 2, 2006" }}</p>
+		</li>
+	{{ end }}
+	</ul>
+{{ end }}

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>{{.Title}}</title>
+{{ partial "favicon.html" . }}
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="{{ .Site.Author.name }}">
+		<meta name="description" content="{{ block "desc" . }}{{ end }}">
+		<meta name="theme-color" content="#440044">
+		<meta name="color-scheme" content="dark light">
+		{{ with resources.Get "css/basic.css" | minify }}<style>{{ .Content | safeCSS }}</style>{{ end }}
+		{{ with resources.Get "css/syntax.css" | minify }}<style>{{ .Content | safeCSS }}</style>{{ end }}
+	</head>
+	<body>
+		<h1>{{ block "header" . }}{{ .Title }}{{ end }}</h1>
+{{ partial "nav.html" . }}
+		<hr>
+{{ block "main" . }}{{ .Content }}{{ end }}
+		<hr>
+{{ partial "footer" . }}
+</body>
+</html>
