@@ -1,0 +1,9 @@
+kind: pipeline
+name: default
+type: kubernetes
+
+steps:
+  - name: inheresite
+    image: jojomi/hugo
+    commands:
+      - hugo -D
