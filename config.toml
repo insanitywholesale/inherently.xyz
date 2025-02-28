@@ -1,9 +1,6 @@
 baseURL = "https://inherently.xyz"
 languageCode = "en-us"
-title = "inherently's cabin"
-
-[author]
-	name = "inherently"
+title = "inherent site"
 
 [markup]
 	[markup.tableOfContents]
