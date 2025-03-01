@@ -15,7 +15,7 @@ pages:
       for branch in $BRANCHES;
       do
         git checkout $branch
-        hugo
+        hugo -D
         mkdir -p public_all/$branch
         cp -a public/* public_all/$branch
         rm -rf public
