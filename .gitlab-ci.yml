@@ -4,28 +4,7 @@ pages:
   before_script:
     - apt update
     - apt -y install git hugo
-  script:
-    - |
-      git fetch --all
-      git checkout $CI_COMMIT_REF_NAME
-
-      mkdir public_all
-
-      export BRANCHES=$(git branch -a --format='%(refname:short)' | cut -d'/' -f 2 | sort -u | grep -v origin)
-      for branch in $BRANCHES;
-      do
-        git checkout $branch
-        hugo
-        mkdir -p public_all/$branch
-        cp -a public/* public_all/$branch
-        rm -rf public
-      done
-
-      git checkout $CI_DEFAULT_BRANCH
-      hugo
-      cp -r public/* public_all/
-      rm -rf public/
-      mv public_all public
+  script: hugo
   artifacts:
     paths:
       # The folder that contains the files to be exposed at the Page URL
