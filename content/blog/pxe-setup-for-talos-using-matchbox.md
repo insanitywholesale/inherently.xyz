@@ -1,5 +1,5 @@
 ---
-title: "Draft: PXE setup for Talos Linux with Matchbox"
+title: "PXE setup for Talos Linux with Matchbox"
 date: 2025-03-01T19:00:33+02:00
 draft: false
 tags: ["homelab", "kubernetes", "networking", "pxe", "opnsense"]
@@ -8,15 +8,15 @@ tags: ["homelab", "kubernetes", "networking", "pxe", "opnsense"]
 Join my campaign of hate against installing operating systems interactively.
 I usually wipe my homelab virtualization hosts every week or two.
 This might sound insane but I've been working on automating their setup.
-As explained in the previous host, friendship ended with ProxMox and kubernetes will take its place.
+As explained in the previous post, friendship ended with ProxMox and kubernetes will take its place.
 Specifically Talos Linux, a linux distro you can't even SSH into.
 ProxMox kind of notoriously doesn't have a way to be sanely installed through PXE but Talos is kind of made for it.
 However, PXE (and iPXE, we'll discuss this later) is not perfectly documented and can be even harder to debug.
 So in this post I'll document what worked for me and talk about some pretty helpful resources.
 
-## Holy Grail
+## Plan
 
-### Pixie who?
+### PXE
 
 So let's start with a bit of background, then lay out what I wanted to achieve, why and what I considered "good enough".
 First off, PXE.
@@ -46,7 +46,7 @@ Everyhing is done using the API which is accessible interactively through the `t
 This means that we can have our operating system and kubernetes configuration as code for the price of one config file.
 Sign me up!
 
-### Cooka da pasta
+### Matchbox
 
 Those are the ingredients but it can hardly be called a meal.
 We need to get some kitchen utensils in this analogy to get the desired result.
@@ -62,18 +62,22 @@ Then the host would get its configuration, install the operating system, install
 
 ### Definition of Done
 
-The ideal end solution should look like:
+The ideal process when getting adding a host should look like:
 * note down the MAC address and corresponding IP somewhere
 * plug in the cables
-* configure the boot option order
-* play minecraft until the host shows up in `kubectl get nodes`
+* configure the boot device order
+* save settings and exit
+* play minecraft while waiting
+* run one or zero commands
+* host shows up in `kubectl get nodes`
+* recreating it from scratch should be just as easy
 
 I don't know if I can get exactly to that point but I'm willing to put in some effort into the setup so in the future I can avoid it to a greater extent.
 Some compromise is acceptable since I don't have any IPAM infrastructure in place already so this isn't the full and proper way to go about it.
 
-## How do I do X in Y minutes
+## Implementation
 
-### The gist
+### How do I do X in Y minutes
 
 Meat and potatoes first, for quick reference here is what I did (5-6 hours of suffering omitted for brevity):
 * Installed `tftp-hpa` on Arch
@@ -139,8 +143,61 @@ Meat and potatoes first, for quick reference here is what I did (5-6 hours of su
 * Wait
 * Watch text scroll on screen
 * ???
-* No profit, I spent my Saturday doing this
+* No profit, I spent my whole weekend on this
 
-### What do the config files mean, Mason?
+### Explanation
 
-# TODO: Finish this
+PXE is an under-documented part of the common network services one can set up.
+An amusing yet educational thing I found was a redditor's 3-part descent into madness and consequently enlightenment:
+  * [part 1](https://www.reddit.com/r/homelab/comments/1ahhhkh/why_does_pxe_feel_like_a_horribly_documented_mess/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button)
+  * [part 2](https://www.reddit.com/r/homelab/comments/1b1qc05/a_followup_to_my_pxe_rant_standing_up_baremetal/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button)
+  * [part 3](https://www.reddit.com/r/homelab/comments/1b3wgvm/uefipxeagents_conclusion_to_my_pxe_rant_with_a/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button)
+
+The matchbox documentation was also very good at explaining both the general process and giving some specific recommendations:
+  * [Network boot environments](https://matchbox.psdn.io/network-booting/)
+  * [Network setup](https://matchbox.psdn.io/network-setup/)
+
+With those out of the way I'll make an attemt at explaining it myself.
+When a PXE client starts, it does the DHCP dance which tells it where the TFTP server is and what the name of the file it should execute is.
+That file is a network boot program which can optionally load some configuration (also stored on the TFTP server).
+So after all of that is figured out, the PXE client will pull the kernel and initramfs, again from the TFTP server.
+In contrast, iPXE uses scripts stored on the TFTP server instead of plain configuration files so we can do fancier things with it.
+However, my old desktop PCs do not have iPXE so I had to use an in-between thingy, undionly.kpxe.
+What that does is load iPXE firmware (ipxe.efi) so we can access the cool new features without having to replace any hardware.
+When that loads, it talks to the DHCP server as an iPXE client this time and gets told to grab the matchbox.ipxe file from the TFTP server.
+That file is an iPXE script which tells the client to check the matchbox server.
+When matchbox gets the request, it checks the groups it has registered and if there are any matches according to the `selector` field, it uses the corresponding profile.
+In this case, the profile is for control-plane Talos Linux nodes.
+The kernel and initramfs listed in the profile are used alongside some specific kernel parameters.
+The most important parameter is `talos.config=http://10.0.20.50:8080/assets/controlplane.yaml` which tells the machine that is booting the operating system to fetch the configuration file listed there.
+Of course, you will need to have generated the configuration (using `talosctl gen config homecluster https://10.0.50.69:6443`) and moved it in the matchbox `assets` directory (or in another HTTP server, matchbox is just convenient in this setup).
+That configuration has some basic things like which disk and network settings to use.
+When the machine gets this configuration, it installs Talos and then waits.
+At this point the system is booted normally, no PXE involved.
+
+Following that, all we need to do is run `talosctl bootstrap --nodes 10.0.50.71 --endpoints 10.0.50.71` and we get a kubernetes cluster.
+To get the kubeconfig required to access the cluster, run `talosctl kubeconfig my-talos-kubeconfig --nodes 10.0.50.71 --endpoints 10.0.50.71` and then check that it works by running `kubectl --kubeconfig my-talos-kubeconfig get nodes`.
+I've tested the whole process end-to-end twice now to ensure that nodes with blank disks and correct boot order will behave correctly and it's almost magic.
+True enough, after pressing the power button on all three systems, making some coffee, and then running the commands mentioned previously, I got this output:
+```
+$ kubectl get nodes -o wide
+NAME     STATUS   ROLES           AGE     VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE         KERNEL-VERSION   CONTAINER-RUNTIME
+kube01   Ready    control-plane   3h20m   v1.32.2   10.0.50.71    <none>        Talos (v1.9.4)   6.12.13-talos    containerd://2.0.2
+kube02   Ready    control-plane   3h20m   v1.32.2   10.0.50.72    <none>        Talos (v1.9.4)   6.12.13-talos    containerd://2.0.2
+kube03   Ready    control-plane   3h20m   v1.32.2   10.0.50.73    <none>        Talos (v1.9.4)   6.12.13-talos    containerd://2.0.2
+```
+And I guess that's it.
+It needed some effort and research and the approach should be adjusted according to the network situation (the matchbox docs saved the day here).
+In the end though, I really like what I got working and it was a fun way to spend the weekend.
+I can go from basically brand new computer with nothing on it to full cluster with a high availability control-plane using patience and a single command.
+Two commands and I can install fluxcd on the cluster which will install all my applications.
+Looking back at the definition of done I set in the beginning, I consider this a success.
+
+## Conclusion
+
+As the proud owner of a Talos Linux kubernetes cluster installed in a fully automated way, I am quite happy.
+I can get back into running services at home and live through the pain of using kubernetes daily again.
+I have a couple of ideas in mind for how to use my new container running platform but that's for another post.
+Hopefully you got a better idea of what PXE is, how it works and how I used it in this instance.
+If you weren't familiar with any of this, maybe it's time to get your hands dirty and prepare to throw away your USB drives.
+Either way, that's all for now.
