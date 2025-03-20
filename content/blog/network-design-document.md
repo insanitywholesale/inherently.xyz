@@ -5,7 +5,6 @@ draft: false
 tags: ["networking", "homelab"]
 ---
 
-## Intro
 I recently started remaking my network at home and decided to publish some of the design documentation here
 
 ## Network Layout

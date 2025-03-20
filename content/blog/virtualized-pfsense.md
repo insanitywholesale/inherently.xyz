@@ -5,7 +5,6 @@ draft: false
 tags: ["virtualization", "proxmox", "networking", "pfsense"]
 ---
 
-## Intro
 Recently I went down the path of running my router inside a virtual machine.
 This is far from the first time I've tried it but it is the first time I have a solid long-term plan.
 Keep reading if you're interested in doing something similar, this should be fun.

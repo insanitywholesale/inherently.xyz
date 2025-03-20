@@ -5,10 +5,6 @@ draft: false
 tags: ["homelab", "sysadmin", "devops", "kubernetes", "drone", "continuous integration"]
 ---
 
-## Previous relevant post
-The post exploring my choice of a continuous deployment tool was covered [here]({{< ref "blog/fluxing-my-cluster">}}) if you're interested, this post is about continuous integration.
-
-## Intro
 I described previously how the deployment of applications is automated in my homelab but didn't touch upon how I test my own code.
 The topic came up when I started trying to simulate a development pipeline who's first step after committing code is to be run through the continuous integration system.
 What should that system be though?

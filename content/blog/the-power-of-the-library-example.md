@@ -5,7 +5,6 @@ draft: false
 tags: ["programming", "opinion"]
 ---
 
-## Intro
 While considering what kind of example I could use for a service that was supposed to be a tech demo, I settled on a catalog/library of books.
 I think it's a powerful example because it includes the basic CRUD operations and also allows for a lot of flexibility and detail of implementation.
 Below I'll try to explain the most important ones and maybe help convince you to rethink about it and maybe use it as the next step after the usual todo list one.

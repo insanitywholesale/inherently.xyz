@@ -5,7 +5,6 @@ draft: false
 tags: ["homelab", "terraform", "proxmox"]
 ---
 
-## Intro
 In a [previous post]({{< ref "blog/ansible-terraform-and-proxmox" >}}) I talked about how I set up proxmox in order to be able to provision virtual machines on it using terraform.
 Since then, I've improved the setup by adding qemu-guest-agent to the template images without needing to create them myself from scratch and I'd like to share it here.
 

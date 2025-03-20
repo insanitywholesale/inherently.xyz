@@ -5,7 +5,6 @@ draft: false
 tags: ["homelab", "sysadmin", "devops", "kubernetes", "flux", "continuous deployment"]
 ---
 
-## Intro
 It's no secret that I'm a fan of automation and making life easier (even if I made it harder in the first place).
 One of the issues I've been having in my homelab is dealing with deploying stuff to kubernetes.
 Initially I wanted to just add a plugin to [drone](https://www.drone.io/) and be done with it.

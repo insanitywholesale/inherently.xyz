@@ -5,7 +5,6 @@ draft: false
 tags: ["homelab", "sysadmin", "linux", "zfs", "kubernetes", "ansible", "proxmox", "terraform"]
 ---
 
-## Previous relevant post
 The first part of the software changes I made was covered [in the first part]({{< ref "blog/homelab-evolved">}}) where I explained how and why I started going down this path.
 
 ## Software choices

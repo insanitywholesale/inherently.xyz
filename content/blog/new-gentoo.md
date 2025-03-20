@@ -5,11 +5,10 @@ draft: false
 tags: ["linux"]
 ---
 
-## Intro
-WARNING: this is an incomplete draft but I wanted to publish it just so it exists as a resource.
-
 As the summer is coming to a close and before the exam period starts I decided to reinstall gentoo on my university laptop.
 I don't plan on doing an ordinary follow the handbook and whabam you're up and running thing so I wanted to document it.
+
+WARNING: this is an incomplete draft but I wanted to publish it just so it exists as a resource.
 
 ## Background
 The laptop I use for university has pretty lackluster specs which is to be expected considering I bought it for 180 euros about 5 years ago.

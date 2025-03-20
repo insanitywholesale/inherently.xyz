@@ -5,7 +5,6 @@ draft: false
 tags: ["homelab", "sysadmin", "devops", "kubernetes", "flux", "continuous deployment"]
 ---
 
-## Previous relevant post
 I wrote about my journey of choosing a continuous deployment tool and why I ultimately ended up using [flux](https://toolkit.fluxcd.io/) for my homelab [in this post]({{< ref "blog/fluxing-my-cluster" >}}).
 It took quite a bit of reasearch and if you're in a similar position as I was it might prove to be helpful.
 

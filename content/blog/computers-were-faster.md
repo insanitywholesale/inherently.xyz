@@ -5,7 +5,6 @@ draft: false
 tags: ["opinion", "old", "hardware"]
 ---
 
-## Intro
 I own 3 operational 32-bit computers and I find them fun to play with and useful for software projects.
 Two of them are socket 475 and one of them is for slot form factor intel cpus.
 For the slot form factor one, I have a Celeron, a Pentium II and a Pentium III.

@@ -5,7 +5,6 @@ draft: false
 tags: ["hardware", "networking", "homelab"]
 ---
 
-## Intro
 One of my friends at university gave me a broken switch that seemed broken and I decided to fix it.
 Join me on a pretty entertaining troubleshooting path that was not entirely necessary.
 

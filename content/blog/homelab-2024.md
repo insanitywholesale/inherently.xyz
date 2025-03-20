@@ -5,8 +5,6 @@ draft: false
 tags: ["homelab", "kubernetes", "proxmox", "ansible", "terraform"]
 ---
 
-## Intro
-
 When operating a homelab there is always something new to do or something waiting to be fixed.
 This post's aim is to detail the state of my homelab at the end of 2024 and beginning of 2025.
 

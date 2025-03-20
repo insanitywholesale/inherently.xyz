@@ -5,7 +5,6 @@ draft: false
 tags: ["opinion", "rant", "free software", "software freedom", "essay"]
 ---
 
-## Intro
 There are a lot of airhead takes on the internet but I've never seen so many in one post and it's a good opportunity to respond to a lot of the anti-freedom arguments one might encounter online.
 I might seem a bit too combatative in the beginning but that's mostly because I know what's coming later.
 Link to the [original](https://r0ml.medium.com/free-software-an-idea-whose-time-has-passed-6570c1d8218a).
