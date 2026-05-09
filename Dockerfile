@@ -1,6 +1,6 @@
 # no official hugo image so this is necessary
-FROM ubuntu:26.04 AS buildsite
-RUN apt update && apt -y full-upgrade && apt -y install hugo
+FROM archlinux AS buildsite
+RUN pacman -Syy && pacman -S --noconfirm hugo
 WORKDIR /inheresite-hugo
 COPY . .
 RUN hugo
