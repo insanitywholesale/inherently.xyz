@@ -1,5 +1,5 @@
 # no official hugo image so this is necessary
-FROM ubuntu AS buildsite
+FROM ubuntu:26.04 AS buildsite
 RUN apt update && apt -y full-upgrade && apt -y install hugo
 WORKDIR /inheresite-hugo
 COPY . .

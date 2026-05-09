@@ -1,5 +1,5 @@
 # The Docker image that will be used to build your app
-image: ubuntu:24.04
+image: ubuntu:26.04
 pages:
   before_script:
     - apt update
