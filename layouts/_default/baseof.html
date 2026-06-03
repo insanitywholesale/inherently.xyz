@@ -2,22 +2,23 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>{{.Title}}</title>
-{{ partial "favicon.html" . }}
+		<title>{{ .Title }}</title>
+		{{ partial "favicon.html" . }}
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="author" content="{{ .Site.Params.Author.name }}">
 		<meta name="description" content="{{ block "desc" . }}{{ end }}">
 		<meta name="theme-color" content="#440044">
 		<meta name="color-scheme" content="dark light">
+		<link rel="alternate" type="application/rss+xml" href="index.xml" title="{{ .Title }}">
 		{{ with resources.Get "css/basic.css" | minify }}<style>{{ .Content | safeCSS }}</style>{{ end }}
 		{{ with resources.Get "css/syntax.css" | minify }}<style>{{ .Content | safeCSS }}</style>{{ end }}
 	</head>
 	<body>
 		<h1>{{ block "header" . }}{{ .Title }}{{ end }}</h1>
-{{ partial "nav.html" . }}
+		{{ partial "nav.html" . }}
 		<hr>
-{{ block "main" . }}{{ .Content }}{{ end }}
+		{{ block "main" . }}{{ .Content }}{{ end }}
 		<hr>
-{{ partial "footer" . }}
+		{{ partial "footer" . }}
 </body>
 </html>
