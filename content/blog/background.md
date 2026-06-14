@@ -1,9 +1,14 @@
 ---
-title: "About"
+title: "Background"
 date: 2020-12-13T20:37:02+02:00
 tags: ["about"]
 draft: false
 ---
+
+This used to be the about page but I felt the navbar was cluttered and the content is outdated so I moved it here.
+I also removed references to the following outdated pages:
+* [todo]({{< ref "todo" >}})
+* [links]({{< ref "links" >}})
 
 ## What I do
 
@@ -15,7 +20,7 @@ and
 [self-hosting](https://www.reddit.com/r/selfhosted/wiki/index#wiki_self-hosting).
 Eventually I realized that it was something I could do all day and never be bored and thus began my studies in the field.
 Up to this point I've tried many technologies including but not limited to
-linux, zfs, qemu+kvm+libvirt, proxmox, openstack, pfsense, git, ansible, terraform, lxc, lxd, docker, docker-compose, kubernetes, freenas/truenas, glusterfs, ceph and more check out what else is on the site by [clicking here](/links).
+linux, zfs, qemu+kvm+libvirt, proxmox, openstack, pfsense, git, ansible, terraform, lxc, lxd, docker, docker-compose, kubernetes, freenas/truenas, glusterfs, ceph and more.
 
 ## Personal Projects
 
@@ -23,7 +28,7 @@ I'll make an attempt to document my journey as far as programming and sysadmin e
 This will have missing and slightly inaccurate information as I'm doing this all in one go.
 My contact information is available on the contact page so feel free to ask me about anything and I'll do my best to answer.
 The source code for most if not all of the following things (where applicable) is on my github or gitlab so take a look there.
-With all disclaimers out of the way, let's get into it. 
+With all disclaimers out of the way, let's get into it.
 
 ### Programming
 
@@ -81,4 +86,4 @@ To not waste any more time let's just say it's been very fun tinkering with all 
 
 ## Future Endeavors
 
-One can never be sure of the future but I've documented some of my future plans [on this page]({{< ref "todo" >}}) as a list of short to medium term goals.
+One can never be sure of the future.

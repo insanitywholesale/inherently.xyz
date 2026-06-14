@@ -5,13 +5,12 @@ tags: ["index"]
 draft: false
 ---
 
-This is my personal site, mostly written by myself and for myself.
-If you want to read more about me, you can read the [about page]({{< ref "about" >}}) that includes my background.
+This is my personal site,
 
 ## Skills
 - Go, Java, SQL, Bash and other languages
 - Docker (deployment, development, debugging and more)
-- Kubernetes (self-deployed and self-managed clusters, upstream k8s as well as k3s)
+- Kubernetes (self-deployed and self-managed clusters, upstream k8s, k3s and lately Talos)
 - Ansible and Terraform for automation
 - Proxmox and libvirt for virtualization
 - pfSense and OPNSense for routing at home
@@ -21,10 +20,9 @@ If you want to read more about me, you can read the [about page]({{< ref "about"
 ## Highlighted Projects
 - [infra](https://gitlab.com/insanitywholesale/infra): automation of home infrastructure (always a work-in-progress)
 - [go-grpc-microservice-template](https://gitlab.com/insanitywholesale/go-grpc-microservice-template): advanced gRPC microservice template with lots of configs (still WIP)
-- [gifinator](https://gitlab.com/insanitywholesale/gifinator): port of a google codebase to use minio instead of gcs
-- [bookdir](https://gitlab.com/insanitywholesale/bookdir): microservice for managing a book collection
-- [go-usrv-tmpl](https://github.com/insanitywholesale/go-usrv-tmpl): simple template for microservices (also WIP)
-- [interocitor](https://github.com/insanitywholesale/interocitor): old ansible playbook to set up vfio
+- [datayoinker](https://gitlab.com/insanitywholesale/datayoinker): self-hosted replacement for [dweet.io](https://web.archive.org/web/20150204141545/https://dweet.io/)
+- [gifinator](https://gitlab.com/insanitywholesale/gifinator): port of [a google showcase project](https://github.com/GoogleCloudPlatform/gifinator) to not use Google Cloud Storage
+- [bookdir](https://gitlab.com/insanitywholesale/bookdir): microservice for managing a book collection, fun example for demo APIs
 
 ## Find my code
 I use multiple git forges to host my code:
@@ -34,3 +32,6 @@ I use multiple git forges to host my code:
 
 ### Github
 - [Occasionally used for some stuff](https://github.com/insanitywholesale)
+
+## Contact Me
+If you wish to contact me about something related to the contents of this site, feel free to reach me on Bluesky at [inherently.bsky.social](https://bsky.app/profile/inherently.bsky.social).
